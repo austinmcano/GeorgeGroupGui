@@ -54,9 +54,14 @@
      <addaction name="actionDirectory"/>
      <addaction name="actionFile"/>
     </widget>
-    <addaction name="actionSave_Data"/>
+    <addaction name="actionNew_Project_2"/>
+    <addaction name="actionOpen_Project"/>
+    <addaction name="actionRecent_Projects"/>
     <addaction name="separator"/>
+    <addaction name="actionChange_Settings"/>
+    <addaction name="actionSave_Data"/>
     <addaction name="menuImport"/>
+    <addaction name="actionPrint"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -95,6 +100,7 @@
     <property name="title">
      <string>GGG</string>
     </property>
+    <addaction name="actionSettings_5"/>
    </widget>
    <widget class="QMenu" name="menuDocks">
     <property name="title">
@@ -489,6 +495,61 @@
   <action name="actionSeaborn_Settings">
    <property name="text">
     <string>Seaborn Settings</string>
+   </property>
+  </action>
+  <action name="actionNew_Project_2">
+   <property name="text">
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="text">
+    <string>Open Project</string>
+   </property>
+  </action>
+  <action name="actionRecent_Projects">
+   <property name="text">
+    <string>Recent Projects</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionSettings_2">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionSettings_3">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionSettings_4">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionSettings_5">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionSettings_6">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionChange_Settings">
+   <property name="text">
+    <string>Change Settings</string>
    </property>
   </action>
  </widget>

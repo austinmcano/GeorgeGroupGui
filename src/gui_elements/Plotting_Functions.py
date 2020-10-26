@@ -437,14 +437,20 @@ def shirley_calculate(x, y, tol=1e-5, maxit=15):
     else:
         return yr + B
 
-def linear_func(x, m,b):
-    return (m*x)+b
+def linear(x,a,b):
+    return (a*x)+b
 
 def gaussian(x, amp, cen, sigma):
     return amp/(sigma*np.sqrt(2*np.pi))*np.exp(-(x-cen)**2/(2*sigma**2))
 
-def lorenz(x, amp, cen, sigma):
+def lorentz(x, amp, cen, sigma):
     return (amp/np.pi)*(1/2*sigma)/((x-cen)**2+(1/2*sigma)**2)
+
+def plateau(x,a,b):
+    return (x*a)/(b+x)
+
+def self_limiting(x,a,b,c):
+    return a-b*np.exp(-c*x)
 
 # def smooth(y_data,window_length, poly):
 #     return savgol_filter(y_data, window_length, poly)

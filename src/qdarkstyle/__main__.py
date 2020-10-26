@@ -10,7 +10,7 @@ from os.path import abspath, dirname
 import helpdev
 
 # Local imports
-from src import qdarkstyle
+import qdarkstyle
 
 sys.path.insert(0, abspath(dirname(abspath(__file__)) + '/..'))
 

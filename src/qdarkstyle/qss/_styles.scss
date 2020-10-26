@@ -2027,7 +2027,7 @@ QHeaderView {
     }
 
     &::down-arrow {
-        /* Those settings (border/width/height/background-color) solve bug */
+        /* Those settings.ini (border/width/height/background-color) solve bug */
         /* transparent arrow background and size */
         background-color: $COLOR_BACKGROUND_NORMAL;
         border: none;

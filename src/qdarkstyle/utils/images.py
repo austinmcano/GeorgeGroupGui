@@ -18,9 +18,9 @@ from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import QApplication
 
 # Local imports
-from src.qdarkstyle import (IMAGES_PATH, STYLES_SCSS_FILEPATH, QRC_FILEPATH, RC_PATH,
-                            SVG_PATH)
-from src.qdarkstyle import DarkPalette
+from qdarkstyle import (IMAGES_PATH, STYLES_SCSS_FILEPATH, QRC_FILEPATH, RC_PATH,
+                        SVG_PATH)
+from qdarkstyle.palette import DarkPalette
 
 IMAGE_BLACKLIST = ['base_palette']
 

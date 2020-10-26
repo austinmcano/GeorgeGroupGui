@@ -1272,7 +1272,6 @@ QComboBox::item:alternate {
 
 QComboBox::item:checked {
   font-weight: bold;
-  height: 12px;
 }
 
 QComboBox::item:selected {
@@ -1962,7 +1961,7 @@ QHeaderView::section::vertical:disabled {
 }
 
 QHeaderView::down-arrow {
-  /* Those settings (border/width/height/background-color) solve bug */
+  /* Those settings.ini (border/width/height/background-color) solve bug */
   /* transparent arrow background and size */
   background-color: #32414B;
   border: none;

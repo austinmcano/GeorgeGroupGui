@@ -54,7 +54,7 @@ import platform
 import warnings
 
 # Local imports
-from src.qdarkstyle import DarkPalette
+from qdarkstyle.palette import DarkPalette
 
 __version__ = "2.8.1"
 
@@ -213,7 +213,7 @@ def _load_stylesheet(qt_api=''):
     from qtpy.QtGui import QColor, QPalette
 
     # Then we import resources - binary qrc content
-    from src.qdarkstyle import style_rc
+    from qdarkstyle import style_rc
 
     # Thus, by importing the binary we can access the resources
     package_dir = os.path.basename(PACKAGE_PATH)

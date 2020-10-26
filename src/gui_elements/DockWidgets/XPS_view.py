@@ -42,7 +42,7 @@ class XPS_view(QtWidgets.QDockWidget):
         self.tree_view.setSortingEnabled(True)
 
         self.tree_view.sortByColumn(True)
-        self.tree_view.setRootIndex(self.model.index(ApplicationSettings.PROJECT_PATH))
+        self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('PROJECT_PATH')))
 
         self.tree_view.setModel(self.model)
         self.tree_view.installEventFilter(self)

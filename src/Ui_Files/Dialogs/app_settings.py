@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Save_To_CSV.ui'
+## Form generated from reading UI file 'app_settings.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -23,27 +23,22 @@ class Ui_Dialog(object):
         Dialog.resize(400, 300)
         self.gridLayout = QGridLayout(Dialog)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label = QLabel(Dialog)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-
-        self.save_as_LE = QLineEdit(Dialog)
-        self.save_as_LE.setObjectName(u"save_as_LE")
-
-        self.gridLayout.addWidget(self.save_as_LE, 1, 1, 1, 1)
-
-        self.treeWidget = QTreeWidget(Dialog)
-        self.treeWidget.setObjectName(u"treeWidget")
-
-        self.gridLayout.addWidget(self.treeWidget, 0, 0, 1, 2)
-
         self.buttonBox = QDialogButtonBox(Dialog)
         self.buttonBox.setObjectName(u"buttonBox")
         self.buttonBox.setOrientation(Qt.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 1, 1, 1, 1)
+
+        self.comboBox = QComboBox(Dialog)
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.gridLayout.addWidget(self.comboBox, 0, 1, 1, 1)
+
+        self.label = QLabel(Dialog)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
 
         self.retranslateUi(Dialog)
@@ -55,8 +50,6 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.label.setText(QCoreApplication.translate("Dialog", u"Save As", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("Dialog", u"All Plotted Items", None));
+        self.label.setText(QCoreApplication.translate("Dialog", u"App Style", None))
     # retranslateUi
 

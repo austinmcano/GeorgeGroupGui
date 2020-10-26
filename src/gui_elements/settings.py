@@ -1,19 +1,9 @@
 class ApplicationSettings:
-
-    VIEW_NAME_LIST = ['FTIR','QCM']
-    VIEW_OBJECT_NAME_LIST = ['FTIR_view', 'QCM_view']
-
-    fig_dict = {}
-    ax_dict = {}
-
-    PROJECT_PATH = '//Project/'
-    # PROJECT_PATH = '/Users/austincano/Google Drive (auca0625@colorado.edu)/'
-    DATABROWSER_PATH = '/Users/austincano/'
-    DATA_PATH = '//Project/Data/'
-    FIG_PATH = '//Project/Graphs/'
-    SAVED_DATA_PATH = '//Project/Saved/'
-    CURRENT_FILEPATH = ''
-    CURRENT_DIR_PATH = ''
+    PROJECT_PATH = '/Users/austincano/Desktop/Project/'
+    DATABROWSER_PATH = '/Users/austincano/Desktop/'
+    DATA_PATH = '/Users/austincano/Desktop/Project/'
+    FIG_PATH = '/Users/austincano/Desktop/'
+    SAVED_DATA_PATH = '/Users/austincano/Desktop/'
     LAST_DATA_PLOTTED = []
     CURRENT_PLOT = []
     ALL_DATA_PLOTTED = {}
