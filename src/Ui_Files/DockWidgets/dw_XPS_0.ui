@@ -69,17 +69,17 @@
          <widget class="QComboBox" name="fit_shape_cb">
           <item>
            <property name="text">
+            <string>Voigt</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Gaussian</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>Lorentz</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Voigt</string>
            </property>
           </item>
          </widget>

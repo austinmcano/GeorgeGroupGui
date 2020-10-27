@@ -80,6 +80,7 @@
     <addaction name="actionQCM"/>
     <addaction name="actionSE"/>
     <addaction name="actionXPS"/>
+    <addaction name="actionCurve_Fitting"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionProject_Tree"/>
@@ -550,6 +551,11 @@
   <action name="actionChange_Settings">
    <property name="text">
     <string>Change Settings</string>
+   </property>
+  </action>
+  <action name="actionCurve_Fitting">
+   <property name="text">
+    <string>Curve Fitting</string>
    </property>
   </action>
  </widget>

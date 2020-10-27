@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'dw_XPS_0.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.14.2
+## Created by: Qt User Interface Compiler version 5.15.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -250,9 +250,9 @@ class Ui_DockWidget(object):
         self.offset_LE.setText(QCoreApplication.translate("DockWidget", u"0", None))
         self.plot_curr_pb.setText(QCoreApplication.translate("DockWidget", u"Plot Curr", None))
         self.shirley_pb.setText(QCoreApplication.translate("DockWidget", u"Shirley", None))
-        self.fit_shape_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Gaussian", None))
-        self.fit_shape_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Lorentz", None))
-        self.fit_shape_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Voigt", None))
+        self.fit_shape_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Voigt", None))
+        self.fit_shape_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Gaussian", None))
+        self.fit_shape_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Lorentz", None))
 
         self.label_44.setText(QCoreApplication.translate("DockWidget", u"Num of Peaks", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)

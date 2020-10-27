@@ -90,12 +90,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.removeplot_action = self.context_menu_plot.addAction('Remove Line')
         self.save_figure_action = self.context_menu_plot.addAction('Save Figure')
         self.sns_settings_action = self.context_menu_plot.addAction('Seaborn Settings')
+        self.send_to_cf_action = self.context_menu_plot.addAction('Send to CF')
 
         self.clear_action.triggered.connect(lambda: self.cleargraph())
         self.removeplot_action.triggered.connect(lambda: plotting_funs.remove_line(self))
         self.actionSave_To_CSV.triggered.connect(lambda: plotting_funs.Save_All_Plotted(self))
         self.save_figure_action.triggered.connect(lambda: plotting_funs.save_fig(self))
         self.sns_settings_action.triggered.connect(lambda: self.sns_settings())
+        self.send_to_cf_action.triggered.connect(lambda: plotting_funs.send_to_cf(self))
 
         start_dialog = QtWidgets.QDialog()
         start_ui = start_Ui()
@@ -123,6 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionFTIR.triggered.connect(lambda: plotting_funs.FTIR_view_fun(self))
         self.ui.actionSE.triggered.connect(lambda: plotting_funs.SE_view_fun(self))
         self.ui.actionConsole.triggered.connect(lambda: plotting_funs.Console_view_fun(self))
+        self.ui.actionCurve_Fitting.triggered.connect(lambda: plotting_funs.CF_view_fun(self))
 
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
         self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
@@ -238,6 +241,11 @@ class plotting_funs:
         self.restoreDockWidget(self.dw_SE)
         self.dw_SE.show()
 
+    def CF_view_fun(self):
+        self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_CF)
+        self.restoreDockWidget(self.dw_CF)
+        self.dw_CF.show()
+
     def Console_view_fun(self):
         pass
         # import sys
@@ -352,6 +360,23 @@ class plotting_funs:
                         del line_0
                 except IndexError:
                     print("Index Error")
+        all_lines = ApplicationSettings.ALL_DATA_PLOTTED
+        dialog = QtWidgets.QDialog()
+        ui = simple_tw()
+        ui.setupUi(dialog)
+        ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        Key_List = []
+        for i in all_lines.keys():
+            Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+        ui.treeWidget.addTopLevelItems(Key_List)
+        ui.buttonBox.accepted.connect(lambda:finish())
+        dialog.exec_()
+        self.canvas.draw()
+
+    def send_to_cf(self):
+        def finish():
+            for j in ui.treeWidget.selectedIndexes():
+                line = ApplicationSettings.ALL_DATA_PLOTTED[j.data()]
         all_lines = ApplicationSettings.ALL_DATA_PLOTTED
         dialog = QtWidgets.QDialog()
         ui = simple_tw()

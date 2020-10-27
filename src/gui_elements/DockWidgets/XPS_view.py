@@ -3,6 +3,7 @@ from src.Ui_Files.DockWidgets.dw_XPS_0 import Ui_DockWidget
 from src.gui_elements.RC_Fucntions import *
 from src.gui_elements.Plotting_Functions import *
 from lmfit import Model, Parameters
+from lmfit.models import VoigtModel, GaussianModel, LorentzianModel
 
 class XPS_view(QtWidgets.QDockWidget):
     def __init__(self, main_window):
@@ -123,28 +124,26 @@ class XPS_view(QtWidgets.QDockWidget):
         #  Y is data[0]..... whyyyyyyy x is data[1]
         if self.ui.fit_shape_cb.currentText() == 'Gaussian':
             if self.ui.num_peaks_sb.value()==1:
-                gmodel = Model(gaussian)
+                gmodel = GaussianModel()
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('amp', con[0][0], True, con[0][1], con[0][2]),
-                                ('cen', con[0][3], True, con[0][4], con[0][5]),
-                                ('sigma', con[0][6], True, con[0][7], con[0][8]),)
+                params.add_many(('amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('center', con[0][3], True, con[0][4], con[0][5]),
+                                ('sigma', con[0][6], True, con[0][7], con[0][8]))
                 result = gmodel.fit(self.data_y-self.shirley, params, x=self.data_x)
                 self.ui.fit_report_TE.setText(result.fit_report())
                 ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x,self.shirley,'k--',label='Shirley')
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] =self.main_window.ax.plot(self.data_x, result.best_fit+self.shirley,'r--',label='Result')
-                leg = self.main_window.ax.legend(loc='best', fontsize='small')
-                leg.set_draggable(True)
 
             elif self.ui.num_peaks_sb.value() == 2:
-                gmodel = Model(gaussian, prefix='p1_') + Model(gaussian, prefix='p2_')
+                gmodel = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('p1_amp', con[0][0],True,con[0][1],con[0][2]),
-                                ('p1_cen', con[0][3],True,con[0][4],con[0][5]),
+                params.add_many(('p1_amplitude', con[0][0],True,con[0][1],con[0][2]),
+                                ('p1_center', con[0][3],True,con[0][4],con[0][5]),
                                 ('p1_sigma', con[0][6],True,con[0][7],con[0][8]),
-                                ('p2_amp', con[1][0],True,con[1][1],con[1][2]),
-                                ('p2_cen', con[1][3],True,con[1][4],con[1][5]),
+                                ('p2_amplitude', con[1][0],True,con[1][1],con[1][2]),
+                                ('p2_center', con[1][3],True,con[1][4],con[1][5]),
                                 ('p2_sigma', con[1][6],True,con[1][7],con[1][8]))
                 result = gmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 comps = result.eval_components()
@@ -157,17 +156,17 @@ class XPS_view(QtWidgets.QDockWidget):
                 leg.set_draggable(True)
 
             elif self.ui.num_peaks_sb.value() == 3:
-                gmodel = Model(gaussian, prefix='p1_') + Model(gaussian, prefix='p2_')+Model(gaussian, prefix='p3_')
+                gmodel = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')+Model(prefix='p3_')
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('p1_amp', con[0][0],True,con[0][1],con[0][2]),
-                                ('p1_cen', con[0][3],True,con[0][4],con[0][5]),
+                params.add_many(('p1_amplitude', con[0][0],True,con[0][1],con[0][2]),
+                                ('p1_center', con[0][3],True,con[0][4],con[0][5]),
                                 ('p1_sigma', con[0][6],True,con[0][7],con[0][8]),
-                                ('p2_amp', con[1][0],True,con[1][1],con[1][2]),
-                                ('p2_cen', con[1][3],True,con[1][4],con[1][5]),
+                                ('p2_amplitude', con[1][0],True,con[1][1],con[1][2]),
+                                ('p2_center', con[1][3],True,con[1][4],con[1][5]),
                                 ('p2_sigma', con[1][6],True,con[1][7],con[1][8]),
-                                ('p3_amp', con[2][0], True, con[2][1], con[2][2]),
-                                ('p3_cen', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
                                 ('p3_sigma', con[2][6], True, con[2][7], con[2][8]))
                 result = gmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 comps = result.eval_components()
@@ -176,26 +175,24 @@ class XPS_view(QtWidgets.QDockWidget):
                 ApplicationSettings.ALL_DATA_PLOTTED['G2'] = self.main_window.ax.plot(self.data_x,self.shirley+comps['p2_'],'k--',label='G2')
                 ApplicationSettings.ALL_DATA_PLOTTED['G3'] = self.main_window.ax.plot(self.data_x,self.shirley+comps['p3_'],'k--',label='G3')
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x, result.best_fit + self.shirley,'r--',label='Result')
-                leg = self.main_window.ax.legend(loc='best', fontsize='small')
-                leg.set_draggable(True)
                 self.ui.fit_report_TE.setText(result.fit_report())
 
             elif self.ui.num_peaks_sb.value() == 4:
-                gmodel = Model(gaussian, prefix='p1_') + Model(gaussian, prefix='p2_') + \
-                         Model(gaussian, prefix='p3_') + Model(gaussian, prefix='p4_')
+                gmodel = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_') + \
+                         GaussianModel(prefix='p3_') + GaussianModel(prefix='p4_')
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('p1_amp', con[0][0], True, con[0][1], con[0][2]),
-                                ('p1_cen', con[0][3], True, con[0][4], con[0][5]),
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
                                 ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
-                                ('p2_amp', con[1][0], True, con[1][1], con[1][2]),
-                                ('p2_cen', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
                                 ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
-                                ('p3_amp', con[2][0], True, con[2][1], con[2][2]),
-                                ('p3_cen', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
                                 ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
-                                ('p4_amp', con[3][0], True, con[3][1], con[3][2]),
-                                ('p4_cen', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
                                 ('p4_sigma', con[3][6], True, con[3][7], con[3][8]))
                 result = gmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 comps = result.eval_components()
@@ -210,24 +207,25 @@ class XPS_view(QtWidgets.QDockWidget):
                 self.ui.fit_report_TE.setText(result.fit_report())
 
             elif self.ui.num_peaks_sb.value() == 5:
-                gmodel = Model(gaussian, prefix='p1_') + Model(gaussian, prefix='p2_') + \
-                         Model(gaussian, prefix='p3_') + Model(gaussian, prefix='p4_') + Model(gaussian, prefix='p5_')
+
+                gmodel = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_') + \
+                         GaussianModel(prefix='p3_') + GaussianModel(prefix='p4_') + GaussianModel(prefix='p5_')
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('p1_amp', con[0][0], True, con[0][1], con[0][2]),
-                                ('p1_cen', con[0][3], True, con[0][4], con[0][5]),
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
                                 ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
-                                ('p2_amp', con[1][0], True, con[1][1], con[1][2]),
-                                ('p2_cen', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
                                 ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
-                                ('p3_amp', con[2][0], True, con[2][1], con[2][2]),
-                                ('p3_cen', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
                                 ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
-                                ('p4_amp', con[3][0], True, con[3][1], con[3][2]),
-                                ('p4_cen', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
                                 ('p4_sigma', con[3][6], True, con[3][7], con[3][8]),
-                                ('p5_amp', con[4][0], True, con[4][1], con[4][2]),
-                                ('p5_cen', con[4][3], True, con[4][4], con[4][5]),
+                                ('p5_amplitude', con[4][0], True, con[4][1], con[4][2]),
+                                ('p5_center', con[4][3], True, con[4][4], con[4][5]),
                                 ('p5_sigma', con[4][6], True, con[4][7], con[4][8]))
                 result = gmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 comps = result.eval_components()
@@ -238,17 +236,15 @@ class XPS_view(QtWidgets.QDockWidget):
                 ApplicationSettings.ALL_DATA_PLOTTED['G4'] =self.main_window.ax.plot(self.data_x, self.shirley + comps['p4_'], 'k--', label='G4')
                 ApplicationSettings.ALL_DATA_PLOTTED['G5'] = self.main_window.ax.plot(self.data_x,self.shirley + comps['p5_'],'k--', label='G5')
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] =self.main_window.ax.plot(self.data_x, result.best_fit + self.shirley, 'r--', label='Result')
-                leg = self.main_window.ax.legend(loc='best',fontsize='small')
-                leg.set_draggable(True)
                 self.ui.fit_report_TE.setText(result.fit_report())
 
         elif self.ui.fit_shape_cb.currentText() == 'Lorentz':
             if self.ui.num_peaks_sb.value() == 1:
-                lmodel = Model(lorenz)
+                lmodel = LorentzianModel()
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('amp', con[0][0], True, con[0][1], con[0][2]),
-                                ('cen', con[0][3], True, con[0][4], con[0][5]),
+                params.add_many(('amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('center', con[0][3], True, con[0][4], con[0][5]),
                                 ('sigma', con[0][6], True, con[0][7], con[0][8]), )
                 result = lmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 self.ui.fit_report_TE.setText(result.fit_report())
@@ -260,32 +256,158 @@ class XPS_view(QtWidgets.QDockWidget):
                 leg = self.main_window.ax.legend(loc='best', fontsize='small')
                 leg.set_draggable(True)
             elif self.ui.num_peaks_sb.value() == 2:
-                lmodel = Model(lorenz, prefix='p1_') + Model(lorenz, prefix='p2_')
+                lmodel = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
-                params.add_many(('p1_amp', con[0][0], True, con[0][1], con[0][2]),
-                                ('p1_cen', con[0][3], True, con[0][4], con[0][5]),
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
                                 ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
-                                ('p2_amp', con[1][0], True, con[1][1], con[1][2]),
-                                ('p2_cen', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
                                 ('p2_sigma', con[1][6], True, con[1][7], con[1][8]))
                 result = lmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
                 comps = result.eval_components()
                 self.ui.fit_report_TE.setText(result.fit_report())
                 ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley,
                                                                                            'k--', label='Shirley')
-                ApplicationSettings.ALL_DATA_PLOTTED['G1'] = self.main_window.ax.plot(self.data_x,
+                ApplicationSettings.ALL_DATA_PLOTTED['L1'] = self.main_window.ax.plot(self.data_x,
                                                                                       self.shirley + comps['p1_'],
-                                                                                      'k--', label='G1')
-                ApplicationSettings.ALL_DATA_PLOTTED['G2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      'k--', label='L1')
+                ApplicationSettings.ALL_DATA_PLOTTED['L2'] = self.main_window.ax.plot(self.data_x,
                                                                                       self.shirley + comps['p2_'],
-                                                                                      'k--', label='G2')
+                                                                                      'k--', label='L2')
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
                                                                                        result.best_fit + self.shirley,
                                                                                        'r--', label='Result')
                 leg = self.main_window.ax.legend(loc='best', fontsize='small')
                 leg.set_draggable(True)
 
+        elif self.ui.fit_shape_cb.currentText() == 'Voigt':
+            if self.ui.num_peaks_sb.value() == 1:
+                vmodel = VoigtModel()
+                params = Parameters()
+                params.add_many(('amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('center', con[0][3], True, con[0][4], con[0][5]),
+                                ('sigma', con[0][6], True, con[0][7], con[0][8]))
+                result = vmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
+                self.ui.fit_report_TE.setText(result.fit_report())
+                ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley,
+                                                                                           'k--', label='Shirley')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit + self.shirley,
+                                                                                       'r--', label='Result')
+            elif self.ui.num_peaks_sb.value() == 2:
+                vmodel = VoigtModel(prefix='p1_') + VoigtModel(prefix='p2_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]))
+                result = vmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
+                comps = result.eval_components()
+                self.ui.fit_report_TE.setText(result.fit_report())
+                ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley,
+                                                                                           'k--', label='Shirley')
+                ApplicationSettings.ALL_DATA_PLOTTED['V1'] = self.main_window.ax.plot(self.data_x,
+                                                                                      self.shirley + comps['p1_'],
+                                                                                      'k--', label='V1')
+                ApplicationSettings.ALL_DATA_PLOTTED['V2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      self.shirley + comps['p2_'],
+                                                                                      'k--', label='V2')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit + self.shirley,
+                                                                                       'r--', label='Result')
+            elif self.ui.num_peaks_sb.value() == 3:
+                vmodel = VoigtModel(prefix='p1_') + VoigtModel(prefix='p2_') + VoigtModel(prefix='p3_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]))
+                result = vmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
+                comps = result.eval_components()
+                ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley,
+                                                                                           'k--', label='Shirley')
+                ApplicationSettings.ALL_DATA_PLOTTED['V1'] = self.main_window.ax.plot(self.data_x,
+                                                                                      self.shirley + comps['p1_'],
+                                                                                      'k--', label='V1')
+                ApplicationSettings.ALL_DATA_PLOTTED['V2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      self.shirley + comps['p2_'],
+                                                                                      'k--', label='V2')
+                ApplicationSettings.ALL_DATA_PLOTTED['V3'] = self.main_window.ax.plot(self.data_x,
+                                                                                      self.shirley + comps['p3_'],
+                                                                                      'k--', label='V3')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit + self.shirley,
+                                                                                       'r--', label='Result')
+                self.ui.fit_report_TE.setText(result.fit_report())
+            elif self.ui.num_peaks_sb.value() == 4:
+                vmodel = VoigtModel(prefix='p1_') + VoigtModel(prefix='p2_') + \
+                         VoigtModel(prefix='p3_') + VoigtModel(prefix='p4_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_sigma', con[3][6], True, con[3][7], con[3][8]))
+                result = vmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
+                comps = result.eval_components()
+                ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley, 'k--', label='Shirley')
+                ApplicationSettings.ALL_DATA_PLOTTED['V1'] = self.main_window.ax.plot(self.data_x, self.shirley + comps['p1_'], 'k--', label='V1')
+                ApplicationSettings.ALL_DATA_PLOTTED['V2'] = self.main_window.ax.plot(self.data_x, self.shirley + comps['p2_'], 'k--', label='V2')
+                ApplicationSettings.ALL_DATA_PLOTTED['V3'] = self.main_window.ax.plot(self.data_x, self.shirley + comps['p3_'], 'k--', label='V3')
+                ApplicationSettings.ALL_DATA_PLOTTED['V4'] = self.main_window.ax.plot(self.data_x, self.shirley + comps['p4_'], 'k--', label='V4')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x, result.best_fit + self.shirley, 'r--', label='Result')
+                leg = self.main_window.ax.legend(loc='best',fontsize='small')
+                leg.set_draggable(True)
+                self.ui.fit_report_TE.setText(result.fit_report())
+            elif self.ui.num_peaks_sb.value() == 5:
+                vmodel = VoigtModel(prefix='p1_') + VoigtModel(prefix='p2_') + \
+                         VoigtModel(prefix='p3_') + VoigtModel(prefix='p4_') + VoigtModel(prefix='p5_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_sigma', con[3][6], True, con[3][7], con[3][8]),
+                                ('p5_amplitude', con[4][0], True, con[4][1], con[4][2]),
+                                ('p5_center', con[4][3], True, con[4][4], con[4][5]),
+                                ('p5_sigma', con[4][6], True, con[4][7], con[4][8]))
+                result = vmodel.fit(self.data_y - self.shirley, params, x=self.data_x)
+                comps = result.eval_components()
+                ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley, 'k--', label='Shirley')
+                ApplicationSettings.ALL_DATA_PLOTTED['V1'] =self.main_window.ax.plot(self.data_x, self.shirley + comps['p1_'], 'k--', label='V1')
+                ApplicationSettings.ALL_DATA_PLOTTED['V2'] =self.main_window.ax.plot(self.data_x, self.shirley + comps['p2_'], 'k--', label='V2')
+                ApplicationSettings.ALL_DATA_PLOTTED['V3'] =self.main_window.ax.plot(self.data_x, self.shirley + comps['p3_'], 'k--', label='V3')
+                ApplicationSettings.ALL_DATA_PLOTTED['V4'] =self.main_window.ax.plot(self.data_x, self.shirley + comps['p4_'], 'k--', label='V4')
+                ApplicationSettings.ALL_DATA_PLOTTED['V5'] = self.main_window.ax.plot(self.data_x,self.shirley + comps['p5_'],'k--', label='V5')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] =self.main_window.ax.plot(self.data_x, result.best_fit + self.shirley, 'r--', label='Result')
+                self.ui.fit_report_TE.setText(result.fit_report())
         self.xps_basic()
         ApplicationSettings.ALL_DATA_PLOTTED['Y Data'] = self.main_window.ax.plot(self.data_x,self.data_y,'-b')
         self.main_window.canvas.draw()

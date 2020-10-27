@@ -2,6 +2,7 @@ from src.Ui_Files.DockWidgets.dw_SE import Ui_DockWidget
 from src.gui_elements.RC_Fucntions import *
 from PySide2 import QtCore,QtWidgets
 import pandas as pd
+from lmfit.models import LinearModel
 
 
 class SE_view(QtWidgets.QDockWidget):
@@ -65,24 +66,32 @@ class SE_view(QtWidgets.QDockWidget):
             self.ui.SEY_tw.addTopLevelItems(column_list_y)
 
     def plot_se(self):
-        path = self.model.filePath(self.tree_view.currentIndex())
-
         x = self.ui.SEX_tw.currentIndex().data()
         y = self.ui.SEY_tw.currentIndex().data()
-        ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.data.plot(x=x,y=y,ax=self.main_window.ax)
-
+        x_data = self.data[x].to_numpy()
+        y_data = self.data[y].to_numpy()
+        if self.ui.correction_combo.currentText() == 'Zero From First':
+            # ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.data.plot(x=x,y=y,ax=self.main_window.ax)
+            ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.main_window.ax.plot(x_data,y_data-y_data[0])
+        elif self.ui.correction_combo.currentText() == 'No Correction':
+            ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.main_window.ax.plot(x_data,y_data)
         self.main_window.canvas.draw()
 
     def linear_SE(self):
-        # self.data = ApplicationSettings.CURRENT_PLOT[0].get_data()
-        self.data = np.asarray(self.data).T
-        print(self.data)
-        # quick_fit_params = np.polyfit(data[0],data[1],1)
-        # quick_fit = np.poly1d(quick_fit_params)
-        # self.main_window.ax.plot(data[0],quick_fit(data[0]))
-        # self.main_window.ax.set_xlabel('Cycles')
-        # self.main_window.ax.set_ylabel('Thickness Change ($\AA$)')
-        # self.main_window.canvas.draw()
+        model = LinearModel()
+        x = self.ui.SEX_tw.currentIndex().data()
+        y = self.ui.SEY_tw.currentIndex().data()
+        x_data = self.data[x].to_numpy()
+        y_data = self.data[y].to_numpy()
+        if self.ui.correction_combo.currentText() =='No Correction':
+            pass
+        elif self.ui.correction_combo.currentText() == 'Zero From First':
+            y_data = y_data-y_data[0]
+        pars = model.guess(y_data,x=x_data)
+        fit = model.fit(y_data,pars,x=x_data)
+        print(fit.fit_report())
+        ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)+'fit'] = self.main_window.ax.plot(x_data,fit.best_fit)
+        self.main_window.canvas.draw()
 
     def SE_graph_constants(self):
         self.main_window.ax.set_xlabel('Cycles')
