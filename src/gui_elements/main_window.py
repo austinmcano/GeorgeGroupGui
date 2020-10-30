@@ -20,11 +20,14 @@ from matplotlib.pyplot import figure
 import matplotlib
 from src.gui_elements.settings import ApplicationSettings
 # from gui
+import sys
 from PySide2 import QtCore,QtWidgets,QtGui
+from shutil import copyfile, copytree, rmtree, copy2
 import pickle
 import os
 import seaborn as sns
 import numpy as np
+from copy import copy
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -111,6 +114,8 @@ class MainWindow(QtWidgets.QMainWindow):
         start_ui.CF_pb.clicked.connect(lambda: self.start(self.dw_CF))
         start_dialog.exec_()
 
+        self.ui.actionFile.triggered.connect(lambda: plotting_funs.import_file(self))
+        self.ui.actionLoad_Data.triggered.connect(lambda: plotting_funs.load_data(self))
         self.ui.actionNew_Project_2.triggered.connect(lambda: plotting_funs.new_project(self))
         self.ui.actionOpen_Project.triggered.connect(lambda: plotting_funs.open_project(self))
         self.ui.actionChange_Settings.triggered.connect(lambda: plotting_funs.app_settings_fun(self))
@@ -126,6 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionSE.triggered.connect(lambda: plotting_funs.SE_view_fun(self))
         self.ui.actionConsole.triggered.connect(lambda: plotting_funs.Console_view_fun(self))
         self.ui.actionCurve_Fitting.triggered.connect(lambda: plotting_funs.CF_view_fun(self))
+        self.ui.actionDirectory.triggered.connect(lambda: plotting_funs.import_directiory_function(self))
 
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
         self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
@@ -286,11 +292,25 @@ class plotting_funs:
             self.canvas.draw()
 
     def Save_All_Plotted(self):
+        names = self.settings.value('Data_Names')
+        if names is None:
+            pass
+        else:
+            for i in names:
+                self.settings.remove(i)
         def temp():
+            temp = []
             for ix in ui.treeWidget.selectedIndexes():
                 text = ix.data()  # or ix.data()
+                temp.append(text)
                 np.savetxt(ui.save_as_LE.text()+'.csv',
                            ApplicationSettings.ALL_DATA_PLOTTED[text][0]._xy,delimiter=',')
+                self.settings.setValue(text, ApplicationSettings.ALL_DATA_PLOTTED[text][0]._xy)
+            # self.settings.setValue('Data_Names',text)
+                name = os.path.join(self.settings.value('SAVED_DATA_PATH'),ui.save_as_LE.text())
+                # print(name)
+                # print(ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy)
+                np.savetxt(str(name), ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy.T,delimiter=',')
         dialog = QtWidgets.QDialog()
         ui = STC_ui()
         ui.setupUi(dialog)
@@ -374,21 +394,25 @@ class plotting_funs:
         self.canvas.draw()
 
     def send_to_cf(self):
-        def finish():
-            for j in ui.treeWidget.selectedIndexes():
-                line = ApplicationSettings.ALL_DATA_PLOTTED[j.data()]
-        all_lines = ApplicationSettings.ALL_DATA_PLOTTED
-        dialog = QtWidgets.QDialog()
-        ui = simple_tw()
-        ui.setupUi(dialog)
-        ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
-        Key_List = []
-        for i in all_lines.keys():
-            Key_List.append(QtWidgets.QTreeWidgetItem([i]))
-        ui.treeWidget.addTopLevelItems(Key_List)
-        ui.buttonBox.accepted.connect(lambda:finish())
-        dialog.exec_()
-        self.canvas.draw()
+        # def finish():
+        #     for j in ui.treeWidget.selectedIndexes():
+        #         line = ApplicationSettings.ALL_DATA_PLOTTED[j.data()]
+        # all_lines = ApplicationSettings.ALL_DATA_PLOTTED
+        # dialog = QtWidgets.QDialog()
+        # ui = simple_tw()
+        # ui.setupUi(dialog)
+        # ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        # Key_List = []
+        # for i in all_lines.keys():
+        #     Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+        # ui.treeWidget.addTopLevelItems(Key_List)
+        # ui.buttonBox.accepted.connect(lambda:finish())
+        # dialog.exec_()
+        # self.canvas.draw()
+        fit_list = self.dw_SE.fitted_slopes
+        self.dw_CF.ui.tableWidget.setRowCount(len(fit_list))
+        for row in range(len(fit_list)):
+            self.dw_CF.ui.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(str(fit_list[row])))
 
     def random_c_plot(self):
         Z = np.random.rand(6, 10)
@@ -441,3 +465,26 @@ class plotting_funs:
     def open_project(self):
         dialog = QtWidgets.QFileDialog.getExistingDirectory()
         self.settings.setValue('PROJECT_PATH', dialog)
+
+    def load_data(self):
+        temp = self.settings.value()
+        key_list = [i for i in temp.keys()]
+        for i in key_list:
+            data = temp[i][0]._xy.T
+            self.ax.plot(data[0],data[1])
+        self.canvas.draw()
+
+    def import_file(self):
+        filepath = QtWidgets.QFileDialog.getOpenFileName()[0]
+        try:
+            filename = os.path.basename(filepath)
+            datapath = self.settings.value('DATA_PATH')
+            copy2(filepath, os.path.join(datapath,filename))
+        except FileNotFoundError:
+            pass
+
+    def import_directiory_function(self):
+        src_directory = QtWidgets.QFileDialog.getExistingDirectory()
+        dirname = src_directory.split('/')[-1]
+        print(os.path.join(self.settings.value('DATA_PATH'),dirname))
+        copytree(src_directory,os.path.join(self.settings.value('DATA_PATH'),dirname))

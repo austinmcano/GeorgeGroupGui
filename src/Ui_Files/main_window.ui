@@ -60,6 +60,7 @@
     <addaction name="separator"/>
     <addaction name="actionChange_Settings"/>
     <addaction name="actionSave_Data"/>
+    <addaction name="actionLoad_Data"/>
     <addaction name="menuImport"/>
     <addaction name="actionPrint"/>
     <addaction name="separator"/>
@@ -164,10 +165,16 @@
    <property name="text">
     <string>FTIR</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
   </action>
   <action name="actionQCM">
    <property name="text">
     <string>QCM</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
   <action name="actionPlot_Left">
@@ -239,6 +246,9 @@
    <property name="text">
     <string>Clear Graph</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="actionAdd_Figure">
    <property name="text">
@@ -284,6 +294,9 @@
    <property name="text">
     <string>XPS</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
   <action name="actionProject_Tree">
    <property name="text">
@@ -298,6 +311,9 @@
   <action name="actionSE">
    <property name="text">
     <string>SE</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionConsole">
@@ -556,6 +572,14 @@
   <action name="actionCurve_Fitting">
    <property name="text">
     <string>Curve Fitting</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionLoad_Data">
+   <property name="text">
+    <string>Load Data</string>
    </property>
   </action>
  </widget>

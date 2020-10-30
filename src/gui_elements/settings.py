@@ -9,4 +9,5 @@ class ApplicationSettings:
     ALL_DATA_PLOTTED = {}
     C_X_LIM = []
     C_Y_LIM = []
+    FITTED_SE = []
 

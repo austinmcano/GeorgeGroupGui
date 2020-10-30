@@ -18,6 +18,7 @@ class SE_view(QtWidgets.QDockWidget):
 
     def _init_vars(self):
         self.current_data_container = None
+        self.fitted_slopes = None
 
     def _init_widgets(self):
         self.tree_view = self.ui.SE_treeView
@@ -69,28 +70,31 @@ class SE_view(QtWidgets.QDockWidget):
         x = self.ui.SEX_tw.currentIndex().data()
         y = self.ui.SEY_tw.currentIndex().data()
         x_data = self.data[x].to_numpy()
-        y_data = self.data[y].to_numpy()
-        if self.ui.correction_combo.currentText() == 'Zero From First':
-            # ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.data.plot(x=x,y=y,ax=self.main_window.ax)
-            ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.main_window.ax.plot(x_data,y_data-y_data[0])
-        elif self.ui.correction_combo.currentText() == 'No Correction':
-            ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)] = self.main_window.ax.plot(x_data,y_data)
-        self.main_window.canvas.draw()
+        for i in self.ui.SEY_tw.selectedItems():
+            if self.ui.correction_combo.currentText() == 'Zero From First':
+                for i in self.ui.SEY_tw.selectedItems():
+                    y_data = self.data[i.text(0)].to_numpy()
+                    ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = self.main_window.ax.plot(x_data, y_data-y_data[0])
+            elif self.ui.correction_combo.currentText() == 'No Correction':
+                for i in self.ui.SEY_tw.selectedItems():
+                    y_data = self.data[i.text(0)].to_numpy()
+                    ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = self.main_window.ax.plot(x_data, y_data)
+            self.main_window.canvas.draw()
 
     def linear_SE(self):
         model = LinearModel()
-        x = self.ui.SEX_tw.currentIndex().data()
-        y = self.ui.SEY_tw.currentIndex().data()
-        x_data = self.data[x].to_numpy()
-        y_data = self.data[y].to_numpy()
-        if self.ui.correction_combo.currentText() =='No Correction':
-            pass
-        elif self.ui.correction_combo.currentText() == 'Zero From First':
-            y_data = y_data-y_data[0]
-        pars = model.guess(y_data,x=x_data)
-        fit = model.fit(y_data,pars,x=x_data)
-        print(fit.fit_report())
-        ApplicationSettings.ALL_DATA_PLOTTED[str(x)+str(y)+'fit'] = self.main_window.ax.plot(x_data,fit.best_fit)
+        # x = self.ui.SEX_tw.currentIndex().data()
+        # y = self.ui.SEY_tw.currentIndex().data()
+        # x_data = self.data[x].to_numpy()
+        # y_data = self.data[y].to_numpy()
+        self.fitted_slopes = []
+        all_data_list = [i for i in ApplicationSettings.ALL_DATA_PLOTTED.keys()]
+        for i in all_data_list:
+            data = ApplicationSettings.ALL_DATA_PLOTTED[i][0]._xy.T
+            pars = model.guess(data[1],x=data[0])
+            fit = model.fit(data[1],pars,x=data[0])
+            ApplicationSettings.ALL_DATA_PLOTTED[str(i) + 'fit'] = self.main_window.ax.plot(data[0],fit.best_fit)
+            self.fitted_slopes.append(fit.params['slope'].value)
         self.main_window.canvas.draw()
 
     def SE_graph_constants(self):

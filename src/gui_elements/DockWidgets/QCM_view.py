@@ -38,6 +38,12 @@ class QCM_view(QtWidgets.QDockWidget):
 
         self.ui.plot_pb.clicked.connect(lambda: self.qcm())
         self.ui.hc_mass_pb.clicked.connect(lambda: self.qcm_mass_hc())
+        self.ui.time_option.currentTextChanged.connect(lambda: self.time_change())
+
+    def time_change(self):
+        if self.ui.time_option.currentText()=='From:To Time':
+            self.ui.From_Time.setText('0')
+            self.ui.To_Time.setText('9999999')
 
     def eventFilter(self, object, event):
         # For right click events
