@@ -6,6 +6,7 @@ from src.Ui_Files.Dialogs.Plot_Dialog_General import Ui_Dialog as plot_dialog
 from src.Ui_Files.Dialogs.simple_text import Ui_Dialog as simple_text_dialog
 import os
 import pickle
+from src.Ui_Files.Dialogs.delete_dialog import Ui_Dialog as delete_dialog
 from src.Ui_Files.Dialogs.simple_tablewidget import Ui_Dialog as tableWidget_dialog
 from PySide2 import QtCore
 
@@ -50,13 +51,12 @@ def rc_browser_options(self):
     self.import_directory_action.triggered.connect(lambda: import_directory_clicked(self))
     self.new_directory_action.triggered.connect(lambda: new_directory_clicked(self))
     self.get_path_action.triggered.connect(lambda: get_path_clicked(self))
-    self.graph_options_action.triggered.connect(lambda: Graph_Options(self))
+    # self.graph_options_action.triggered.connect(lambda: Graph_Options(self))
     # self.to_root_action.triggered.connect(lambda: to_root_fun(self))
     self.directory_plot_action.triggered.connect(lambda: plot_directory(self))
     self.unpickle_action.triggered.connect(lambda: show_pickled_fig(self))
     self.table_action.triggered.connect(lambda: table_dialog(self))
     self.change_path_action.triggered.connect(lambda: change_path(self))
-
 
 def import_file_clicked(self):
     filepath = self.model.filePath(self.tree_view.currentIndex())
@@ -65,11 +65,9 @@ def import_file_clicked(self):
     else:
         pass
 
-
 def get_path_clicked(self):
     filepath = self.model.filePath(self.tree_view.currentIndex())
     print(filepath)
-
 
 def plot_directory(self):
     pass
@@ -175,13 +173,19 @@ def table_dialog(self):
     dialog.exec_()
 
 def delete_action_clicked(self):
+    def finish():
+        if os.path.isfile(path):
+            os.remove(path)
+            print('was this done')
+        elif os.path.isdir(path):
+            rmtree(path)
     path = self.model.filePath(self.tree_view.currentIndex())
-    if os.path.isfile(path):
-        os.remove(path)
-        print('was this done')
-    elif os.path.isdir(path):
-        rmtree(path)
-
+    d = QtWidgets.QDialog()
+    ui = delete_dialog()
+    ui.setupUi(d)
+    ui.label_2.setText(path)
+    ui.buttonBox.accepted.connect(lambda: finish())
+    d.exec_()
 
 def import_directory_clicked(self):
     dirpath = self.model.filePath(self.tree_view.currentIndex())
@@ -190,7 +194,6 @@ def import_directory_clicked(self):
         copytree(dirpath, ApplicationSettings.DATA_PATH+str(dirpath.split('/')[-1]))
     elif os.path.isfile(dirpath):
         print('isnotdir')
-
 
 def new_directory_clicked(self):
     simple_text = QtWidgets.QDialog()
@@ -207,9 +210,6 @@ def new_directory_clicked(self):
     else:
         print('Path Exists')
         print(newdirpath)
-
-
-
 
 # def addmpl(self,fig):
 #     self.main_window.canvas = FigureCanvas(fig)
