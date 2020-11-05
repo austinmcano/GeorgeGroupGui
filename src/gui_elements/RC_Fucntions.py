@@ -224,8 +224,11 @@ def new_directory_clicked(self):
 #     self.ui.verticalLayout.removeWidget(self.main_window.toolbar)
 
 def change_path(self):
-    self.tree_view.setRootIndex(self.model.index(ApplicationSettings.DATABROWSER_PATH))
-
+    path = QtWidgets.QFileDialog.getExistingDirectory()
+    if type(path) is str:
+        self.tree_view.setRootIndex(self.model.index(path))
+    else:
+        print(path)
 
 def show_pickled_fig(self):
     path = self.model.filePath(self.tree_view.currentIndex())

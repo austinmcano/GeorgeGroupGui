@@ -115,12 +115,12 @@ class FTIR_view(QtWidgets.QDockWidget):
             self.sub = subtraction_from_survey(csv_list)
             inte = integrate_ir(self.sub,minimum,maximum)
             ApplicationSettings.ALL_DATA_PLOTTED['Int. '+str(minimum)+'-'+str(maximum)] = \
-                self.main_window.ax.plot(inte,'.-b',label='Int. '+str(minimum)+'-'+str(maximum))
+                self.main_window.ax.plot(inte,'.-',label='Int. '+str(minimum)+'-'+str(maximum))
         elif self.ui.int_type_cb.currentText() == 'Integrate Diff (dir)':
             self.diff = difference_from_survey(csv_list)
             inte = integrate_ir(self.diff, minimum, maximum)
             ApplicationSettings.ALL_DATA_PLOTTED['Int. ' + str(minimum) + '-' + str(maximum)] = \
-                self.main_window.ax.plot(inte,'.-b', label='Int. ' + str(minimum) + '-' + str(maximum))
+                self.main_window.ax.plot(inte,'.-', label='Int. ' + str(minimum) + '-' + str(maximum))
         self.main_window.canvas.draw()
 
     def smooth(self):

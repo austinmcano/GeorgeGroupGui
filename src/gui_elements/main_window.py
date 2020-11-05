@@ -9,6 +9,7 @@ from src.gui_elements.DockWidgets.SE_view import SE_view
 from src.gui_elements.DockWidgets.CF_view import CurveFit_view
 from src.Ui_Files.Dialogs.app_settings import Ui_Dialog as app_settings
 from src.Ui_Files.Dialogs.start_dialog import Ui_Dialog as start_Ui
+from src.Ui_Files.Dialogs.annotation_dialog import Ui_Dialog as annotation_ui
 from src.gui_elements.DockWidgets.Console_view import Console_view
 from src.Ui_Files.Dialogs.seaborn_settings import Ui_Dialog as Ui_sns_Dialog
 from src.Ui_Files.Dialogs.simple_text import Ui_Dialog as simple_text_ui
@@ -92,6 +93,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actionSave_To_CSV = self.context_menu_plot.addAction('Save To CSV')
         self.removeplot_action = self.context_menu_plot.addAction('Remove Line')
         self.save_figure_action = self.context_menu_plot.addAction('Save Figure')
+        self.annotation_action = self.context_menu_plot.addAction('Annotate')
         self.sns_settings_action = self.context_menu_plot.addAction('Seaborn Settings')
         self.send_to_cf_action = self.context_menu_plot.addAction('Send to CF')
 
@@ -99,6 +101,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.removeplot_action.triggered.connect(lambda: plotting_funs.remove_line(self))
         self.actionSave_To_CSV.triggered.connect(lambda: plotting_funs.Save_All_Plotted(self))
         self.save_figure_action.triggered.connect(lambda: plotting_funs.save_fig(self))
+        self.annotation_action.triggered.connect(lambda: plotting_funs.plot_annotation(self))
         self.sns_settings_action.triggered.connect(lambda: self.sns_settings())
         self.send_to_cf_action.triggered.connect(lambda: plotting_funs.send_to_cf(self))
 
@@ -310,7 +313,7 @@ class plotting_funs:
                 name = os.path.join(self.settings.value('SAVED_DATA_PATH'),ui.save_as_LE.text())
                 # print(name)
                 # print(ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy)
-                np.savetxt(str(name), ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy.T,delimiter=',')
+                np.savetxt(str(name)+ui.comboBox.currentText(), ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy.T,delimiter=',')
         dialog = QtWidgets.QDialog()
         ui = STC_ui()
         ui.setupUi(dialog)
@@ -454,7 +457,11 @@ class plotting_funs:
             os.makedirs(os.path.join(project_name,ui.project_le.text()))
             os.makedirs(os.path.join(project_name,ui.project_le.text(),'Data'))
             os.makedirs(os.path.join(project_name, ui.project_le.text(), 'Saved'))
-            self.settings.setValue('PROJECT_PATH',project_name)
+            project_path = os.path.join(project_name, ui.project_le.text())
+
+            self.settings.setValue('PROJECT_PATH',project_path)
+            self.settings.setValue('SAVED_DATA_PATH', os.path.join(project_path,'Saved'))
+            self.settings.setValue('DATA_PATH', os.path.join(project_path, 'Data'))
         dialog_path = QtWidgets.QFileDialog.getExistingDirectory()
         d = QtWidgets.QDialog()
         ui = new_project_dialog()
@@ -488,3 +495,14 @@ class plotting_funs:
         dirname = src_directory.split('/')[-1]
         print(os.path.join(self.settings.value('DATA_PATH'),dirname))
         copytree(src_directory,os.path.join(self.settings.value('DATA_PATH'),dirname))
+
+    def plot_annotation(self):
+        def finish():
+            spot = [np.average(ApplicationSettings.C_X_LIM),np.average(ApplicationSettings.C_Y_LIM)]
+            self.ax.annotate(ui.text_le.text(),xy=(spot[0],spot[1])).draggable()
+            self.canvas.draw()
+        d = QtWidgets.QDialog()
+        ui = annotation_ui()
+        ui.setupUi(d)
+        ui.buttonBox.accepted.connect(lambda: finish())
+        d.exec_()
