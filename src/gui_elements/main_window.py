@@ -306,11 +306,9 @@ class plotting_funs:
             for ix in ui.treeWidget.selectedIndexes():
                 text = ix.data()  # or ix.data()
                 temp.append(text)
-                self.settings.setValue(text, ApplicationSettings.ALL_DATA_PLOTTED[text][0]._xy)
-            # self.settings.setValue('Data_Names',text)
+                # self.settings.setValue(text, ApplicationSettings.ALL_DATA_PLOTTED[text][0]._xy)
+                # self.settings.setValue('Data_Names',text)
                 name = os.path.join(self.settings.value('SAVED_DATA_PATH'),ui.save_as_LE.text())
-                # print(name)
-                # print(ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy)
                 np.savetxt(str(name)+ui.comboBox.currentText(),
                            ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy,delimiter=',')
         dialog = QtWidgets.QDialog()
