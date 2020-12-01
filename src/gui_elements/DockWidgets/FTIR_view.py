@@ -37,7 +37,7 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.tree_view.setSortingEnabled(True)
 
         self.tree_view.sortByColumn(True)
-        self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('PROJECT_PATH')))
+        self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('FTIR_PATH')))
 
         self.tree_view.setModel(self.model)
         self.tree_view.installEventFilter(self)
@@ -109,18 +109,30 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.sub = subtraction_from_survey(csv_list)
         minimum = float(self.ui.tableWidget.item(0,0).text())
         maximum = float(self.ui.tableWidget.item(0, 1).text())
+        if self.ui.comboBox.currentText()=='Left Axis':
+            ax = self.main_window.ax
+        elif self.ui.comboBox.currentText()=='Right Axis':
+            if self.main_window.ax_2 is None:
+                self.main_window.ax_2 = self.main_window.ax.twinx()
+            ax = self.main_window.ax_2
         if self.ui.int_type_cb.currentText() == 'Integrate Plot (dir)':
             pass
+        if self.ui.int_type_cb.currentText() == 'Integrate Sub (dir) Corrected':
+            self.sub = subtraction_from_survey(csv_list)
+            inte = integrate_ir(self.sub, minimum, maximum)
+            inte_c = [i-inte[0] for i in inte]
+            ApplicationSettings.ALL_DATA_PLOTTED['Int. ' + str(minimum) + '-' + str(maximum)] = \
+                ax.plot(inte_c, '.-', label='Int. Corr. ' + str(minimum) + '-' + str(maximum))
         elif self.ui.int_type_cb.currentText() == 'Integrate Sub (dir)':
             self.sub = subtraction_from_survey(csv_list)
             inte = integrate_ir(self.sub,minimum,maximum)
             ApplicationSettings.ALL_DATA_PLOTTED['Int. '+str(minimum)+'-'+str(maximum)] = \
-                self.main_window.ax.plot(inte,'.-',label='Int. '+str(minimum)+'-'+str(maximum))
+                ax.plot(inte,'.-',label='Int. '+str(minimum)+'-'+str(maximum))
         elif self.ui.int_type_cb.currentText() == 'Integrate Diff (dir)':
             self.diff = difference_from_survey(csv_list)
             inte = integrate_ir(self.diff, minimum, maximum)
             ApplicationSettings.ALL_DATA_PLOTTED['Int. ' + str(minimum) + '-' + str(maximum)] = \
-                self.main_window.ax.plot(inte,'.-', label='Int. ' + str(minimum) + '-' + str(maximum))
+                ax.plot(inte,'.-', label='Int. ' + str(minimum) + '-' + str(maximum))
         self.main_window.canvas.draw()
 
     def smooth(self):

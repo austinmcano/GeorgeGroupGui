@@ -7,6 +7,7 @@ from src.gui_elements.DockWidgets.QCM_view import QCM_view
 from src.gui_elements.DockWidgets.FTIR_view import FTIR_view
 from src.gui_elements.DockWidgets.SE_view import SE_view
 from src.gui_elements.DockWidgets.CF_view import CurveFit_view
+from src.gui_elements.DockWidgets.Calc_view import Calculator_view
 from src.Ui_Files.Dialogs.app_settings import Ui_Dialog as app_settings
 from src.Ui_Files.Dialogs.start_dialog import Ui_Dialog as start_Ui
 from src.Ui_Files.Dialogs.annotation_dialog import Ui_Dialog as annotation_ui
@@ -15,6 +16,7 @@ from src.Ui_Files.Dialogs.seaborn_settings import Ui_Dialog as Ui_sns_Dialog
 from src.Ui_Files.Dialogs.simple_text import Ui_Dialog as simple_text_ui
 from src.Ui_Files.Dialogs.new_project_dialog import Ui_Dialog as new_project_dialog
 from src.Ui_Files.Dialogs.simple_treeWidget_dialog import Ui_Dialog as simple_tw
+from src.Ui_Files.Dialogs.bargraph_dialog import Ui_Dialog as bar_dialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import figure
@@ -60,6 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dw_SE = SE_view(self)
         self.dw_Console = Console_view(self)
         self.dw_CF = CurveFit_view(self)
+        self.dw_calc = Calculator_view(self)
 
         self.All_Views = [self.dw_FTIR,self.dw_QCM,self.dw_SE,self.dw_XPS,self.dw_CF,self.dw_ProjectView
             ,self.dw_Data_Broswer]
@@ -74,11 +77,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
         self.canvas = FigureCanvas(self.fig)
         self.ax = self.fig.add_subplot(111)
+        self.ax_2 = None
         self.canvas.draw()
         self.toolbar = NavigationToolbar(self.canvas, self.canvas, coordinates=True)
         self.ui.verticalLayout.addWidget(self.toolbar)
         self.ui.verticalLayout.addWidget(self.canvas)
         self.canvas.draw()
+
+        self.bar = {'xlist': '', 'y1list':'','y2list':'','y3list':'', 'width':'0.35', 'num':1,
+                    'label1':'','label2':'','label3':''}
 
     def closeEvent(self, event: QtGui.QCloseEvent):
         self.settings.setValue('window_size', self.size())
@@ -96,6 +103,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.annotation_action = self.context_menu_plot.addAction('Annotate')
         self.sns_settings_action = self.context_menu_plot.addAction('Seaborn Settings')
         self.send_to_cf_action = self.context_menu_plot.addAction('Send to CF')
+        self.open_fig_action = self.context_menu_plot.addAction('Open Fig')
 
         self.clear_action.triggered.connect(lambda: self.cleargraph())
         self.removeplot_action.triggered.connect(lambda: plotting_funs.remove_line(self))
@@ -104,6 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.annotation_action.triggered.connect(lambda: plotting_funs.plot_annotation(self))
         self.sns_settings_action.triggered.connect(lambda: self.sns_settings())
         self.send_to_cf_action.triggered.connect(lambda: plotting_funs.send_to_cf(self))
+        self.open_fig_action.triggered.connect(lambda: plotting_funs.show_pickled_fig(self))
 
         start_dialog = QtWidgets.QDialog()
         start_ui = start_Ui()
@@ -117,6 +126,7 @@ class MainWindow(QtWidgets.QMainWindow):
         start_ui.CF_pb.clicked.connect(lambda: self.start(self.dw_CF))
         start_dialog.exec_()
 
+        self.ui.actionGraph_Test.triggered.connect(lambda: plotting_funs.graph_test_fun(self))
         self.ui.actionFile.triggered.connect(lambda: plotting_funs.import_file(self))
         self.ui.actionLoad_Data.triggered.connect(lambda: plotting_funs.load_data(self))
         self.ui.actionNew_Project_2.triggered.connect(lambda: plotting_funs.new_project(self))
@@ -125,20 +135,23 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionSeaborn_Settings.triggered.connect(lambda: self.sns_settings())
         self.ui.actionLegend_Toggle.triggered.connect(lambda: plotting_funs.toggle_legend(self))
         self.ui.actionSave_Data.triggered.connect(lambda: plotting_funs.Save_All_Plotted(self))
-        self.ui.actionClear_Graph.triggered.connect(lambda: plotting_funs.cleargraph(self))
+        self.ui.actionClear_Graph.triggered.connect(lambda: self.cleargraph())
         self.ui.actionXPS.triggered.connect(lambda: plotting_funs.XPS_view_fun(self))
         self.ui.actionDataBrowser.triggered.connect(lambda: plotting_funs.DataBrowser_view_fun(self))
         self.ui.actionProject_Tree.triggered.connect(lambda: plotting_funs.Project_view_fun(self))
         self.ui.actionQCM.triggered.connect(lambda: plotting_funs.QCM_view_fun(self))
         self.ui.actionFTIR.triggered.connect(lambda: plotting_funs.FTIR_view_fun(self))
         self.ui.actionSE.triggered.connect(lambda: plotting_funs.SE_view_fun(self))
+        self.ui.actionCalculator.triggered.connect(lambda: plotting_funs.Calc_view_fun(self))
         self.ui.actionConsole.triggered.connect(lambda: plotting_funs.Console_view_fun(self))
         self.ui.actionCurve_Fitting.triggered.connect(lambda: plotting_funs.CF_view_fun(self))
         self.ui.actionDirectory.triggered.connect(lambda: plotting_funs.import_directiory_function(self))
+        self.ui.actionBar_Graph.triggered.connect(lambda: plotting_funs.bar_graph(self))
 
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
-        self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
+        # self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
         self.ax.callbacks.connect('xlim_changed', self.lims_change)
+        self.ui.actionLegend_Toggle.setShortcut(QtCore.QCoreApplication.translate("MainWindow", u"Ctrl+T", None))
 
     def start(self, dock_widget):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock_widget)
@@ -212,13 +225,85 @@ class MainWindow(QtWidgets.QMainWindow):
         self.settings.setValue('sns_font',self.font)
 
     def cleargraph(self):
-        self.ax.clear()
-        self.ax.callbacks.connect('xlim_changed', self.lims_change)
-        self.ax.callbacks.connect('ylim_changed', self.lims_change)
-        ApplicationSettings.ALL_DATA_PLOTTED = {}
-        self.canvas.draw()
+        if self.ax_2 is None:
+            self.ax.clear()
+            self.ax.callbacks.connect('xlim_changed', self.lims_change)
+            self.ax.callbacks.connect('ylim_changed', self.lims_change)
+            ApplicationSettings.ALL_DATA_PLOTTED = {}
+            self.canvas.draw()
+        elif self.ax_2 is not None:
+            self.ui.verticalLayout.removeWidget(self.toolbar)
+            self.ui.verticalLayout.removeWidget(self.canvas)
+            self.toolbar.close()
+            self.canvas.close()
+            self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+            self.canvas = FigureCanvas(self.fig)
+            self.toolbar = NavigationToolbar(self.canvas, self.canvas, coordinates=True)
+            self.ui.verticalLayout.addWidget(self.toolbar)
+            self.ui.verticalLayout.addWidget(self.canvas)
+            self.ax = self.fig.add_subplot(111)
+            self.canvas.installEventFilter(self)
+            self.ax.callbacks.connect('xlim_changed', self.lims_change)
+            self.ax.callbacks.connect('ylim_changed', self.lims_change)
+            ApplicationSettings.ALL_DATA_PLOTTED = {}
+            self.canvas.draw()
+            self.ax_2 = None
 
 class plotting_funs:
+    def graph_test_fun(self):
+        path, ext = QtWidgets.QFileDialog.getOpenFileName(self, 'Pickeled Figure', self.settings.value('FIG_PATH'))
+        ax = pickle.load(open(path, 'rb'))
+        self.ui.verticalLayout.removeWidget(self.toolbar)
+        self.ui.verticalLayout.removeWidget(self.canvas)
+        self.toolbar.close()
+        self.canvas.close()
+        sns.set(context=self.context, style=self.style, palette=self.c_palette,
+                font=self.font, font_scale=self.fs, color_codes=True)
+        self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
+        self.canvas = FigureCanvas(self.fig)
+        self.ui.verticalLayout.addWidget(NavigationToolbar(self.canvas, self.canvas, coordinates=True))
+        self.ui.verticalLayout.addWidget(self.canvas)
+        self.ax = ax
+        self.canvas.installEventFilter(self)
+        self.canvas.draw()
+
+    def save_fig(self):
+        def finish():
+            text = ui.lineEdit.text()
+            # pickle.dump(self.ax, self.settings.value('FIG_PATH') + text, 'w')
+            with open(self.settings.value('FIG_PATH') + text, 'wb') as f:  # should be 'wb' rather than 'w'
+                pickle.dump(self.ax, f)
+            print(ApplicationSettings.FIG_PATH + text)
+        dialog = QtWidgets.QDialog()
+        ui = simple_text_ui()
+        ui.setupUi(dialog)
+        ui.buttonBox.accepted.connect(lambda: finish())
+
+        dialog.exec_()
+
+        # pickle.dump(self.fig, open(ApplicationSettings.FIG_PATH+text, 'wb'))
+
+    def show_pickled_fig(self):
+        path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Pickeled Figure',self.settings.value('FIG_PATH'))
+        figx = pickle.load(open(path, 'rb'))
+        self.ui.verticalLayout.removeWidget(self.toolbar)
+        self.ui.verticalLayout.removeWidget(self.canvas)
+        self.toolbar.close()
+        self.canvas.close()
+        self.style = self.settings.value('sns_style')
+        self.context = self.settings.value('sns_context')
+        self.fs = int(self.settings.value('sns_fontscale'))
+        self.c_palette = self.settings.value('sns_c_palette')
+        self.font = self.settings.value('sns_font')
+        sns.set(context=self.context, style=self.style, palette=self.c_palette,
+                font=self.font, font_scale=self.fs, color_codes=True)
+        self.fig = figx
+        self.canvas = FigureCanvas(self.fig)
+        self.ui.verticalLayout.addWidget(NavigationToolbar(self.canvas, self.canvas, coordinates=True))
+        self.ui.verticalLayout.addWidget(self.canvas)
+        self.ax = self.fig.add_subplot(111)
+        self.canvas.installEventFilter(self)
+        self.canvas.draw()
 
     def Project_view_fun(self):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_ProjectView)
@@ -277,40 +362,50 @@ class plotting_funs:
         # self.restoreDockWidget(self.dw_Console)
         # self.dw_Console.show()
 
-    def cleargraph(self):
-        self.ax.clear()
-        self.ax.callbacks.connect('xlim_changed', self.lims_change)
-        self.ax.callbacks.connect('ylim_changed', self.lims_change)
-        ApplicationSettings.ALL_DATA_PLOTTED = {}
-        self.canvas.draw()
+    def Calc_view_fun(self):
+        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dw_calc)
+        self.restoreDockWidget(self.dw_calc)
+        self.dw_calc.show()
+
+    # def cleargraph(self):
+    #     self.ax.clear()
+    #     self.ax.callbacks.connect('xlim_changed', self.lims_change)
+    #     self.ax.callbacks.connect('ylim_changed', self.lims_change)
+    #     ApplicationSettings.ALL_DATA_PLOTTED = {}
+    #     self.canvas.draw()
 
     def toggle_legend(self):
         if self.ui.actionLegend_Toggle.isChecked()==True:
             self.ax.legend()
-            leg = self.ax.legend(loc='best')
-            leg.set_draggable(True)
+            leg_1 = self.ax.legend(loc='best')
+            leg_1.set_draggable(True)
+            if self.ax_2 is not None:
+                self.ax_2.legend()
+                leg_2 = self.ax.legend(loc='best')
+                leg_2.set_draggable(True)
             self.canvas.draw()
         elif self.ui.actionLegend_Toggle.isChecked()==False:
             self.ax.get_legend().remove()
+            if self.ax_2 is not None:
+                self.ax_2.get_legend().remove()
             self.canvas.draw()
 
     def Save_All_Plotted(self):
-        names = self.settings.value('Data_Names')
-        if names is None:
-            pass
-        else:
-            for i in names:
-                self.settings.remove(i)
+        # names = self.settings.value('Data_Names')
+        # if names is None:
+        #     pass
+        # else:
+        #     for i in names:
+        #         self.settings.remove(i)
         def temp():
             temp = []
             for ix in ui.treeWidget.selectedIndexes():
-                text = ix.data()  # or ix.data()
+                text = ix.data()
                 temp.append(text)
-                # self.settings.setValue(text, ApplicationSettings.ALL_DATA_PLOTTED[text][0]._xy)
-                # self.settings.setValue('Data_Names',text)
-                name = os.path.join(self.settings.value('SAVED_DATA_PATH'),ui.save_as_LE.text())
-                np.savetxt(str(name)+ui.comboBox.currentText(),
+                name = os.path.join(self.settings.value('SAVED_DATA_PATH'),ix.data())
+                np.savetxt(str(name)+ui.save_as_LE.text()+ui.comboBox.currentText(),
                            ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy,delimiter=',')
+                print(ApplicationSettings.ALL_DATA_PLOTTED[ix.data()][0]._xy)
         dialog = QtWidgets.QDialog()
         ui = STC_ui()
         ui.setupUi(dialog)
@@ -320,43 +415,8 @@ class plotting_funs:
             Key_List.append(QtWidgets.QTreeWidgetItem([i]))
         ui.treeWidget.addTopLevelItems(Key_List)
         ui.buttonBox.accepted.connect(lambda: temp())
+        ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         dialog.exec_()
-
-    def save_fig(self):
-        dialog = QtWidgets.QDialog()
-        ui = simple_text_ui()
-        ui.setupUi(dialog)
-        dialog.exec_()
-        text = ui.lineEdit.text()
-        with open(ApplicationSettings.FIG_PATH+text, 'wb') as f:  # should be 'wb' rather than 'w'
-            pickle.dump(self.fig, f)
-        print(self.fig.__dict__)
-        # pickle.dump(self.fig, open(ApplicationSettings.FIG_PATH+text, 'wb'))
-
-    def show_pickled_fig(self):
-        path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Pickeled Figure',ApplicationSettings.FIG_PATH)
-        # print(path)
-        figx = pickle.load(open(path, 'rb'))
-        print(figx.__dict__)
-        # self.fig = figx
-        # self.canvas.draw()
-        self.ui.verticalLayout.removeWidget(self.canvas)
-        self.ui.verticalLayout.removeWidget(self.toolbar)
-        self.canvas.close()
-        self.toolbar.close()
-        self.fig = figx
-        self.canvas = FigureCanvas(self.fig)
-        # self.fig.draw(self.fig.canvas.draw())
-
-        self.ui.gridLayout.addWidget(NavigationToolbar(self.canvas, self.canvas, coordinates=True))
-        self.ui.gridLayout.addWidget(self.canvas)
-
-        self.ax = self.fig.add_subplot(111)
-        print(self.fig.__dict__)
-        # sns.set_style("darkgrid")
-
-        self.canvas.installEventFilter(self)
-        self.canvas.draw()
 
     def remove_line(self):
         def finish():
@@ -421,14 +481,49 @@ class plotting_funs:
         self.fig.colorbar(c, ax=self.ax)
 
     def app_settings_fun(self):
+
         def function():
             self.settings.setValue('app_style',ui.comboBox.currentText())
-        d=QtWidgets.QDialog()
-        ui=app_settings()
+        def change_path(settings_type):
+            path = QtWidgets.QFileDialog.getExistingDirectory()
+            self.settings.setValue(settings_type, path)
+            if settings_type == 'FTIR_PATH':
+                self.dw_FTIR.tree_view.setRootIndex(self.dw_FTIR.model.index(path))
+            elif settings_type == 'QCM_PATH':
+                self.dw_QCM.tree_view.setRootIndex(self.dw_QCM.model.index(path))
+            elif settings_type == 'SE_PATH':
+                self.dw_SE.tree_view.setRootIndex(self.dw_SE.model.index(path))
+            elif settings_type == 'XPS_PATH':
+                self.dw_XPS.tree_view.setRootIndex(self.dw_XPS.model.index(path))
+            update()
+        def update():
+            ui.datapath_le.setText(str(self.settings.value('DATA_PATH')))
+            ui.projectpath_le.setText(str(self.settings.value('PROJECT_PATH')))
+            ui.savepath_le.setText(str(self.settings.value('SAVED_DATA_PATH')))
+            ui.fig_path_label.setText(str(self.settings.value('FIG_PATH')))
+            ui.ftir_path_label.setText(str(self.settings.value('FTIR_PATH')))
+            ui.se_path_label.setText(str(self.settings.value('SE_PATH')))
+            ui.qcm_path_label.setText(str(self.settings.value('QCM_PATH')))
+            ui.cf_path_label.setText(str(self.settings.value('CF_PATH')))
+            ui.xps_path_label.setText(str(self.settings.value('XPS_PATH')))
+            ui.comboBox.setCurrentText(self.settings.value('app_style'))
+
+        d = QtWidgets.QDialog()
+        ui = app_settings()
         ui.setupUi(d)
         ui.comboBox.addItems(QtWidgets.QStyleFactory.keys())
-        ui.comboBox.setCurrentText(self.settings.value('app_style'))
+        ui.comboBox.addItems(['darkstyle'])
+        update()
         ui.buttonBox.accepted.connect(lambda: function())
+        ui.changedatapath_pb.clicked.connect(lambda: change_path('DATA_PATH'))
+        ui.changesavepath_pb.clicked.connect(lambda: change_path('SAVED_DATA_PATH'))
+        ui.changeprojectpath_pb.clicked.connect(lambda: change_path('PROJECT_PATH'))
+        ui.change_figpath_pb.clicked.connect(lambda: change_path('FIG_PATH'))
+        ui.change_ir_pb.clicked.connect(lambda: change_path('FTIR_PATH'))
+        ui.change_qcm_pb.clicked.connect(lambda: change_path('QCM_PATH'))
+        ui.change_se_pb.clicked.connect(lambda: change_path('SE_PATH'))
+        ui.change_cf_pb.clicked.connect(lambda: change_path('CF_PATH'))
+        ui.change_xps_pb.clicked.connect(lambda: change_path('XPS_PATH'))
         d.exec_()
 
     def send_to_custom_data(self):
@@ -502,4 +597,55 @@ class plotting_funs:
         ui = annotation_ui()
         ui.setupUi(d)
         ui.buttonBox.accepted.connect(lambda: finish())
+        d.exec_()
+
+    def bar_graph(self):
+        def plot_bar():
+            N = ui.num_sb.value()
+            xlist = ui.x_list.text().split(' ')
+            ind = np.arange(N)
+            width = float(ui.width_le.text())
+            try:
+                y1list_ = ui.y1_list.text().split(' ')
+                y1list = [float(i) for i in y1list_]
+                self.ax.bar(ind, y1list, width, label=ui.label1_le.text())
+            except ValueError:
+                print('ValueError')
+            try:
+                y2list_ = ui.y2_list.text().split(' ')
+                y2list = [float(i) for i in y2list_]
+                self.ax.bar(ind+width, y2list, width, label=ui.label2_le.text())
+            except ValueError:
+                print('ValueError')
+            try:
+                y3list_ = ui.y3_list.text().split(' ')
+                y3list = [float(i) for i in y3list_]
+                self.ax.bar(ind+width+width, y3list, width, label=ui.label3_le.text())
+            except ValueError:
+                print('ValueError')
+            self.bar['xlist'] = ui.x_list.text()
+            self.bar['y1list'] = ui.y1_list.text()
+            self.bar['y2list'] = ui.y2_list.text()
+            self.bar['y3list'] = ui.y3_list.text()
+            self.bar['label1'] = ui.label1_le.text()
+            self.bar['label2'] = ui.label2_le.text()
+            self.bar['label3'] = ui.label3_le.text()
+            self.bar['width'] = ui.width_le.text()
+            self.bar['num'] = ui.num_sb.value()
+            self.ax.set_xticks(ind + width / N, xlist)
+            self.ax.legend(loc='best')
+            self.canvas.draw()
+        d = QtWidgets.QDialog()
+        ui = bar_dialog()
+        ui.setupUi(d)
+        ui.x_list.setText(self.bar['xlist'])
+        ui.y1_list.setText(self.bar['y1list'])
+        ui.y2_list.setText(self.bar['y2list'])
+        ui.y3_list.setText(self.bar['y3list'])
+        ui.label1_le.setText(self.bar['label1'])
+        ui.label2_le.setText(self.bar['label2'])
+        ui.label3_le.setText(self.bar['label3'])
+        ui.width_le.setText(self.bar['width'])
+        ui.num_sb.setValue(self.bar['num'])
+        ui.buttonBox.accepted.connect(lambda: plot_bar())
         d.exec_()

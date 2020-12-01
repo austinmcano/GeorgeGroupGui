@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>747</width>
-    <height>587</height>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,6 +82,7 @@
     <addaction name="actionSE"/>
     <addaction name="actionXPS"/>
     <addaction name="actionCurve_Fitting"/>
+    <addaction name="actionCalculator"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionProject_Tree"/>
@@ -97,23 +98,11 @@
     <addaction name="actionSave_To_CSV"/>
     <addaction name="actionLegend_Toggle"/>
     <addaction name="actionSeaborn_Settings"/>
-   </widget>
-   <widget class="QMenu" name="menuGGG">
-    <property name="title">
-     <string>GGG</string>
-    </property>
-    <addaction name="actionSettings_5"/>
-   </widget>
-   <widget class="QMenu" name="menuDocks">
-    <property name="title">
-     <string>Docks</string>
-    </property>
-    <addaction name="actionProject_View"/>
-    <addaction name="actionSystem_View"/>
+    <addaction name="actionBar_Graph"/>
    </widget>
    <widget class="QMenu" name="menuHELP">
     <property name="title">
-     <string>HELP</string>
+     <string>Help</string>
     </property>
     <addaction name="separator"/>
     <addaction name="actionQCM_Help"/>
@@ -123,13 +112,18 @@
     <addaction name="separator"/>
     <addaction name="actionOther_Help"/>
    </widget>
-   <addaction name="menuGGG"/>
+   <widget class="QMenu" name="menuTesting">
+    <property name="title">
+     <string>Testing</string>
+    </property>
+    <addaction name="actionGraph_Test"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuViews"/>
    <addaction name="menuFigure"/>
-   <addaction name="menuDocks"/>
    <addaction name="menuHELP"/>
+   <addaction name="menuTesting"/>
   </widget>
   <action name="actionOpen_File">
    <property name="text">
@@ -580,6 +574,21 @@
   <action name="actionLoad_Data">
    <property name="text">
     <string>Load Data</string>
+   </property>
+  </action>
+  <action name="actionCalculator">
+   <property name="text">
+    <string>Calculator</string>
+   </property>
+  </action>
+  <action name="actionBar_Graph">
+   <property name="text">
+    <string>Bar Graph</string>
+   </property>
+  </action>
+  <action name="actionGraph_Test">
+   <property name="text">
+    <string>Graph_Test</string>
    </property>
   </action>
  </widget>

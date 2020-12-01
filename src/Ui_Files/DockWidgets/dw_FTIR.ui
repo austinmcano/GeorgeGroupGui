@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>536</height>
+    <width>346</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,17 +56,12 @@
          <widget class="QComboBox" name="ir_plot_cb">
           <item>
            <property name="text">
-            <string>Plot</string>
+            <string>Sub Plot (dir)</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>Plot (dir)</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Sub Plot (dir)</string>
            </property>
           </item>
           <item>
@@ -77,6 +72,11 @@
           <item>
            <property name="text">
             <string>Diff (2)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Plot</string>
            </property>
           </item>
          </widget>
@@ -122,19 +122,6 @@
         <string>Integrate</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Num of Ints</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
          <widget class="QSpinBox" name="spinBox">
           <property name="minimum">
@@ -145,11 +132,23 @@
           </property>
          </widget>
         </item>
+        <item row="5" column="0">
+         <widget class="QPushButton" name="integrate_pb">
+          <property name="text">
+           <string>Integrate</string>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="0">
          <widget class="QComboBox" name="int_type_cb">
           <item>
            <property name="text">
             <string>Integrate Sub (dir)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Integrate Sub (dir) Corrected</string>
            </property>
           </item>
           <item>
@@ -169,14 +168,34 @@
           </item>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QPushButton" name="integrate_pb">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="text">
-           <string>Integrate</string>
+           <string>Num of Ints</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="2" rowspan="4">
+        <item row="6" column="0">
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Left Axis</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Right Axis</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="2" rowspan="5">
          <widget class="QTableWidget" name="tableWidget">
           <property name="maximumSize">
            <size>

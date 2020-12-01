@@ -33,8 +33,8 @@ class SE_view(QtWidgets.QDockWidget):
         self.tree_view.setModel(self.model)
         self.tree_view.setSortingEnabled(True)
 
-        self.tree_view.sortByColumn(True)
-        self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('PROJECT_PATH')))
+        self.tree_view.sortByColumn(0, QtCore.Qt.AscendingOrder)
+        self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('SE_PATH')))
 
         self.tree_view.setModel(self.model)
         self.tree_view.installEventFilter(self)
@@ -67,19 +67,32 @@ class SE_view(QtWidgets.QDockWidget):
             self.ui.SEY_tw.addTopLevelItems(column_list_y)
 
     def plot_se(self):
+        if self.ui.ax_cb.currentText() == 'Left Ax':
+            ax = self.main_window.ax
+        elif self.ui.ax_cb.currentText() == 'Right Ax':
+            if self.main_window.ax_2 is None:
+                self.main_window.ax_2 = self.main_window.ax.twinx()
+            ax = self.main_window.ax_2
         x = self.ui.SEX_tw.currentIndex().data()
-        y = self.ui.SEY_tw.currentIndex().data()
+        # y = self.ui.SEY_tw.currentIndex().data()
         x_data = self.data[x].to_numpy()
-        for i in self.ui.SEY_tw.selectedItems():
-            if self.ui.correction_combo.currentText() == 'Zero From First':
-                for i in self.ui.SEY_tw.selectedItems():
-                    y_data = self.data[i.text(0)].to_numpy()
-                    ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = self.main_window.ax.plot(x_data, y_data-y_data[0])
-            elif self.ui.correction_combo.currentText() == 'No Correction':
-                for i in self.ui.SEY_tw.selectedItems():
-                    y_data = self.data[i.text(0)].to_numpy()
-                    ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = self.main_window.ax.plot(x_data, y_data)
-            self.main_window.canvas.draw()
+        if self.ui.correction_combo.currentText() == 'Zero From First':
+            for i in self.ui.SEY_tw.selectedItems():
+                y_data = self.data[i.text(0)].to_numpy()
+                ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = \
+                    ax.plot(x_data, y_data-y_data[0],self.ui.linetype_cb.currentText())
+        elif self.ui.correction_combo.currentText() == 'No Correction':
+            for i in self.ui.SEY_tw.selectedItems():
+                y_data = self.data[i.text(0)].to_numpy()
+                ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = \
+                    ax.plot(x_data, y_data, self.ui.linetype_cb.currentText())
+        if self.ui.checkBox.isChecked()==True:
+            pass
+        if self.ui.checkBox.isChecked()==False:
+            self.main_window.ax.set_xlabel(self.ui.xlabel_le.text())
+            self.main_window.ax.set_ylabel(self.ui.ylabel_le.text())
+        self.main_window.fig.tight_layout()
+        self.main_window.canvas.draw()
 
     def linear_SE(self):
         model = LinearModel()
@@ -96,7 +109,3 @@ class SE_view(QtWidgets.QDockWidget):
             ApplicationSettings.ALL_DATA_PLOTTED[str(i) + 'fit'] = self.main_window.ax.plot(data[0],fit.best_fit)
             self.fitted_slopes.append(fit.params['slope'].value)
         self.main_window.canvas.draw()
-
-    def SE_graph_constants(self):
-        self.main_window.ax.set_xlabel('Cycles')
-        self.main_window.ax.set_ylabel('Thickness Change ($\AA$)')

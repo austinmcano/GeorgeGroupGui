@@ -8,7 +8,6 @@ import os
 import pickle
 from src.Ui_Files.Dialogs.delete_dialog import Ui_Dialog as delete_dialog
 from src.Ui_Files.Dialogs.simple_tablewidget import Ui_Dialog as tableWidget_dialog
-from PySide2 import QtCore
 
 
 def rc_browser_options(self):
@@ -227,6 +226,7 @@ def change_path(self):
     path = QtWidgets.QFileDialog.getExistingDirectory()
     if type(path) is str:
         self.tree_view.setRootIndex(self.model.index(path))
+        self.main_window.settings.setValue('PROJECT_PATH',path)
     else:
         print(path)
 

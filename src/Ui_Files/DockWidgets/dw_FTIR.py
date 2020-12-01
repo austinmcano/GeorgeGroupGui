@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'dw_FTIR.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.14.2
+## Created by: Qt User Interface Compiler version 5.15.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,7 +20,7 @@ class Ui_DockWidget(object):
     def setupUi(self, DockWidget):
         if not DockWidget.objectName():
             DockWidget.setObjectName(u"DockWidget")
-        DockWidget.resize(456, 536)
+        DockWidget.resize(346, 387)
         self.dockWidgetContents = QWidget()
         self.dockWidgetContents.setObjectName(u"dockWidgetContents")
         self.gridLayout = QGridLayout(self.dockWidgetContents)
@@ -103,12 +103,6 @@ class Ui_DockWidget(object):
         self.tab_3.setObjectName(u"tab_3")
         self.gridLayout_4 = QGridLayout(self.tab_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.label_2 = QLabel(self.tab_3)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMaximumSize(QSize(16777215, 30))
-
-        self.gridLayout_4.addWidget(self.label_2, 2, 0, 1, 1)
-
         self.spinBox = QSpinBox(self.tab_3)
         self.spinBox.setObjectName(u"spinBox")
         self.spinBox.setMinimum(1)
@@ -116,7 +110,13 @@ class Ui_DockWidget(object):
 
         self.gridLayout_4.addWidget(self.spinBox, 4, 0, 1, 1)
 
+        self.integrate_pb = QPushButton(self.tab_3)
+        self.integrate_pb.setObjectName(u"integrate_pb")
+
+        self.gridLayout_4.addWidget(self.integrate_pb, 5, 0, 1, 1)
+
         self.int_type_cb = QComboBox(self.tab_3)
+        self.int_type_cb.addItem("")
         self.int_type_cb.addItem("")
         self.int_type_cb.addItem("")
         self.int_type_cb.addItem("")
@@ -125,10 +125,18 @@ class Ui_DockWidget(object):
 
         self.gridLayout_4.addWidget(self.int_type_cb, 3, 0, 1, 1)
 
-        self.integrate_pb = QPushButton(self.tab_3)
-        self.integrate_pb.setObjectName(u"integrate_pb")
+        self.label_2 = QLabel(self.tab_3)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMaximumSize(QSize(16777215, 30))
 
-        self.gridLayout_4.addWidget(self.integrate_pb, 5, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.label_2, 2, 0, 1, 1)
+
+        self.comboBox = QComboBox(self.tab_3)
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.gridLayout_4.addWidget(self.comboBox, 6, 0, 1, 1)
 
         self.tableWidget = QTableWidget(self.tab_3)
         if (self.tableWidget.columnCount() < 2):
@@ -168,7 +176,7 @@ class Ui_DockWidget(object):
         self.tableWidget.setRowCount(4)
         self.tableWidget.setColumnCount(2)
 
-        self.gridLayout_4.addWidget(self.tableWidget, 2, 2, 4, 1)
+        self.gridLayout_4.addWidget(self.tableWidget, 2, 2, 5, 1)
 
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_4 = QWidget()
@@ -262,7 +270,7 @@ class Ui_DockWidget(object):
 
         self.retranslateUi(DockWidget)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(DockWidget)
@@ -272,24 +280,28 @@ class Ui_DockWidget(object):
         DockWidget.setWindowTitle(QCoreApplication.translate("DockWidget", u"FTIR", None))
         self.label_4.setText(QCoreApplication.translate("DockWidget", u"Error Log", None))
         self.skip_every_LE.setText(QCoreApplication.translate("DockWidget", u"0", None))
-        self.ir_plot_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Plot", None))
+        self.ir_plot_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Sub Plot (dir)", None))
         self.ir_plot_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Plot (dir)", None))
-        self.ir_plot_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Sub Plot (dir)", None))
-        self.ir_plot_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"Diff Plot (dir)", None))
-        self.ir_plot_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"Diff (2)", None))
+        self.ir_plot_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Diff Plot (dir)", None))
+        self.ir_plot_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"Diff (2)", None))
+        self.ir_plot_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"Plot", None))
 
         self.pushButton.setText(QCoreApplication.translate("DockWidget", u"Plot or Fit FTIR", None))
         self.label.setText(QCoreApplication.translate("DockWidget", u"Skip Every", None))
         self.label_13.setText(QCoreApplication.translate("DockWidget", u"From:To", None))
         self.smooth_pb.setText(QCoreApplication.translate("DockWidget", u"Smooth", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("DockWidget", u"IR Plot", None))
-        self.label_2.setText(QCoreApplication.translate("DockWidget", u"Num of Ints", None))
-        self.int_type_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Integrate Sub (dir)", None))
-        self.int_type_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Integrate Diff (dir)", None))
-        self.int_type_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Integrate Plot (dir)", None))
-        self.int_type_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"Integrate", None))
-
         self.integrate_pb.setText(QCoreApplication.translate("DockWidget", u"Integrate", None))
+        self.int_type_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Integrate Sub (dir)", None))
+        self.int_type_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Integrate Sub (dir) Corrected", None))
+        self.int_type_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Integrate Diff (dir)", None))
+        self.int_type_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"Integrate Plot (dir)", None))
+        self.int_type_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"Integrate", None))
+
+        self.label_2.setText(QCoreApplication.translate("DockWidget", u"Num of Ints", None))
+        self.comboBox.setItemText(0, QCoreApplication.translate("DockWidget", u"Left Axis", None))
+        self.comboBox.setItemText(1, QCoreApplication.translate("DockWidget", u"Right Axis", None))
+
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("DockWidget", u"From", None));
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)

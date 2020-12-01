@@ -15,23 +15,6 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Draggable</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QSpinBox" name="size_sb"/>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Size</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Frame</string>
@@ -39,13 +22,23 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Text</string>
+      <string>Draggable</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="5" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
     <widget class="QComboBox" name="dragable_cb">
      <item>
       <property name="text">
@@ -59,17 +52,10 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="1">
+    <widget class="QSpinBox" name="size_sb"/>
+   </item>
+   <item row="2" column="1">
     <widget class="QComboBox" name="frame_cb">
      <item>
       <property name="text">
@@ -83,7 +69,21 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Size</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Text</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
     <widget class="QLineEdit" name="text_le"/>
    </item>
   </layout>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
-    <height>585</height>
+    <width>447</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,18 +35,25 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="numa_label">
+        <item row="2" column="0">
+         <widget class="QLabel" name="pthress_label">
           <property name="text">
-           <string># of A Exposures</string>
+           <string>Pressure</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>% Time through Purge</string>
-          </property>
+        <item row="5" column="0" colspan="2">
+         <widget class="QComboBox" name="time_option">
+          <item>
+           <property name="text">
+            <string>From:To Time</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Plot Limits</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item row="1" column="4">
@@ -56,24 +63,24 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="numb_label">
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="Num_A">
           <property name="text">
-           <string># of B Exposures</string>
+           <string>1</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2">
-         <widget class="QPushButton" name="plot_pb">
+        <item row="4" column="0">
+         <widget class="QLabel" name="wait_time_label">
           <property name="text">
-           <string>Plot</string>
+           <string>Wait (s)</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="P_Threshold">
+        <item row="1" column="0">
+         <widget class="QLabel" name="numa_label">
           <property name="text">
-           <string>0.05</string>
+           <string># of A</string>
           </property>
          </widget>
         </item>
@@ -106,24 +113,10 @@
           </item>
          </widget>
         </item>
-        <item row="2" column="4">
-         <widget class="QLineEdit" name="time_through_purge">
+        <item row="0" column="3" colspan="2">
+         <widget class="QPushButton" name="plot_pb">
           <property name="text">
-           <string>.88</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="pthress_label">
-          <property name="text">
-           <string>Pressure Thresh</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Density (g/cm3)</string>
+           <string>Plot</string>
           </property>
          </widget>
         </item>
@@ -134,53 +127,81 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="Num_A">
+        <item row="2" column="3">
+         <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>1</string>
+           <string>% Time</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="wait_time_label">
+        <item row="4" column="3">
+         <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>Wait Time (s)</string>
+           <string>Den. (g/cm3)</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="2" column="4">
+         <widget class="QLineEdit" name="time_through_purge">
+          <property name="text">
+           <string>.88</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="numb_label">
+          <property name="text">
+           <string># of B</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="P_Threshold">
+          <property name="text">
+           <string>0.05</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
          <widget class="QLabel" name="label_3">
           <property name="text">
            <string>From To Time (s)</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="5" column="4">
          <widget class="QLineEdit" name="From_Time">
           <property name="text">
            <string>0</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="3">
+        <item row="8" column="4">
          <widget class="QLineEdit" name="To_Time">
           <property name="text">
            <string>9999999</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QComboBox" name="time_option">
+        <item row="8" column="3">
+         <widget class="QComboBox" name="ax_cb">
           <item>
            <property name="text">
-            <string>From:To Time</string>
+            <string>Left Ax</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Plot Limits</string>
+            <string>Right Ax</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item row="8" column="0" colspan="2">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Refresh Params</string>
+          </property>
          </widget>
         </item>
        </layout>
