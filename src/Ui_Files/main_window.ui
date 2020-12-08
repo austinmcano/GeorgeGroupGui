@@ -99,6 +99,7 @@
     <addaction name="actionLegend_Toggle"/>
     <addaction name="actionSeaborn_Settings"/>
     <addaction name="actionBar_Graph"/>
+    <addaction name="actionTight_Layout"/>
    </widget>
    <widget class="QMenu" name="menuHELP">
     <property name="title">
@@ -589,6 +590,14 @@
   <action name="actionGraph_Test">
    <property name="text">
     <string>Graph_Test</string>
+   </property>
+  </action>
+  <action name="actionTight_Layout">
+   <property name="text">
+    <string>Tight Layout</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

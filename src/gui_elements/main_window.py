@@ -147,7 +147,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionCurve_Fitting.triggered.connect(lambda: plotting_funs.CF_view_fun(self))
         self.ui.actionDirectory.triggered.connect(lambda: plotting_funs.import_directiory_function(self))
         self.ui.actionBar_Graph.triggered.connect(lambda: plotting_funs.bar_graph(self))
-
+        self.ui.actionTight_Layout.triggered.connect(lambda: plotting_funs.tight_figure(self))
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
         # self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
         self.ax.callbacks.connect('xlim_changed', self.lims_change)
@@ -246,6 +246,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ax.callbacks.connect('xlim_changed', self.lims_change)
             self.ax.callbacks.connect('ylim_changed', self.lims_change)
             ApplicationSettings.ALL_DATA_PLOTTED = {}
+            self.fig.tight_layout()
             self.canvas.draw()
             self.ax_2 = None
 
@@ -257,6 +258,7 @@ class plotting_funs:
         self.ui.verticalLayout.removeWidget(self.canvas)
         self.toolbar.close()
         self.canvas.close()
+        self.ax.remove()
         sns.set(context=self.context, style=self.style, palette=self.c_palette,
                 font=self.font, font_scale=self.fs, color_codes=True)
         self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
@@ -267,18 +269,20 @@ class plotting_funs:
         self.canvas.installEventFilter(self)
         self.canvas.draw()
 
+    def tight_figure(self):
+        self.fig.tight_layout()
+        self.canvas.draw()
+
     def save_fig(self):
         def finish():
             text = ui.lineEdit.text()
             # pickle.dump(self.ax, self.settings.value('FIG_PATH') + text, 'w')
             with open(self.settings.value('FIG_PATH') + text, 'wb') as f:  # should be 'wb' rather than 'w'
-                pickle.dump(self.ax, f)
-            print(ApplicationSettings.FIG_PATH + text)
+                pickle.dump(self.fig, f)
         dialog = QtWidgets.QDialog()
         ui = simple_text_ui()
         ui.setupUi(dialog)
         ui.buttonBox.accepted.connect(lambda: finish())
-
         dialog.exec_()
 
         # pickle.dump(self.fig, open(ApplicationSettings.FIG_PATH+text, 'wb'))
@@ -286,24 +290,23 @@ class plotting_funs:
     def show_pickled_fig(self):
         path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Pickeled Figure',self.settings.value('FIG_PATH'))
         figx = pickle.load(open(path, 'rb'))
-        self.ui.verticalLayout.removeWidget(self.toolbar)
-        self.ui.verticalLayout.removeWidget(self.canvas)
-        self.toolbar.close()
-        self.canvas.close()
-        self.style = self.settings.value('sns_style')
-        self.context = self.settings.value('sns_context')
-        self.fs = int(self.settings.value('sns_fontscale'))
-        self.c_palette = self.settings.value('sns_c_palette')
-        self.font = self.settings.value('sns_font')
-        sns.set(context=self.context, style=self.style, palette=self.c_palette,
-                font=self.font, font_scale=self.fs, color_codes=True)
-        self.fig = figx
-        self.canvas = FigureCanvas(self.fig)
-        self.ui.verticalLayout.addWidget(NavigationToolbar(self.canvas, self.canvas, coordinates=True))
-        self.ui.verticalLayout.addWidget(self.canvas)
-        self.ax = self.fig.add_subplot(111)
-        self.canvas.installEventFilter(self)
-        self.canvas.draw()
+        if path == '':
+            pass
+        else:
+            self.ui.verticalLayout.removeWidget(self.toolbar)
+            self.ui.verticalLayout.removeWidget(self.canvas)
+            self.toolbar.close()
+            self.canvas.close()
+            sns.set(context=self.context, style=self.style, palette=self.c_palette,
+                    font=self.font, font_scale=self.fs, color_codes=True)
+            self.fig = figx
+            self.ax = self.fig.add_subplot(111)
+            self.canvas = FigureCanvas(self.fig)
+            self.ui.verticalLayout.addWidget(NavigationToolbar(self.canvas, self.canvas, coordinates=True))
+            self.ui.verticalLayout.addWidget(self.canvas)
+
+            self.canvas.installEventFilter(self)
+            self.canvas.draw()
 
     def Project_view_fun(self):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_ProjectView)
@@ -366,13 +369,6 @@ class plotting_funs:
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, self.dw_calc)
         self.restoreDockWidget(self.dw_calc)
         self.dw_calc.show()
-
-    # def cleargraph(self):
-    #     self.ax.clear()
-    #     self.ax.callbacks.connect('xlim_changed', self.lims_change)
-    #     self.ax.callbacks.connect('ylim_changed', self.lims_change)
-    #     ApplicationSettings.ALL_DATA_PLOTTED = {}
-    #     self.canvas.draw()
 
     def toggle_legend(self):
         if self.ui.actionLegend_Toggle.isChecked()==True:
