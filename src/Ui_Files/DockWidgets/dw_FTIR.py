@@ -20,7 +20,7 @@ class Ui_DockWidget(object):
     def setupUi(self, DockWidget):
         if not DockWidget.objectName():
             DockWidget.setObjectName(u"DockWidget")
-        DockWidget.resize(346, 387)
+        DockWidget.resize(368, 523)
         self.dockWidgetContents = QWidget()
         self.dockWidgetContents.setObjectName(u"dockWidgetContents")
         self.gridLayout = QGridLayout(self.dockWidgetContents)
@@ -52,11 +52,6 @@ class Ui_DockWidget(object):
         self.line.setFrameShadow(QFrame.Sunken)
 
         self.gridLayout_2.addWidget(self.line, 1, 0, 1, 4)
-
-        self.skip_every_LE = QLineEdit(self.tab)
-        self.skip_every_LE.setObjectName(u"skip_every_LE")
-
-        self.gridLayout_2.addWidget(self.skip_every_LE, 4, 1, 1, 1)
 
         self.ir_plot_cb = QComboBox(self.tab)
         self.ir_plot_cb.addItem("")
@@ -97,6 +92,13 @@ class Ui_DockWidget(object):
         self.smooth_pb.setObjectName(u"smooth_pb")
 
         self.gridLayout_2.addWidget(self.smooth_pb, 4, 2, 1, 1)
+
+        self.skip_sb = QSpinBox(self.tab)
+        self.skip_sb.setObjectName(u"skip_sb")
+        self.skip_sb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.skip_sb.setKeyboardTracking(False)
+
+        self.gridLayout_2.addWidget(self.skip_sb, 4, 1, 1, 1)
 
         self.tabWidget.addTab(self.tab, "")
         self.tab_3 = QWidget()
@@ -199,68 +201,60 @@ class Ui_DockWidget(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayout_3 = QGridLayout(self.tab_2)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.horizontalSlider_3 = QSlider(self.tab_2)
-        self.horizontalSlider_3.setObjectName(u"horizontalSlider_3")
-        self.horizontalSlider_3.setOrientation(Qt.Horizontal)
+        self.label_5 = QLabel(self.tab_2)
+        self.label_5.setObjectName(u"label_5")
 
-        self.gridLayout_3.addWidget(self.horizontalSlider_3, 1, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.label_5, 0, 0, 1, 1)
 
-        self.horizontalSlider_4 = QSlider(self.tab_2)
-        self.horizontalSlider_4.setObjectName(u"horizontalSlider_4")
-        self.horizontalSlider_4.setOrientation(Qt.Horizontal)
+        self.num_of_peaks_sb = QSpinBox(self.tab_2)
+        self.num_of_peaks_sb.setObjectName(u"num_of_peaks_sb")
 
-        self.gridLayout_3.addWidget(self.horizontalSlider_4, 4, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.num_of_peaks_sb, 0, 1, 1, 1)
 
-        self.horizontalSlider_2 = QSlider(self.tab_2)
-        self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
-        self.horizontalSlider_2.setOrientation(Qt.Horizontal)
+        self.function_type_cb = QComboBox(self.tab_2)
+        self.function_type_cb.addItem("")
+        self.function_type_cb.addItem("")
+        self.function_type_cb.addItem("")
+        self.function_type_cb.setObjectName(u"function_type_cb")
 
-        self.gridLayout_3.addWidget(self.horizontalSlider_2, 3, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.function_type_cb, 0, 2, 1, 1)
 
-        self.label_9 = QLabel(self.tab_2)
-        self.label_9.setObjectName(u"label_9")
+        self.tableWidget_2 = QTableWidget(self.tab_2)
+        if (self.tableWidget_2.columnCount() < 5):
+            self.tableWidget_2.setColumnCount(5)
+        __qtablewidgetitem14 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(0, __qtablewidgetitem14)
+        __qtablewidgetitem15 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(1, __qtablewidgetitem15)
+        __qtablewidgetitem16 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(2, __qtablewidgetitem16)
+        __qtablewidgetitem17 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(3, __qtablewidgetitem17)
+        __qtablewidgetitem18 = QTableWidgetItem()
+        self.tableWidget_2.setHorizontalHeaderItem(4, __qtablewidgetitem18)
+        if (self.tableWidget_2.rowCount() < 9):
+            self.tableWidget_2.setRowCount(9)
+        __qtablewidgetitem19 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(0, __qtablewidgetitem19)
+        __qtablewidgetitem20 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(1, __qtablewidgetitem20)
+        __qtablewidgetitem21 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(2, __qtablewidgetitem21)
+        __qtablewidgetitem22 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(3, __qtablewidgetitem22)
+        __qtablewidgetitem23 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(4, __qtablewidgetitem23)
+        __qtablewidgetitem24 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(5, __qtablewidgetitem24)
+        __qtablewidgetitem25 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(6, __qtablewidgetitem25)
+        __qtablewidgetitem26 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(7, __qtablewidgetitem26)
+        __qtablewidgetitem27 = QTableWidgetItem()
+        self.tableWidget_2.setVerticalHeaderItem(8, __qtablewidgetitem27)
+        self.tableWidget_2.setObjectName(u"tableWidget_2")
 
-        self.gridLayout_3.addWidget(self.label_9, 4, 0, 1, 1)
-
-        self.radioButton_2 = QRadioButton(self.tab_2)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-
-        self.gridLayout_3.addWidget(self.radioButton_2, 0, 1, 1, 1)
-
-        self.radioButton_3 = QRadioButton(self.tab_2)
-        self.radioButton_3.setObjectName(u"radioButton_3")
-
-        self.gridLayout_3.addWidget(self.radioButton_3, 0, 2, 1, 1)
-
-        self.label_7 = QLabel(self.tab_2)
-        self.label_7.setObjectName(u"label_7")
-
-        self.gridLayout_3.addWidget(self.label_7, 1, 0, 1, 1)
-
-        self.label_8 = QLabel(self.tab_2)
-        self.label_8.setObjectName(u"label_8")
-
-        self.gridLayout_3.addWidget(self.label_8, 3, 0, 1, 1)
-
-        self.label_10 = QLabel(self.tab_2)
-        self.label_10.setObjectName(u"label_10")
-
-        self.gridLayout_3.addWidget(self.label_10, 1, 3, 1, 1)
-
-        self.label_11 = QLabel(self.tab_2)
-        self.label_11.setObjectName(u"label_11")
-
-        self.gridLayout_3.addWidget(self.label_11, 3, 3, 1, 1)
-
-        self.label_12 = QLabel(self.tab_2)
-        self.label_12.setObjectName(u"label_12")
-
-        self.gridLayout_3.addWidget(self.label_12, 4, 3, 1, 1)
-
-        self.radioButton = QRadioButton(self.tab_2)
-        self.radioButton.setObjectName(u"radioButton")
-
-        self.gridLayout_3.addWidget(self.radioButton, 0, 3, 1, 1)
+        self.gridLayout_3.addWidget(self.tableWidget_2, 1, 0, 1, 3)
 
         self.tabWidget.addTab(self.tab_2, "")
 
@@ -279,7 +273,6 @@ class Ui_DockWidget(object):
     def retranslateUi(self, DockWidget):
         DockWidget.setWindowTitle(QCoreApplication.translate("DockWidget", u"FTIR", None))
         self.label_4.setText(QCoreApplication.translate("DockWidget", u"Error Log", None))
-        self.skip_every_LE.setText(QCoreApplication.translate("DockWidget", u"0", None))
         self.ir_plot_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Sub Plot (dir)", None))
         self.ir_plot_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Plot (dir)", None))
         self.ir_plot_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Diff Plot (dir)", None))
@@ -338,15 +331,39 @@ class Ui_DockWidget(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("DockWidget", u"Integrate", None))
         self.label_3.setText(QCoreApplication.translate("DockWidget", u"Threshold", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("DockWidget", u"Find Peaks", None))
-        self.label_9.setText(QCoreApplication.translate("DockWidget", u"Position", None))
-        self.radioButton_2.setText(QCoreApplication.translate("DockWidget", u"Peak 1", None))
-        self.radioButton_3.setText(QCoreApplication.translate("DockWidget", u"Peak 2", None))
-        self.label_7.setText(QCoreApplication.translate("DockWidget", u"Amp", None))
-        self.label_8.setText(QCoreApplication.translate("DockWidget", u"FWHM", None))
-        self.label_10.setText(QCoreApplication.translate("DockWidget", u"0", None))
-        self.label_11.setText(QCoreApplication.translate("DockWidget", u"0", None))
-        self.label_12.setText(QCoreApplication.translate("DockWidget", u"0", None))
-        self.radioButton.setText(QCoreApplication.translate("DockWidget", u"Peak 3", None))
+        self.label_5.setText(QCoreApplication.translate("DockWidget", u"Num of Peak", None))
+        self.function_type_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Voight", None))
+        self.function_type_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Gaussian", None))
+        self.function_type_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Lorentz", None))
+
+        ___qtablewidgetitem14 = self.tableWidget_2.horizontalHeaderItem(0)
+        ___qtablewidgetitem14.setText(QCoreApplication.translate("DockWidget", u"Peak 1", None));
+        ___qtablewidgetitem15 = self.tableWidget_2.horizontalHeaderItem(1)
+        ___qtablewidgetitem15.setText(QCoreApplication.translate("DockWidget", u"Peak 2", None));
+        ___qtablewidgetitem16 = self.tableWidget_2.horizontalHeaderItem(2)
+        ___qtablewidgetitem16.setText(QCoreApplication.translate("DockWidget", u"Peak 3", None));
+        ___qtablewidgetitem17 = self.tableWidget_2.horizontalHeaderItem(3)
+        ___qtablewidgetitem17.setText(QCoreApplication.translate("DockWidget", u"Peak 4", None));
+        ___qtablewidgetitem18 = self.tableWidget_2.horizontalHeaderItem(4)
+        ___qtablewidgetitem18.setText(QCoreApplication.translate("DockWidget", u"Peak 5", None));
+        ___qtablewidgetitem19 = self.tableWidget_2.verticalHeaderItem(0)
+        ___qtablewidgetitem19.setText(QCoreApplication.translate("DockWidget", u"Amp", None));
+        ___qtablewidgetitem20 = self.tableWidget_2.verticalHeaderItem(1)
+        ___qtablewidgetitem20.setText(QCoreApplication.translate("DockWidget", u"Amp Low", None));
+        ___qtablewidgetitem21 = self.tableWidget_2.verticalHeaderItem(2)
+        ___qtablewidgetitem21.setText(QCoreApplication.translate("DockWidget", u"New Row", None));
+        ___qtablewidgetitem22 = self.tableWidget_2.verticalHeaderItem(3)
+        ___qtablewidgetitem22.setText(QCoreApplication.translate("DockWidget", u"Cen", None));
+        ___qtablewidgetitem23 = self.tableWidget_2.verticalHeaderItem(4)
+        ___qtablewidgetitem23.setText(QCoreApplication.translate("DockWidget", u"Cen Low", None));
+        ___qtablewidgetitem24 = self.tableWidget_2.verticalHeaderItem(5)
+        ___qtablewidgetitem24.setText(QCoreApplication.translate("DockWidget", u"New Row", None));
+        ___qtablewidgetitem25 = self.tableWidget_2.verticalHeaderItem(6)
+        ___qtablewidgetitem25.setText(QCoreApplication.translate("DockWidget", u"Sigma", None));
+        ___qtablewidgetitem26 = self.tableWidget_2.verticalHeaderItem(7)
+        ___qtablewidgetitem26.setText(QCoreApplication.translate("DockWidget", u"Sigma Low", None));
+        ___qtablewidgetitem27 = self.tableWidget_2.verticalHeaderItem(8)
+        ___qtablewidgetitem27.setText(QCoreApplication.translate("DockWidget", u"Sigma High", None));
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("DockWidget", u"Fitting", None))
     # retranslateUi
 

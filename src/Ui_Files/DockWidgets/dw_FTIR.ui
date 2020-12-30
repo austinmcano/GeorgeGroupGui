@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
-    <height>387</height>
+    <width>368</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,13 +42,6 @@
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="skip_every_LE">
-          <property name="text">
-           <string>0</string>
           </property>
          </widget>
         </item>
@@ -112,6 +105,16 @@
          <widget class="QPushButton" name="smooth_pb">
           <property name="text">
            <string>Smooth</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="skip_sb">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::UpDownArrows</enum>
+          </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -309,88 +312,107 @@
         <string>Fitting</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="1" colspan="2">
-         <widget class="QSlider" name="horizontalSlider_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="QSlider" name="horizontalSlider_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QSlider" name="horizontalSlider_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_9">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Position</string>
+           <string>Num of Peak</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QRadioButton" name="radioButton_2">
-          <property name="text">
-           <string>Peak 1</string>
-          </property>
-         </widget>
+         <widget class="QSpinBox" name="num_of_peaks_sb"/>
         </item>
         <item row="0" column="2">
-         <widget class="QRadioButton" name="radioButton_3">
-          <property name="text">
-           <string>Peak 2</string>
-          </property>
+         <widget class="QComboBox" name="function_type_cb">
+          <item>
+           <property name="text">
+            <string>Voight</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Lorentz</string>
+           </property>
+          </item>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Amp</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>FWHM</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QRadioButton" name="radioButton">
-          <property name="text">
-           <string>Peak 3</string>
-          </property>
+        <item row="1" column="0" colspan="3">
+         <widget class="QTableWidget" name="tableWidget_2">
+          <row>
+           <property name="text">
+            <string>Amp</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Amp Low</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>New Row</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Cen</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Cen Low</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>New Row</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Sigma</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Sigma Low</string>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Sigma High</string>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>Peak 1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Peak 2</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Peak 3</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Peak 4</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Peak 5</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>

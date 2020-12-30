@@ -111,7 +111,7 @@ class XPS_view(QtWidgets.QDockWidget):
         indexs = [find_nearest(self.data_x, x_lim[1]), find_nearest(self.data_x, x_lim[0])]
         self.data_x = self.data_x[indexs[0]:indexs[1]]
         self.data_y = self.data_y[indexs[0]:indexs[1]]
-        ApplicationSettings.ALL_DATA_PLOTTED['Data_y'] = self.main_window.ax.plot(self.data_x,self.data_y,'-b')
+        ApplicationSettings.ALL_DATA_PLOTTED['Data_y'] = self.main_window.ax.plot(self.data_x,self.data_y)
         self.shirley = shirley_calculate(self.data_x, self.data_y)
         ApplicationSettings.ALL_DATA_PLOTTED['Shirley'] = self.main_window.ax.plot(self.data_x, self.shirley, '.k', markersize=2)
         self.xps_basic()
@@ -415,16 +415,24 @@ class XPS_view(QtWidgets.QDockWidget):
     def plot(self):
         path = self.model.filePath(self.tree_view.currentIndex())
         filename, extension = os.path.splitext(path)
-        if extension=='.csv' or extension=='.CSV':
+        if extension == '.csv' or extension == '.CSV':
             self.data = np.genfromtxt(path, delimiter=',').T
             self.data_x = self.data[0]+float(self.ui.offset_LE.text())
             self.data_y = self.data[1]
             ApplicationSettings.ALL_DATA_PLOTTED['XPS'] = self.main_window.ax.plot(self.data[0], self.data[1])
-        elif extension=='.txt':
+        elif extension == '.txt':
             self.data = np.genfromtxt(path,skip_header=1).T
             self.data_x = self.data[0]+float(self.ui.offset_LE.text())
             self.data_y = self.data[1]
             ApplicationSettings.ALL_DATA_PLOTTED['XPS'] = self.main_window.ax.plot(self.data_x, self.data_y)
+        elif extension == '':
+            try:
+                self.data = np.genfromtxt(path,skip_header=1).T
+                self.data_x = self.data[0]+float(self.ui.offset_LE.text())
+                self.data_y = self.data[1]
+                ApplicationSettings.ALL_DATA_PLOTTED['XPS'] = self.main_window.ax.plot(self.data_x, self.data_y)
+            except ValueError:
+                print('Could Not Read File Type')
         self.xps_basic()
         self.main_window.canvas.draw()
 
