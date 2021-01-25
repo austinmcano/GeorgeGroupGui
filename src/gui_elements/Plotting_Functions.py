@@ -50,6 +50,12 @@ def linear_plot_SE(self):
     self.ax.plot(new_data[0], np.poly1d(fit)(new_data[0]))
     self.canvas.draw()
 
+def keycheck(dict, key):
+    if key in dict.keys():
+        return True
+    else:
+        return False
+
 def addmpl(self,fig):
     self.main_window.canvas = FigureCanvas(fig)
     self.ui.verticalLayout.addWidget(self.main_window.canvas)
@@ -107,6 +113,7 @@ def qcm_hc_mass(data, start_time=float, end_time=float, purge_time_a=float, purg
         fc[i] = mass_hc_a[i]+mass_hc_b[i]
     return mass_hc_a,mass_hc_b, fc
 
+
 def plot_QCM(self, time,pressure,mass,a_exp=int,b_exp=int,ttp=float,threshold=float,from_time=int,to_time=int,
              wait_time=float, density = float):
     #  Few more assignments Exposures is the time of each Exposure, the Index is just what index it
@@ -147,8 +154,6 @@ def plot_QCM(self, time,pressure,mass,a_exp=int,b_exp=int,ttp=float,threshold=fl
         if (Exposure_index[num + 1] - Exposure_index[num]) < 2000:
             Purge_Time_Index[num] = Exposure_index[num + 1] - Exposure_index[num]
 
-    # for num in Purge_Time_Index:
-    #     if
 
     Purge_Time_Index[-1] = Purge_Time_Index[0]
 
@@ -207,82 +212,6 @@ def plot_QCM(self, time,pressure,mass,a_exp=int,b_exp=int,ttp=float,threshold=fl
 
     return MC_A, MC_B, MC_Cycle, half_cycle_density_A, half_cycle_density_B, full_cycle_density
 
-    # if QCM_fun == 0:
-    #     x_values_A = np.linspace(0,int(len(MC_A)),len(MC_A))
-    #     x_values_B = np.linspace(0, int(len(MC_B)), len(MC_B))
-    #     self.main_window.ax.plot(x_values_A,MC_A)
-    #     self.main_window.ax.plot(x_values_B,MC_B)
-    #     self.main_window.ax.set_xlabel('Cycles')
-    #     self.main_window.ax.set_ylabel('Mass Change (ng/cm$^3$)')
-    #     self.main_window.fig.tight_layout()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.clear()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.append([MC_A, MC_B])
-    #     ApplicationSettings.ALL_DATA_PLOTTED[path.split('/')[-1].split('.')[0]+'MC_AB.csv'] = [x_values_A, MC_A, x_values_B, MC_B]
-    #
-    # elif QCM_fun == 1:
-    #     x_values = np.linspace(1, len(MC_Cycle),len(MC_Cycle))
-    #     self.main_window.ax.plot(x_values,MC_Cycle)
-    #     self.main_window.ax.set_xlabel('Cycles')
-    #     self.main_window.ax.set_ylabel('Mass Change (ng/cm$^3$)')
-    #     self.main_window.fig.tight_layout()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.clear()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.append([MC_Cycle])
-    #     ApplicationSettings.ALL_DATA_PLOTTED[path.split('/')[-1].split('.')[0] + 'MC_AB.csv'] = [x_values, MC_Cycle]
-    #
-    # elif QCM_fun == 2:
-    #     x_values = np.linspace(1, 30, 30)
-    #     self.main_window.ax.plot(x_values, MC_P)
-    #     self.main_window.ax.plot(x_values, MC_N)
-    #     self.main_window.ax.set_xlabel('Cycles')
-    #     self.main_window.ax.set_ylabel('Mass Change (ng/cm$^3$)')
-    #     self.main_window.fig.tight_layout()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.clear()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.append([MC_N, MC_P])
-    #     ApplicationSettings.ALL_DATA_PLOTTED[path.split('/')[-1].split('.')[0] + 'MC_AB.csv'] = [x_values, MC_P, MC_N]
-    #
-    # elif QCM_fun == 3:
-    #     # self.main_window.ax.plot(time, pressure)
-    #     self.main_window.ax.plot(time, mass)
-    #     self.main_window.ax.set_xlabel('Time (s)')
-    #     self.main_window.ax.set_ylabel('Mass (ng/cm$^3$)')
-    #     # self.main_window.ax.axvline(time_at_num, color='gray', lw=1, alpha=0.5)
-    #
-    # elif QCM_fun == 4:
-    #     self.main_window.ax.plot(time, pressure)
-    #     # self.main_window.ax.plot(time, mass)
-    #     self.main_window.ax.set_xlabel('Time (s)')
-    #     self.main_window.ax.set_ylabel('Pressure (Torr)')
-    #
-    # elif QCM_fun == 5:
-    #     for i in range(len(MC_A)):
-    #         half_cycle_density_A[i] = MC_A[i] / (10.0 * density)
-    #     for i in range(len(MC_B)):
-    #         half_cycle_density_B[i] = MC_B[i] / (10.0 * density)
-    #     x_values_A = np.linspace(0, int(len(MC_A)), len(MC_A))
-    #     x_values_B = np.linspace(0, int(len(MC_B)), len(MC_B))
-    #     self.main_window.ax.plot(x_values_A, half_cycle_density_A)
-    #     self.main_window.ax.plot(x_values_B, half_cycle_density_B)
-    #     self.main_window.ax.set_xlabel('Cycles')
-    #     self.main_window.ax.set_ylabel('Thickness ($\AA$)')
-    #     self.main_window.fig.tight_layout()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.clear()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.append([half_cycle_density_A, half_cycle_density_B])
-    #     ApplicationSettings.ALL_DATA_PLOTTED[path.split('/')[-1].split('.')[0] + 'MC_AB_den.csv'] = \
-    #         [x_values_A, half_cycle_density_A,x_values_B, half_cycle_density_B]
-    #
-    # elif QCM_fun == 6:
-    #     for i in range(len(MC_Cycle)):
-    #         full_cycle_density[i] = MC_Cycle[i] / (10 * density)
-    #     x_values = np.linspace(0, int(len(MC_Cycle)), len(MC_Cycle))
-    #     self.main_window.ax.plot(x_values, full_cycle_density)
-    #     self.main_window.ax.set_xlabel('Cycles')
-    #     self.main_window.ax.set_ylabel('Thickness ($\AA$)')
-    #     self.main_window.fig.tight_layout()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.clear()
-    #     ApplicationSettings.LAST_DATA_PLOTTED.append([full_cycle_density])
-    #     ApplicationSettings.ALL_DATA_PLOTTED[path.split('/')[-1].split('.')[0] + 'MC_Cycle_den.csv'] = \
-    #         [x_values, full_cycle_density]
-
 
 def ir_plot_basic(self):
     try: self.main_window.ax.legend().set_draggable(True)
@@ -315,7 +244,7 @@ def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
-#
+
 def integrate_ir(data,minimum,maximum):
     integral_list = []
     lim = [min(range(len(data[0])),key=lambda i: abs(data[0][i] - minimum)),

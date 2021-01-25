@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>447</width>
-    <height>556</height>
+    <width>569</width>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,19 +15,164 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="0" colspan="4">
      <widget class="QTreeView" name="QCMtreeView"/>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item row="6" column="2">
+     <widget class="QComboBox" name="plot_type_cb">
+      <item>
+       <property name="text">
+        <string>Pressure</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mass</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mass Sub</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Half+Full Cycle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Half Cycle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Half Cycle Density</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QPushButton" name="cols_plot_pb">
+      <property name="text">
+       <string>Plot</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QPushButton" name="fill_cols_pb">
+      <property name="text">
+       <string>Fill Columns</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="4">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Columns</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="1">
+         <widget class="QTreeWidget" name="treeWidget_pressure">
+          <column>
+           <property name="text">
+            <string>Pressure</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QTreeWidget" name="treeWidget_mass">
+          <column>
+           <property name="text">
+            <string>Mass</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QTreeWidget" name="treeWidget_time">
+          <column>
+           <property name="text">
+            <string>Time</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="3">
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="Params_Tab">
        <attribute name="title">
         <string>Params w/ Pressure</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="4">
+         <widget class="QLineEdit" name="Num_B">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>From To Time (s)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="numa_label">
+          <property name="text">
+           <string># of A</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="wait_LE">
+          <property name="text">
+           <string>58</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="P_Threshold">
+          <property name="text">
+           <string>0.05</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="numb_label">
+          <property name="text">
+           <string># of B</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="3">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Refresh Params</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="4">
+         <widget class="QLineEdit" name="To_Time">
+          <property name="text">
+           <string>9999999</string>
+          </property>
+         </widget>
+        </item>
         <item row="4" column="4">
          <widget class="QLineEdit" name="Density">
           <property name="text">
@@ -35,14 +180,21 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="pthress_label">
+        <item row="2" column="4">
+         <widget class="QLineEdit" name="time_through_purge">
           <property name="text">
-           <string>Pressure</string>
+           <string>.88</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
+        <item row="2" column="3">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>% Time</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="2">
          <widget class="QComboBox" name="time_option">
           <item>
            <property name="text">
@@ -56,81 +208,10 @@
           </item>
          </widget>
         </item>
-        <item row="1" column="4">
-         <widget class="QLineEdit" name="Num_B">
+        <item row="6" column="4">
+         <widget class="QLineEdit" name="From_Time">
           <property name="text">
-           <string>1</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="Num_A">
-          <property name="text">
-           <string>1</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="wait_time_label">
-          <property name="text">
-           <string>Wait (s)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="numa_label">
-          <property name="text">
-           <string># of A</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QComboBox" name="comboBox">
-          <item>
-           <property name="text">
-            <string>Half+Full Cycle</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>QCM Mass Sub</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Plot Mass</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Plot Pressure</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Denisty Half+Full Cycle</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="0" column="3" colspan="2">
-         <widget class="QPushButton" name="plot_pb">
-          <property name="text">
-           <string>Plot</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="wait_LE">
-          <property name="text">
-           <string>58</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>% Time</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -141,66 +222,38 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="4">
-         <widget class="QLineEdit" name="time_through_purge">
+        <item row="4" column="0">
+         <widget class="QLabel" name="wait_time_label">
           <property name="text">
-           <string>.88</string>
+           <string>Wait (s)</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="numb_label">
+        <item row="2" column="0">
+         <widget class="QLabel" name="pthress_label">
           <property name="text">
-           <string># of B</string>
+           <string>Pressure</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="P_Threshold">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="Num_A">
           <property name="text">
-           <string>0.05</string>
+           <string>1</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="3">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>From To Time (s)</string>
+        <item row="1" column="0" colspan="5">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
-        <item row="5" column="4">
-         <widget class="QLineEdit" name="From_Time">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="4">
-         <widget class="QLineEdit" name="To_Time">
-          <property name="text">
-           <string>9999999</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="3">
-         <widget class="QComboBox" name="ax_cb">
-          <item>
-           <property name="text">
-            <string>Left Ax</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Right Ax</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="8" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Refresh Params</string>
+        <item row="5" column="0" colspan="5">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
@@ -211,99 +264,73 @@
         <string>Params w/ Mass</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="5" column="1">
+        <item row="4" column="1">
          <widget class="QLineEdit" name="num_exp_LE">
           <property name="text">
            <string>50</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>End Time (s)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QLineEdit" name="end_time_LE">
-          <property name="text">
-           <string>9999</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="start_time_LE">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="label_12">
           <property name="text">
            <string>Num of Exposures</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>B D+P Time (s)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
+        <item row="0" column="1">
          <widget class="QLineEdit" name="adp_time_LE">
           <property name="text">
            <string>0</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_13">
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="start_time_LE">
           <property name="text">
-           <string>Start Time (s)</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
+        <item row="0" column="3">
          <widget class="QLineEdit" name="bdp_time_LE">
           <property name="text">
            <string>0</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>End Time (s)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QLineEdit" name="end_time_LE">
+          <property name="text">
+           <string>9999</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
          <widget class="QLabel" name="label_4">
           <property name="text">
            <string>A D+PTime (s)</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QComboBox" name="comboBox_2">
-          <item>
-           <property name="text">
-            <string>Half+Full Cycle</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Density Half+Full Cycle</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Plot Mass</string>
-           </property>
-          </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>B D+P Time (s)</string>
+          </property>
          </widget>
         </item>
-        <item row="0" column="2" colspan="2">
-         <widget class="QPushButton" name="hc_mass_pb">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>Plot</string>
+           <string>Start Time (s)</string>
           </property>
          </widget>
         </item>
@@ -428,6 +455,20 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="ax_cb">
+      <item>
+       <property name="text">
+        <string>Left Ax</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Right Ax</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>

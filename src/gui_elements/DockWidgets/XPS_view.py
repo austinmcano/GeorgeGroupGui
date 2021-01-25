@@ -37,7 +37,7 @@ class XPS_view(QtWidgets.QDockWidget):
 
     def _init_UI(self):
         self.model = QtWidgets.QFileSystemModel()
-        self.model.setRootPath(QtCore.QDir.currentPath())
+        self.model.setRootPath('')
 
         self.tree_view.setModel(self.model)
         self.tree_view.setSortingEnabled(True)
@@ -443,4 +443,7 @@ class XPS_view(QtWidgets.QDockWidget):
         leg.set_draggable(True)
         self.main_window.fig.tight_layout()
         self.main_window.canvas.draw()
+
+    def thickogram(self):
+        pass
 

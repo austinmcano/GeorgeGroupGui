@@ -139,6 +139,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionBar_Graph.triggered.connect(lambda: plotting_funs.bar_graph(self))
         self.ui.actionTight_Layout.triggered.connect(lambda: plotting_funs.tight_figure(self))
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
+        self.ui.actionSE_Help.triggered.connect(lambda: self.se_help_function())
         # self.ui.actionOpen_File.triggered.connect(lambda: self.show_pickled_fig())
         self.ax.callbacks.connect('xlim_changed', self.lims_change)
         self.ui.actionLegend_Toggle.setShortcut(QtCore.QCoreApplication.translate("MainWindow", u"Ctrl+T", None))
@@ -214,12 +215,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.settings.setValue('sns_fontscale', self.fs)
         self.settings.setValue('sns_font',self.font)
 
+    def se_help_function(self):
+        print('the best color is: #b63841ff')
+
     def cleargraph(self):
         if self.ax_2 is None:
             self.ax.clear()
             self.ax.callbacks.connect('xlim_changed', self.lims_change)
             self.ax.callbacks.connect('ylim_changed', self.lims_change)
             ApplicationSettings.ALL_DATA_PLOTTED = {}
+            self.fig.tight_layout()
             self.canvas.draw()
         elif self.ax_2 is not None:
             self.ui.verticalLayout.removeWidget(self.toolbar)

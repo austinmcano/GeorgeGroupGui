@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'simple_treeWidget_dialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.14.2
+## Created by: Qt User Interface Compiler version 5.15.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,7 +28,7 @@ class Ui_Dialog(object):
         self.buttonBox.setOrientation(Qt.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
 
         self.treeWidget = QTreeWidget(Dialog)
         __qtreewidgetitem = QTreeWidgetItem()
@@ -37,6 +37,11 @@ class Ui_Dialog(object):
         self.treeWidget.setObjectName(u"treeWidget")
 
         self.gridLayout.addWidget(self.treeWidget, 0, 0, 1, 1)
+
+        self.lineEdit = QLineEdit(Dialog)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.gridLayout.addWidget(self.lineEdit, 1, 0, 1, 1)
 
 
         self.retranslateUi(Dialog)

@@ -3,6 +3,7 @@ from src.gui_elements.RC_Fucntions import *
 from PySide2 import QtCore,QtWidgets
 import pandas as pd
 from lmfit.models import LinearModel
+from src.Ui_Files.Dialogs.simple_treeWidget_dialog import Ui_Dialog as twDialog_ui
 
 
 class SE_view(QtWidgets.QDockWidget):
@@ -19,6 +20,8 @@ class SE_view(QtWidgets.QDockWidget):
     def _init_vars(self):
         self.current_data_container = None
         self.fitted_slopes = None
+        self.data_x = None
+        self.data_y = None
 
     def _init_widgets(self):
         self.tree_view = self.ui.SE_treeView
@@ -28,7 +31,8 @@ class SE_view(QtWidgets.QDockWidget):
 
     def _init_UI(self):
         self.model = QtWidgets.QFileSystemModel()
-        self.model.setRootPath(QtCore.QDir.currentPath())
+        # self.model.setRootPath(QtCore.QDir.currentPath())
+        self.model.setRootPath('')
 
         self.tree_view.setModel(self.model)
         self.tree_view.setSortingEnabled(True)
@@ -44,6 +48,7 @@ class SE_view(QtWidgets.QDockWidget):
 
         self.ui.fill_cols_pb.clicked.connect(lambda: self.fill_cols())
         self.ui.plot_pb.clicked.connect(lambda: self.plot_type_organizer())
+        self.ui.lin_fit_pb.clicked.connect(lambda: self.linear_SE())
 
     def eventFilter(self, object, event):
         # For right click events
@@ -54,10 +59,9 @@ class SE_view(QtWidgets.QDockWidget):
     def plot_type_organizer(self):
         if self.ui.plot_type_cb.currentText() == 'X vs Y':
             self.plot_se()
-        elif self.ui.plot_type_cb.currentText() == 'Ext. Plot':
+        elif self.ui.plot_type_cb.currentText() == 'Ext. Plot (half-ints)' or \
+                self.ui.plot_type_cb.currentText() == 'Ext. Plot (ints)':
             self.extended_plot_fun()
-        elif self.ui.plot_type_cb.currentText() == 'Linear Fit':
-            self.linear_SE()
 
     def fill_cols(self):
         self.ui.SEY_tw.clear()
@@ -88,36 +92,59 @@ class SE_view(QtWidgets.QDockWidget):
             for i in self.ui.SEY_tw.selectedItems():
                 y_data = self.data[i.text(0)].to_numpy()
                 ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = \
-                    ax.plot(x_data, y_data-y_data[0],self.ui.linetype_cb.currentText())
+                    ax.plot(x_data, y_data-y_data[0],self.ui.linetype_cb.currentText(),label=x)
         elif not self.ui.zero_correct_checkb.isChecked():
             for i in self.ui.SEY_tw.selectedItems():
                 y_data = self.data[i.text(0)].to_numpy()
                 ApplicationSettings.ALL_DATA_PLOTTED[str(x) + str(i.text(0))] = \
-                    ax.plot(x_data, y_data, self.ui.linetype_cb.currentText())
-        if self.ui.checkBox.isChecked():
-            pass
-        if not self.ui.checkBox.isChecked():
-            self.main_window.ax.set_xlabel(self.ui.xlabel_le.text())
-            self.main_window.ax.set_ylabel(self.ui.ylabel_le.text())
+                    ax.plot(x_data, y_data, self.ui.linetype_cb.currentText(),label=x)
+        self.main_window.ax.set_xlabel(self.ui.xlabel_le.text())
+        self.main_window.ax.set_ylabel(self.ui.ylabel_le.text())
         self.main_window.fig.tight_layout()
         self.main_window.canvas.draw()
 
+
+
     def linear_SE(self):
-        model = LinearModel()
-        self.fitted_slopes = []
-        all_data_list = [i for i in ApplicationSettings.ALL_DATA_PLOTTED.keys()]
-        for i in all_data_list:
-            data = ApplicationSettings.ALL_DATA_PLOTTED[i][0]._xy.T
-            print(data)
-            print(len(data[0]))
-            print(len(data[1]))
-            pars = model.guess(data[1],x=data[0])
-            fit = model.fit(data[1],pars,x=data[0])
-            ApplicationSettings.ALL_DATA_PLOTTED[str(i) + 'fit'] = self.main_window.ax.plot(data[0],fit.best_fit)
-            self.fitted_slopes.append(fit.params['slope'].value)
-        self.main_window.canvas.draw()
+        def finish():
+            if self.ui.line_name_checkbox.isChecked():
+                name = self.ui.line_name_le.text()
+            else:
+                name = self.ui.SEY_tw.currentIndex().data()
+            if keycheck(dict, name) is True:
+                name = name + '_'
+            key = ui.treeWidget.currentItem().text(0)
+            self.data_x = dict[key][0]._xy.T[0]
+            self.data_y = dict[key][0]._xy.T[1]
+            x_lim = ApplicationSettings.C_X_LIM
+            indexs = [find_nearest(self.data_x, x_lim[0]), find_nearest(self.data_x, x_lim[1])]
+            self.data_x = self.data_x[indexs[0]:indexs[1]]
+            self.data_y = self.data_y[indexs[0]:indexs[1]]
+            model = LinearModel()
+            pars = model.guess(self.data_y,x=self.data_x)
+            fit = model.fit(self.data_y,pars,x=self.data_x)
+            ApplicationSettings.ALL_DATA_PLOTTED[name+' Fit'] = \
+                self.main_window.ax.plot(self.data_x,fit.best_fit,label=name+' Fit')
+            self.ui.fit_results_TE.setText(fit.fit_report())
+            self.main_window.canvas.draw()
+        dialog = QtWidgets.QDialog()
+        ui = twDialog_ui()
+        ui.setupUi(dialog)
+        dict = ApplicationSettings.ALL_DATA_PLOTTED
+        Key_List = []
+        for i in dict.keys():
+            Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+        ui.treeWidget.addTopLevelItems(Key_List)
+        ui.buttonBox.accepted.connect(lambda: finish())
+        dialog.exec_()
 
     def extended_plot_fun(self):
+        if self.ui.line_name_checkbox.isChecked():
+            name = self.ui.line_name_le.text()
+        else:
+            name = self.ui.SEY_tw.currentIndex().data()
+        if keycheck(ApplicationSettings.ALL_DATA_PLOTTED,name) is True:
+                name = name + '_'
         if self.ui.ax_cb.currentText() == 'Left Ax':
             ax = self.main_window.ax
         elif self.ui.ax_cb.currentText() == 'Right Ax':
@@ -125,41 +152,22 @@ class SE_view(QtWidgets.QDockWidget):
                 self.main_window.ax_2 = self.main_window.ax.twinx()
             ax = self.main_window.ax_2
         y_data = []
+        for i in self.ui.SEY_tw.selectedItems():
+            temp = self.data[i.text(0)].to_numpy()
+            for j in temp:
+                if not np.isnan(j):
+                    y_data.append(j)
         if self.ui.zero_correct_checkb.isChecked():
-            for i in self.ui.SEY_tw.selectedItems():
-                temp = self.data[i.text(0)].to_numpy()
-                for j in temp:
-                    if not np.isnan(j):
-                        y_data.append(j)
             y_data = y_data-y_data[0]
-            if self.ui.x_list_cb.currentText() == 'X From List':
-                pass
-            elif self.ui.x_list_cb.currentText() == 'X (ints)':
-                ApplicationSettings.ALL_DATA_PLOTTED['test'] = \
-                    ax.plot(np.linspace(0, len(y_data) - 1, len(y_data)), y_data, self.ui.linetype_cb.currentText())
-            elif self.ui.x_list_cb.currentText() == 'X (half-ints)':
-                ApplicationSettings.ALL_DATA_PLOTTED['test'] = \
-                    ax.plot(np.linspace(0, (len(y_data) - 1) / 2, len(y_data)), y_data,
-                            self.ui.linetype_cb.currentText())
-        elif not self.ui.zero_correct_checkb.isChecked():
-            for i in self.ui.SEY_tw.selectedItems():
-                temp = self.data[i.text(0)].to_numpy()
-                for j in temp:
-                    if not np.isnan(j):
-                        y_data.append(j)
-
-            # if self.ui.x_list_cb.currentText() == 'X From List':
-            #     pass
-            if self.ui.x_list_cb.currentText() == 'X (ints)':
-                ApplicationSettings.ALL_DATA_PLOTTED['test'] = \
-                    ax.plot(np.linspace(0,len(y_data)-1,len(y_data)), y_data, self.ui.linetype_cb.currentText())
-            elif self.ui.x_list_cb.currentText() == 'X (half-ints)':
-                ApplicationSettings.ALL_DATA_PLOTTED['test'] = \
-                    ax.plot(np.linspace(0, (len(y_data) - 1)/2, len(y_data)), y_data, self.ui.linetype_cb.currentText())
-        if self.ui.checkBox.isChecked():
-            pass
-        if not self.ui.checkBox.isChecked():
-            self.main_window.ax.set_xlabel(self.ui.xlabel_le.text())
-            self.main_window.ax.set_ylabel(self.ui.ylabel_le.text())
+        if self.ui.plot_type_cb.currentText() == 'Ext. Plot (ints)':
+            ApplicationSettings.ALL_DATA_PLOTTED[name] = \
+                ax.plot(np.linspace(0, len(y_data) - 1, len(y_data)), y_data, self.ui.linetype_cb.currentText()
+                        ,label=self.ui.line_name_le.text()+name)
+        elif self.ui.plot_type_cb.currentText() == 'Ext. Plot (half-ints)':
+            ApplicationSettings.ALL_DATA_PLOTTED[name] = \
+                ax.plot(np.linspace(0, (len(y_data) - 1) / 2, len(y_data)), y_data,
+                        self.ui.linetype_cb.currentText(),label=name)
+        self.main_window.ax.set_xlabel(self.ui.xlabel_le.text())
+        self.main_window.ax.set_ylabel(self.ui.ylabel_le.text())
         self.main_window.fig.tight_layout()
         self.main_window.canvas.draw()

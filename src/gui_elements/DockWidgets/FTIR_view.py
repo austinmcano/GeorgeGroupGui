@@ -4,9 +4,9 @@ from src.gui_elements.RC_Fucntions import *
 from src.gui_elements.Plotting_Functions import subtraction_from_survey
 import glob
 from scipy.signal import savgol_filter
-from lmfit.models import VoigtModel, GaussianModel, LorentzianModel
+from lmfit.models import VoigtModel, GaussianModel, LorentzianModel, LinearModel
 from lmfit import Model, Parameters
-
+from src.Ui_Files.Dialogs.simple_treeWidget_dialog import Ui_Dialog as twDialog_ui
 
 class FTIR_view(QtWidgets.QDockWidget):
     def __init__(self, main_window):
@@ -25,8 +25,8 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.diff = None
         self.model = None
         self.data = None
-        self.x_data = None
-        self.y_daya = None
+        self.data_x = None
+        self.data_y = None
         self.constraints = np.asarray(
             [[10, -1000, 1000, 3700, 400, 4000, 50, 1, 400], [10, -1000, 2900, 285, 400, 4000, 50, 1, 400],
              [1, -1000, 1000, 2890, 400, 4000, 50, 1, 400], [10, -1000, 1000, 1215, 400, 4000, 50, 1, 400],
@@ -43,13 +43,14 @@ class FTIR_view(QtWidgets.QDockWidget):
 
     def _init_UI(self):
         self.model = QtWidgets.QFileSystemModel()
-        self.model.setRootPath(QtCore.QDir.currentPath())
+        self.model.setRootPath('')
 
         self.tree_view.setModel(self.model)
         self.tree_view.setSortingEnabled(True)
 
-        self.tree_view.sortByColumn(True)
+        # self.tree_view.sortByColumn(True)
         self.tree_view.setRootIndex(self.model.index(self.main_window.settings.value('FTIR_PATH')))
+        self.tree_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
         self.tree_view.setModel(self.model)
         self.tree_view.installEventFilter(self)
@@ -60,7 +61,11 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.ui.integrate_pb.clicked.connect(lambda: self.integrate())
         # self.ui.
 
-        # self.ui.tryfit_pb.clicked.connect(lambda: self.try_fit())
+        self.ui.fit_pb.clicked.connect(lambda: self.fitting_function())
+        self.ui.plot_current_pb.clicked.connect(lambda: self.plot_init())
+        self.ui.tableWidget_2.cellChanged.connect(lambda: self.save_constraints())
+        self.ui.selectdata_pb.clicked.connect(lambda: self.select_data())
+
 
     def eventFilter(self, object, event):
         # For right click events
@@ -68,18 +73,18 @@ class FTIR_view(QtWidgets.QDockWidget):
             self.context_menu.exec_(self.mapToGlobal(event.pos()))
         return False
 
-    def pick_data(self):
-        dialog = QtWidgets.QDialog()
-        ui = STC_ui()
-        ui.setupUi(dialog)
-        dict = ApplicationSettings.ALL_DATA_PLOTTED
-        Key_List = []
-        for i in dict.keys():
-            Key_List.append(QtWidgets.QTreeWidgetItem([i]))
-        ui.treeWidget.addTopLevelItems(Key_List)
-        # ui.buttonBox.accepted.connect(lambda: temp())
-        ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        dialog.exec_()
+    # def pick_data(self):
+    #     dialog = QtWidgets.QDialog()
+    #     ui = STC_ui()
+    #     ui.setupUi(dialog)
+    #     dict = ApplicationSettings.ALL_DATA_PLOTTED
+    #     Key_List = []
+    #     for i in dict.keys():
+    #         Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+    #     ui.treeWidget.addTopLevelItems(Key_List)
+    #     # ui.buttonBox.accepted.connect(lambda: temp())
+    #     ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+    #     dialog.exec_()
 
     def save_constraints(self):
         try:
@@ -89,11 +94,13 @@ class FTIR_view(QtWidgets.QDockWidget):
         except ValueError:
             print('No constraint save')
 
-    def try_fit(self):
+    def fitting_function(self):
         self.main_window.cleargraph()
         self.save_constraints()
         con = self.constraints
         #  Y is data[0]..... whyyyyyyy x is data[1]
+        linearmod = LinearModel()
+
         if self.ui.fit_shape_cb.currentText() == 'Gaussian':
             if self.ui.num_peaks_sb.value() == 1:
                 gmodel = GaussianModel()
@@ -291,7 +298,7 @@ class FTIR_view(QtWidgets.QDockWidget):
                                 ('center', con[0][3], True, con[0][4], con[0][5]),
                                 ('sigma', con[0][6], True, con[0][7], con[0][8]))
                 result = vmodel.fit(self.data_y, params, x=self.data_x)
-                self.ui.fit_report_TE.setText(result.fit_report())
+                # self.ui.fit_report_TE.setText(result.fit_report())
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
                                                                                        result.best_fit,
                                                                                        'r--', label='Result')
@@ -424,9 +431,65 @@ class FTIR_view(QtWidgets.QDockWidget):
                                                                                        'r--', label='Result')
                 self.ui.fit_report_TE.setText(result.fit_report())
 
-        self.xps_basic()
         ApplicationSettings.ALL_DATA_PLOTTED['Y Data'] = self.main_window.ax.plot(self.data_x, self.data_y)
-        self.main_window.canvas.draw()
+        self.ir_basic()
+
+    def select_data(self):
+        def finish():
+            key = ui.treeWidget.currentItem().text(0)
+            self.data_x = dict[key]._xy.T[0]
+            self.data_y = dict[key]._xy.T[1]
+            x_lim = ApplicationSettings.C_X_LIM
+            indexs = [find_nearest(self.data_x, x_lim[1]), find_nearest(self.data_x, x_lim[0])]
+            self.data_x = self.data_x[indexs[0]:indexs[1]]
+            self.data_y = self.data_y[indexs[0]:indexs[1]]
+        dialog = QtWidgets.QDialog()
+        ui = twDialog_ui()
+        ui.setupUi(dialog)
+        dict = ApplicationSettings.ALL_DATA_PLOTTED
+        Key_List = []
+        for i in dict.keys():
+            Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+        ui.treeWidget.addTopLevelItems(Key_List)
+        ui.buttonBox.accepted.connect(lambda: finish())
+        dialog.exec_()
+
+    def save_constraints(self):
+        try:
+            for row in range(9):
+                for column in range(5):
+                    self.constraints[column][row] = float(self.ui.tableWidget_2.item(row, column).text())
+        except ValueError:
+            print('No constraint save')
+
+    def plot_init(self):
+        self.main_window.cleargraph()
+        con = self.constraints
+        if self.ui.num_peaks_sb.value() == 1:
+            start_plot = gaussian(self.data_x,con[0][0],con[0][3],con[0][6])
+        elif self.ui.num_peaks_sb.value() == 2:
+            start_plot = gaussian(self.data_x, con[0][0], con[0][3], con[0][6])+gaussian(self.data_x, con[1][0], con[1][3], con[1][6])
+        elif self.ui.num_peaks_sb.value() == 3:
+            start_plot = gaussian(self.data_x, con[0][0], con[0][3], con[0][6])+\
+                         gaussian(self.data_x, con[1][0], con[1][3], con[1][6])+\
+                         gaussian(self.data_x, con[2][0], con[2][3], con[2][6])
+        elif self.ui.num_peaks_sb.value() == 4:
+            start_plot = gaussian(self.data_x, con[0][0], con[0][3], con[0][6]) + \
+                         gaussian(self.data_x, con[1][0], con[1][3], con[1][6]) + \
+                         gaussian(self.data_x, con[2][0], con[2][3], con[2][6]) + \
+                         gaussian(self.data_x, con[3][0], con[3][3], con[3][6])
+        elif self.ui.num_peaks_sb.value() == 5:
+            start_plot = gaussian(self.data_x, con[0][0], con[0][3], con[0][6]) + \
+                         gaussian(self.data_x, con[1][0], con[1][3], con[1][6]) + \
+                         gaussian(self.data_x, con[2][0], con[2][3], con[2][6]) + \
+                         gaussian(self.data_x, con[3][0], con[3][3], con[3][6]) + \
+                         gaussian(self.data_x, con[4][0], con[4][3], con[4][6])
+
+
+        ApplicationSettings.ALL_DATA_PLOTTED['Y_Data'] = self.main_window.ax.plot(self.data_x,self.data_y)
+        ApplicationSettings.ALL_DATA_PLOTTED['FTIR Init Values'] = \
+            self.main_window.ax.plot(self.data_x,start_plot, '--k')
+        self.ir_basic()
 
     def ir_plot(self):
         path = self.model.filePath(self.tree_view.currentIndex())
@@ -441,7 +504,6 @@ class FTIR_view(QtWidgets.QDockWidget):
             if os.path.isdir(path):
                 csv_list = sorted(glob.glob(path + '/*CSV'))
                 self.sub = subtraction_from_survey(csv_list)
-
                 for i in range(0,len(self.sub)-1,self.ui.skip_sb.value()+1):
                     ApplicationSettings.ALL_DATA_PLOTTED['Sub_'+str(i)] = \
                         self.main_window.ax.plot(self.sub[0],self.sub[i+1],label='Sub_'+str(i))
@@ -481,9 +543,12 @@ class FTIR_view(QtWidgets.QDockWidget):
         csv_list = sorted(glob.glob(path + '/*CSV'))
         self.sub = subtraction_from_survey(csv_list)
         min_max = [[400,4000],[400,4000],[400,4000],[400,4000]]
+        labels = ['','','','']
         for row in range(4):
-            for column in range(4):
-                min_max[row][column] = self.ui.tableWidget.item(row,column).text()
+            labels[row] = self.ui.tableWidget.item(row, 2).text()
+            for column in range(2):
+                min_max[row][column] = float(self.ui.tableWidget.item(row,column).text())
+        print(labels)
         minimum = float(self.ui.tableWidget.item(0,0).text())
         maximum = float(self.ui.tableWidget.item(0, 1).text())
         num_of_int = self.ui.spinBox.value()
@@ -502,7 +567,7 @@ class FTIR_view(QtWidgets.QDockWidget):
                 inte = integrate_ir(self.sub, min_max[i][0], min_max[i][1])
                 inte_c = [i-inte[0] for i in inte]
                 ApplicationSettings.ALL_DATA_PLOTTED['Int. ' + str(minimum) + '-' + str(maximum)] = \
-                    ax.plot(inte_c, '.-', label='Int. Corr. ' + str(minimum) + '-' + str(maximum))
+                    ax.plot(inte_c, '.-', label=labels[i] + str(minimum) + '-' + str(maximum))
         elif self.ui.int_type_cb.currentText() == 'Integrate Sub (dir)':
             for i in range(num_of_int):
                 self.sub = subtraction_from_survey(csv_list)

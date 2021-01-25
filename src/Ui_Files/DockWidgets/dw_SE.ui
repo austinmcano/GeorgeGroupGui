@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
-    <height>489</height>
+    <width>456</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,25 +15,47 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="4">
-     <widget class="QPushButton" name="fill_cols_pb">
+    <item row="0" column="2" colspan="4">
+     <widget class="QTreeView" name="SE_treeView"/>
+    </item>
+    <item row="3" column="2" colspan="2">
+     <widget class="QComboBox" name="plot_type_cb">
+      <item>
+       <property name="text">
+        <string>Ext. Plot (half-ints)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ext. Plot (ints)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>X vs Y</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QPushButton" name="lin_fit_pb">
       <property name="text">
-       <string>Grab Columns</string>
+       <string>Lin. Fit</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2" colspan="5">
-     <widget class="QTreeView" name="SE_treeView"/>
-    </item>
-    <item row="3" column="5" colspan="2">
+    <item row="3" column="4">
      <widget class="QPushButton" name="plot_pb">
       <property name="text">
        <string>Plot</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="2" colspan="5">
+    <item row="2" column="2" colspan="4">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -42,52 +64,31 @@
         <string>Axis Properties</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>X Label</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="line_name_checkbox">
+          <property name="text">
+           <string>Use Line Name</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
            <string>Skip Rows: </string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Y Label</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="skip_rows_sb"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QComboBox" name="ax_cb">
-          <item>
-           <property name="text">
-            <string>Left Ax</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Right Ax</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QCheckBox" name="zero_correct_checkb">
-          <property name="text">
-           <string>Zero Correct</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
+        <item row="5" column="1">
          <widget class="QComboBox" name="linetype_cb">
           <item>
            <property name="text">
@@ -121,7 +122,7 @@
           </item>
          </widget>
         </item>
-        <item row="3" column="2">
+        <item row="5" column="2">
          <widget class="QComboBox" name="comboBox">
           <item>
            <property name="text">
@@ -145,11 +146,96 @@
           </item>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QLineEdit" name="xlabel_le"/>
-        </item>
         <item row="2" column="1" colspan="2">
-         <widget class="QLineEdit" name="ylabel_le"/>
+         <widget class="QLineEdit" name="line_name_le">
+          <property name="text">
+           <string>Extended_Plot</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QPushButton" name="fill_cols_pb">
+          <property name="text">
+           <string>Grab Columns</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="3">
+         <widget class="QLineEdit" name="ylabel_le">
+          <property name="text">
+           <string>$\Delta$ Thickness ($\AA$)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Line Name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QComboBox" name="ax_cb">
+          <item>
+           <property name="text">
+            <string>Left Ax</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Right Ax</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="3">
+         <widget class="QLineEdit" name="xlabel_le">
+          <property name="text">
+           <string>Cycles</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="skip_rows_sb"/>
+        </item>
+        <item row="1" column="3">
+         <widget class="QCheckBox" name="zero_correct_checkb">
+          <property name="text">
+           <string>Zero Correct</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Y Label</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QTreeWidget" name="SEY_tw">
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <column>
+           <property name="text">
+            <string>SE-Y</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Fit Results</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QTextEdit" name="fit_results_TE"/>
         </item>
        </layout>
       </widget>
@@ -158,10 +244,26 @@
         <string>Params</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>0</string>
+           <string>Skip Columns:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QTreeWidget" name="SEX_tw">
+          <column>
+           <property name="text">
+            <string>SE-X</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Use Cols:</string>
           </property>
          </widget>
         </item>
@@ -172,24 +274,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_4">
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit">
           <property name="text">
-           <string>Use Cols:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="checkBox">
-          <property name="text">
-           <string>Use Column Name</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Skip Columns:</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -200,17 +288,17 @@
         <string>Calculated</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_5">
+        <item row="0" column="1">
+         <widget class="QLabel" name="thick_change_QL">
           <property name="text">
-           <string>TextLabel</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_3">
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>Growth/Etch Rate (A)/Cyc</string>
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -228,15 +316,29 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="thick_change_QL">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>0</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="label_6">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Growth/Etch Rate (A)/Cyc</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_12">
           <property name="text">
            <string>0</string>
           </property>
@@ -244,60 +346,6 @@
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QComboBox" name="plot_type_cb">
-      <item>
-       <property name="text">
-        <string>Ext. Plot</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Linear Fit</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>X vs Y</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="3" column="3">
-     <widget class="QComboBox" name="x_list_cb">
-      <item>
-       <property name="text">
-        <string>X (ints)</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>X (half-ints)</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="1" column="4" colspan="3">
-     <widget class="QTreeWidget" name="SEY_tw">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <column>
-       <property name="text">
-        <string>SE-Y</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="1" column="2" colspan="2">
-     <widget class="QTreeWidget" name="SEX_tw">
-      <column>
-       <property name="text">
-        <string>SE-X</string>
-       </property>
-      </column>
      </widget>
     </item>
    </layout>

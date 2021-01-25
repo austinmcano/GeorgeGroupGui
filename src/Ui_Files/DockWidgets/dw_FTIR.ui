@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>368</width>
-    <height>523</height>
+    <width>468</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,18 +15,18 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="3">
+     <widget class="QTreeView" name="FTIR_treeView"/>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="QLineEdit" name="lineEdit_4"/>
+    </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Error Log</string>
       </property>
      </widget>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit_4"/>
-    </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="QTreeView" name="FTIR_treeView"/>
     </item>
     <item row="3" column="0" colspan="3">
      <widget class="QTabWidget" name="tabWidget">
@@ -116,6 +116,9 @@
           <property name="keyboardTracking">
            <bool>false</bool>
           </property>
+          <property name="value">
+           <number>0</number>
+          </property>
          </widget>
         </item>
        </layout>
@@ -125,25 +128,14 @@
         <string>Integrate</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="4" column="0">
-         <widget class="QSpinBox" name="spinBox">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>4</number>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QPushButton" name="integrate_pb">
-          <property name="text">
-           <string>Integrate</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
+        <item row="0" column="4">
          <widget class="QComboBox" name="int_type_cb">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <item>
            <property name="text">
             <string>Integrate Sub (dir)</string>
@@ -171,7 +163,7 @@
           </item>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="0" column="2">
          <widget class="QLabel" name="label_2">
           <property name="maximumSize">
            <size>
@@ -184,25 +176,33 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QComboBox" name="comboBox">
-          <item>
-           <property name="text">
-            <string>Left Axis</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Right Axis</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="2" rowspan="5">
-         <widget class="QTableWidget" name="tableWidget">
+        <item row="0" column="3">
+         <widget class="QSpinBox" name="spinBox">
           <property name="maximumSize">
            <size>
-            <width>240</width>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2" rowspan="4" colspan="3">
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="minimumSize">
+           <size>
+            <width>320</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>1000</width>
             <height>1000</height>
            </size>
           </property>
@@ -210,7 +210,7 @@
            <number>4</number>
           </property>
           <property name="columnCount">
-           <number>2</number>
+           <number>3</number>
           </property>
           <row>
            <property name="text">
@@ -242,6 +242,11 @@
             <string>To</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>Label</string>
+           </property>
+          </column>
           <item row="0" column="0">
            <property name="text">
             <string>400</string>
@@ -250,6 +255,11 @@
           <item row="0" column="1">
            <property name="text">
             <string>4000</string>
+           </property>
+          </item>
+          <item row="0" column="2">
+           <property name="text">
+            <string/>
            </property>
           </item>
           <item row="1" column="0">
@@ -262,6 +272,11 @@
             <string>4000</string>
            </property>
           </item>
+          <item row="1" column="2">
+           <property name="text">
+            <string/>
+           </property>
+          </item>
           <item row="2" column="0">
            <property name="text">
             <string>400</string>
@@ -270,6 +285,11 @@
           <item row="2" column="1">
            <property name="text">
             <string>4000</string>
+           </property>
+          </item>
+          <item row="2" column="2">
+           <property name="text">
+            <string/>
            </property>
           </item>
           <item row="3" column="0">
@@ -282,27 +302,44 @@
             <string>4000</string>
            </property>
           </item>
+          <item row="3" column="2">
+           <property name="text">
+            <string/>
+           </property>
+          </item>
          </widget>
         </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>Find Peaks</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="1">
-         <widget class="QSlider" name="horizontalSlider">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="6" column="4">
+         <widget class="QPushButton" name="integrate_pb">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Threshold</string>
+           <string>Integrate</string>
           </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QComboBox" name="comboBox">
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Left Axis</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Right Axis</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -312,33 +349,14 @@
         <string>Fitting</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Num of Peak</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="num_of_peaks_sb"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QComboBox" name="function_type_cb">
-          <item>
-           <property name="text">
-            <string>Voight</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Gaussian</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Lorentz</string>
-           </property>
-          </item>
+         <widget class="QSpinBox" name="num_peaks_sb">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
          </widget>
         </item>
         <item row="1" column="0" colspan="3">
@@ -414,6 +432,63 @@
            </property>
           </column>
          </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Num of Peak</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="fit_shape_cb">
+          <item>
+           <property name="text">
+            <string>Voigt</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Lorentz</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="fit_pb">
+          <property name="text">
+           <string>Fit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="plot_current_pb">
+          <property name="text">
+           <string>Plot Current</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="selectdata_pb">
+          <property name="text">
+           <string>Select Data</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Fit Report</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QTextEdit" name="fit_report_TE"/>
         </item>
        </layout>
       </widget>

@@ -1,6 +1,7 @@
 from PySide2 import QtCore
 from src.Ui_Files.DockWidgets.dw_QCM import Ui_DockWidget
 from src.gui_elements.RC_Fucntions import *
+import pandas as pd
 
 class QCM_view(QtWidgets.QDockWidget):
     def __init__(self, main_window):
@@ -16,6 +17,10 @@ class QCM_view(QtWidgets.QDockWidget):
     def _init_vars(self):
         # self.ax = self.main_window.ax
         self.current_data_container = None
+        self.time = None
+        self.pressure = None
+        self.mass = None
+        self.data = None
 
     def _init_widgets(self):
         self.tree_view = self.ui.QCMtreeView
@@ -25,7 +30,8 @@ class QCM_view(QtWidgets.QDockWidget):
 
     def _init_UI(self):
         self.model = QtWidgets.QFileSystemModel()
-        self.model.setRootPath(QtCore.QDir.currentPath())
+        # self.model.setRootPath(QtCore.QDir.currentPath())
+        self.model.setRootPath('')
 
         self.tree_view.setModel(self.model)
         self.tree_view.setSortingEnabled(True)
@@ -36,10 +42,16 @@ class QCM_view(QtWidgets.QDockWidget):
         self.tree_view.setModel(self.model)
         self.tree_view.installEventFilter(self)
         self.tree_view.setColumnWidth(0, 200)
+        self.model.sort(0, order=QtCore.Qt.SortOrder.AscendingOrder)
 
-        self.ui.plot_pb.clicked.connect(lambda: self.qcm())
-        self.ui.hc_mass_pb.clicked.connect(lambda: self.qcm_mass_hc())
-        self.ui.time_option.currentTextChanged.connect(lambda: self.time_change())
+        # self.ui.plot_pb.clicked.connect(lambda: self.qcm())
+        # self.ui.hc_mass_pb.clicked.connect(lambda: self.qcm_mass_hc())
+        # self.ui.time_option.currentTextChanged.connect(lambda: self.time_change())
+        self.ui.fill_cols_pb.clicked.connect(lambda: self.fill_colls())
+        self.ui.cols_plot_pb.clicked.connect(lambda: self.qcm_tw())
+        self.ui.treeWidget_time.currentItemChanged.connect(lambda: self.load_data(self.ui.treeWidget_time))
+        self.ui.treeWidget_pressure.currentItemChanged.connect(lambda: self.load_data(self.ui.treeWidget_pressure))
+        self.ui.treeWidget_mass.currentItemChanged.connect(lambda: self.load_data(self.ui.treeWidget_mass))
 
     def time_change(self):
         if self.ui.time_option.currentText()=='From:To Time':
@@ -85,6 +97,101 @@ class QCM_view(QtWidgets.QDockWidget):
         self.ui.total_ml_label.setText(str(np.sum(mc_f)))
         self.qcm_basic()
         self.main_window.canvas.draw()
+
+    def fill_colls(self):
+        self.time = None
+        self.mass = None
+        self.pressure = None
+        self.ui.treeWidget_time.clear()
+        self.ui.treeWidget_pressure.clear()
+        self.ui.treeWidget_mass.clear()
+
+        path = self.model.filePath(self.tree_view.currentIndex())
+        filename, file_extension = os.path.splitext(path)
+        if file_extension == '.CSV' or file_extension == '.csv':
+            self.data = pd.read_csv(self.model.filePath(self.tree_view.currentIndex()),
+                                    delimiter=',', skiprows=0)
+        else:
+            self.data = pd.read_csv(self.model.filePath(self.tree_view.currentIndex()),
+                                    sep='\t')
+        strings = [col for col in self.data.columns]
+        column_list_time = []
+        column_list_pressure = []
+        column_list_mass = []
+        for i in strings:
+            column_list_time.append(QtWidgets.QTreeWidgetItem([i]))
+            column_list_pressure.append(QtWidgets.QTreeWidgetItem([i]))
+            column_list_mass.append(QtWidgets.QTreeWidgetItem([i]))
+            self.ui.treeWidget_time.addTopLevelItems(column_list_time)
+            self.ui.treeWidget_pressure.addTopLevelItems(column_list_pressure)
+            self.ui.treeWidget_mass.addTopLevelItems(column_list_mass)
+
+    def load_data(self, widget):
+        try:
+            name = widget.currentIndex().data()
+            if widget is self.ui.treeWidget_time:
+                self.time = self.data[name].to_numpy()
+            elif widget is self.ui.treeWidget_pressure:
+                self.pressure = self.data[name].to_numpy()
+                if type(self.pressure[0]) is str:
+                    for i in range(len(self.pressure)):
+                        self.pressure[i] = float(self.pressure[i].split(' ')[0])
+            elif widget is self.ui.treeWidget_mass:
+                self.mass = self.data[name].to_numpy()
+            print(self.time)
+            print(self.pressure)
+            print(self.mass)
+        except KeyError:
+            print('Change Came From Fill Columns')
+
+    def qcm_tw(self):
+        if self.ui.ax_cb.currentText() == 'Left Ax':
+            self.ax = self.main_window.ax
+        elif self.ui.ax_cb.currentText() == 'Right Ax':
+            if self.main_window.ax_2 is None:
+                self.main_window.ax_2 = self.main_window.ax.twinx()
+            self.ax = self.main_window.ax_2
+        if self.ui.time_option.currentText()=='From:To Time':
+            lims = [int(self.ui.From_Time.text()),int(self.ui.To_Time.text())]
+        elif self.ui.time_option.currentText()=='Plot Limits':
+            lims = ApplicationSettings.C_X_LIM
+            self.ui.From_Time.setText(str(int(lims[0])))
+            self.ui.To_Time.setText(str(int(lims[1])))
+        if self.ui.plot_type_cb.currentText() == "Pressure":
+            ApplicationSettings.ALL_DATA_PLOTTED['Pressure'] = self.ax.plot(self.time,self.pressure, label='Pressure')
+        elif self.ui.plot_type_cb.currentText() == "Mass":
+            ApplicationSettings.ALL_DATA_PLOTTED['Mass'] = self.ax.plot(self.time,self.mass, label='Mass (ng/cm$^2$)')
+        elif self.ui.plot_type_cb.currentText() == "Mass Sub":
+            ApplicationSettings.ALL_DATA_PLOTTED['Mass'] = self.ax.plot(self.time,self.mass-self.mass[0], label='Mass (ng/cm$^2$)')
+        elif self.ui.plot_type_cb.currentText()=="Half+Full Cycle":
+            mc_a, mc_b, mc_f, hcd_a, hcd_b, fc_d = plot_QCM(self, self.time, self.pressure, self.mass,
+                                                            a_exp=int(self.ui.Num_A.text()),
+                                                            b_exp=int(self.ui.Num_B.text()),
+                                                            ttp=float(self.ui.time_through_purge.text()),
+                                                            threshold=float(self.ui.P_Threshold.text()),
+                                                            from_time=lims[0],
+                                                            to_time=lims[1],
+                                                            wait_time=float(self.ui.wait_LE.text()),
+                                                            density=float(self.ui.Density.text()))
+            ApplicationSettings.ALL_DATA_PLOTTED['MC_A'] = self.ax.plot(mc_a, label='Mass Change A')
+            ApplicationSettings.ALL_DATA_PLOTTED['MC_B'] = self.ax.plot(mc_b, label='Mass Change B')
+            ApplicationSettings.ALL_DATA_PLOTTED['MC_F'] = self.ax.plot(mc_f, label='Cycle Mass Change')
+        elif self.ui.plot_type_cb.currentText() == "Half Cycle":
+            mc_a, mc_b, mc_f, hcd_a, hcd_b, fc_d = plot_QCM(self, self.time, self.pressure, self.mass,
+                                                            a_exp=int(self.ui.Num_A.text()),
+                                                            b_exp=int(self.ui.Num_B.text()),
+                                                            ttp=float(self.ui.time_through_purge.text()),
+                                                            threshold=float(self.ui.P_Threshold.text()),
+                                                            from_time=lims[0],
+                                                            to_time=lims[1],
+                                                            wait_time=float(self.ui.wait_LE.text()),
+                                                            density=float(self.ui.Density.text()))
+            ApplicationSettings.ALL_DATA_PLOTTED['MC_A'] = self.ax.plot(mc_a, label='Mass Change A')
+            ApplicationSettings.ALL_DATA_PLOTTED['MC_B'] = self.ax.plot(mc_b, label='Mass Change B')
+        elif self.ui.plot_type_cb.currentText() == "Half Cycle Density":
+            pass
+        self.main_window.canvas.draw()
+
 
     def qcm(self):
         if self.ui.ax_cb.currentText() == 'Left Ax':
