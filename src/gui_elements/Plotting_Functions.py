@@ -629,7 +629,6 @@ class plotting_funs:
         self.fig.colorbar(c, ax=self.ax)
 
     def app_settings_fun(self):
-
         def function():
             self.settings.setValue('app_style',ui.comboBox.currentText())
         def change_path(settings_type):
@@ -660,7 +659,9 @@ class plotting_funs:
         ui = app_settings()
         ui.setupUi(d)
         ui.comboBox.addItems(QtWidgets.QStyleFactory.keys())
-        ui.comboBox.addItems(['darkstyle'])
+        ui.comboBox.addItems(['DarkStyle'])
+        ui.comboBox.addItems(['DarkFusion'])
+        ui.comboBox.addItems(['GrayFusion'])
         update()
         ui.buttonBox.accepted.connect(lambda: function())
         ui.changedatapath_pb.clicked.connect(lambda: change_path('DATA_PATH'))

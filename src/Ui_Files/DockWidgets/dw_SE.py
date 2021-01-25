@@ -38,16 +38,6 @@ class Ui_DockWidget(object):
 
         self.gridLayout.addWidget(self.plot_type_cb, 3, 2, 1, 2)
 
-        self.lin_fit_pb = QPushButton(self.dockWidgetContents)
-        self.lin_fit_pb.setObjectName(u"lin_fit_pb")
-
-        self.gridLayout.addWidget(self.lin_fit_pb, 3, 5, 1, 1)
-
-        self.plot_pb = QPushButton(self.dockWidgetContents)
-        self.plot_pb.setObjectName(u"plot_pb")
-
-        self.gridLayout.addWidget(self.plot_pb, 3, 4, 1, 1)
-
         self.tabWidget = QTabWidget(self.dockWidgetContents)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setTabShape(QTabWidget.Rounded)
@@ -71,35 +61,10 @@ class Ui_DockWidget(object):
 
         self.gridLayout_3.addWidget(self.label_7, 1, 0, 1, 1)
 
-        self.linetype_cb = QComboBox(self.tab_3)
-        self.linetype_cb.addItem("")
-        self.linetype_cb.addItem("")
-        self.linetype_cb.addItem("")
-        self.linetype_cb.addItem("")
-        self.linetype_cb.addItem("")
-        self.linetype_cb.addItem("")
-        self.linetype_cb.setObjectName(u"linetype_cb")
-
-        self.gridLayout_3.addWidget(self.linetype_cb, 5, 1, 1, 1)
-
-        self.comboBox = QComboBox(self.tab_3)
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.setObjectName(u"comboBox")
-
-        self.gridLayout_3.addWidget(self.comboBox, 5, 2, 1, 1)
-
         self.line_name_le = QLineEdit(self.tab_3)
         self.line_name_le.setObjectName(u"line_name_le")
 
         self.gridLayout_3.addWidget(self.line_name_le, 2, 1, 1, 2)
-
-        self.fill_cols_pb = QPushButton(self.tab_3)
-        self.fill_cols_pb.setObjectName(u"fill_cols_pb")
-
-        self.gridLayout_3.addWidget(self.fill_cols_pb, 5, 3, 1, 1)
 
         self.ylabel_le = QLineEdit(self.tab_3)
         self.ylabel_le.setObjectName(u"ylabel_le")
@@ -144,6 +109,22 @@ class Ui_DockWidget(object):
         self.SEY_tw.setSelectionMode(QAbstractItemView.SingleSelection)
 
         self.gridLayout_3.addWidget(self.SEY_tw, 0, 0, 1, 4)
+
+        self.lin_fit_pb = QPushButton(self.tab_3)
+        self.lin_fit_pb.setObjectName(u"lin_fit_pb")
+
+        self.gridLayout_3.addWidget(self.lin_fit_pb, 5, 2, 1, 2)
+
+        self.linetype_cb = QComboBox(self.tab_3)
+        self.linetype_cb.addItem("")
+        self.linetype_cb.addItem("")
+        self.linetype_cb.addItem("")
+        self.linetype_cb.addItem("")
+        self.linetype_cb.addItem("")
+        self.linetype_cb.addItem("")
+        self.linetype_cb.setObjectName(u"linetype_cb")
+
+        self.gridLayout_3.addWidget(self.linetype_cb, 5, 0, 1, 2)
 
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_2 = QWidget()
@@ -234,6 +215,16 @@ class Ui_DockWidget(object):
 
         self.gridLayout.addWidget(self.tabWidget, 2, 2, 1, 4)
 
+        self.plot_pb = QPushButton(self.dockWidgetContents)
+        self.plot_pb.setObjectName(u"plot_pb")
+
+        self.gridLayout.addWidget(self.plot_pb, 3, 5, 1, 1)
+
+        self.fill_cols_pb = QPushButton(self.dockWidgetContents)
+        self.fill_cols_pb.setObjectName(u"fill_cols_pb")
+
+        self.gridLayout.addWidget(self.fill_cols_pb, 3, 4, 1, 1)
+
         DockWidget.setWidget(self.dockWidgetContents)
 
         self.retranslateUi(DockWidget)
@@ -250,25 +241,10 @@ class Ui_DockWidget(object):
         self.plot_type_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Ext. Plot (ints)", None))
         self.plot_type_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"X vs Y", None))
 
-        self.lin_fit_pb.setText(QCoreApplication.translate("DockWidget", u"Lin. Fit", None))
-        self.plot_pb.setText(QCoreApplication.translate("DockWidget", u"Plot", None))
         self.label_8.setText(QCoreApplication.translate("DockWidget", u"X Label", None))
         self.line_name_checkbox.setText(QCoreApplication.translate("DockWidget", u"Use Line Name", None))
         self.label_7.setText(QCoreApplication.translate("DockWidget", u"Skip Rows: ", None))
-        self.linetype_cb.setItemText(0, QCoreApplication.translate("DockWidget", u".-", None))
-        self.linetype_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"-.", None))
-        self.linetype_cb.setItemText(2, QCoreApplication.translate("DockWidget", u".", None))
-        self.linetype_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"-", None))
-        self.linetype_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"--", None))
-        self.linetype_cb.setItemText(5, QCoreApplication.translate("DockWidget", u",", None))
-
-        self.comboBox.setItemText(0, QCoreApplication.translate("DockWidget", u"r", None))
-        self.comboBox.setItemText(1, QCoreApplication.translate("DockWidget", u"b", None))
-        self.comboBox.setItemText(2, QCoreApplication.translate("DockWidget", u"g", None))
-        self.comboBox.setItemText(3, QCoreApplication.translate("DockWidget", u"k", None))
-
         self.line_name_le.setText(QCoreApplication.translate("DockWidget", u"Extended_Plot", None))
-        self.fill_cols_pb.setText(QCoreApplication.translate("DockWidget", u"Grab Columns", None))
         self.ylabel_le.setText(QCoreApplication.translate("DockWidget", u"$\\Delta$ Thickness ($\\AA$)", None))
         self.label_10.setText(QCoreApplication.translate("DockWidget", u"Line Name", None))
         self.ax_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Left Ax", None))
@@ -279,6 +255,14 @@ class Ui_DockWidget(object):
         self.label_9.setText(QCoreApplication.translate("DockWidget", u"Y Label", None))
         ___qtreewidgetitem = self.SEY_tw.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("DockWidget", u"SE-Y", None));
+        self.lin_fit_pb.setText(QCoreApplication.translate("DockWidget", u"Lin. Fit", None))
+        self.linetype_cb.setItemText(0, QCoreApplication.translate("DockWidget", u".-", None))
+        self.linetype_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"-.", None))
+        self.linetype_cb.setItemText(2, QCoreApplication.translate("DockWidget", u".", None))
+        self.linetype_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"-", None))
+        self.linetype_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"--", None))
+        self.linetype_cb.setItemText(5, QCoreApplication.translate("DockWidget", u",", None))
+
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("DockWidget", u"Axis Properties", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("DockWidget", u"Fit Results", None))
         self.label_2.setText(QCoreApplication.translate("DockWidget", u"Skip Columns:", None))
@@ -297,5 +281,7 @@ class Ui_DockWidget(object):
         self.label_11.setText(QCoreApplication.translate("DockWidget", u"TextLabel", None))
         self.label_12.setText(QCoreApplication.translate("DockWidget", u"0", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("DockWidget", u"Calculated", None))
+        self.plot_pb.setText(QCoreApplication.translate("DockWidget", u"Plot", None))
+        self.fill_cols_pb.setText(QCoreApplication.translate("DockWidget", u"Fill Columns", None))
     # retranslateUi
 

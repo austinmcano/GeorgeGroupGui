@@ -138,9 +138,6 @@ class QCM_view(QtWidgets.QDockWidget):
                         self.pressure[i] = float(self.pressure[i].split(' ')[0])
             elif widget is self.ui.treeWidget_mass:
                 self.mass = self.data[name].to_numpy()
-            print(self.time)
-            print(self.pressure)
-            print(self.mass)
         except KeyError:
             print('Change Came From Fill Columns')
 
