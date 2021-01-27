@@ -2,7 +2,8 @@ import sys
 from PySide2 import QtWidgets,QtCore, QtGui
 from src.gui_elements.main_window import MainWindow
 # from src import pyqtcss
-from src import qdarkstyle
+from src.Resources import qdarkstyle
+
 settings = QtCore.QSettings('Resources/settings.ini', QtCore.QSettings.IniFormat)
 
 if __name__ == "__main__":
@@ -47,13 +48,10 @@ if __name__ == "__main__":
     else:
         app.setStyle(style)
 
-
-
     window = MainWindow()
-    window.resize(1250,600)
     window.show()
-
     sys.exit(app.exec_())
+
 """
 to do list:
 Need to enable multiple line saving in the SAVE_Csv dialog (mostly done)

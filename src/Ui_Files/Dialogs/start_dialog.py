@@ -69,7 +69,7 @@ class Ui_Dialog(object):
         self.label.setText(QCoreApplication.translate("Dialog", u"Welcome to the George group gui!", None))
         self.SE_pb.setText(QCoreApplication.translate("Dialog", u"Ellipsometry", None))
         self.QCM_pb.setText(QCoreApplication.translate("Dialog", u"Quartz Crystal Microbalance", None))
-        self.XPS_pb.setText(QCoreApplication.translate("Dialog", u"X-ray Photoelectron Spectroscopy", None))
+        self.XPS_pb.setText(QCoreApplication.translate("Dialog", u"X-Ray Photoelectron Spectroscopy", None))
         self.FTIR_pb.setText(QCoreApplication.translate("Dialog", u"Infrared Spectroscopy", None))
         self.label_2.setText(QCoreApplication.translate("Dialog", u"Select what closest matches up with why you are here:", None))
         self.CF_pb.setText(QCoreApplication.translate("Dialog", u"Curve Fitting", None))

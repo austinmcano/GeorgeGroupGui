@@ -15,6 +15,7 @@ from matplotlib.pyplot import figure
 import matplotlib
 import pickle
 from PySide2 import QtCore,QtWidgets,QtGui
+import sys
 from shutil import copyfile, copytree, rmtree, copy2
 import os
 import seaborn as sns
@@ -389,17 +390,26 @@ class plotting_funs:
             self.ax.yaxis.label.set_color(ui.lspine_cb.currentText())
             self.ax.tick_params(axis='x', colors=ui.bspine_cb.currentText())
             self.ax.tick_params(axis='y', colors=ui.lspine_cb.currentText())
+            self.settings.setValue('top_spine_color',ui.tspine_cb.currentText())
+            self.settings.setValue('bottom_spine_color', ui.bspine_cb.currentText())
+            self.settings.setValue('left_spine_color', ui.lspine_cb.currentText())
+            self.settings.setValue('right_spine_color', ui.rspine_cb.currentText())
             if self.ax_2 is not None:
                 self.ax_2.tick_params(axis='y', colors=ui.rspine_cb.currentText())
             self.canvas.draw()
         dialog = QtWidgets.QDialog()
         ui = spine_color_dialog()
         ui.setupUi(dialog)
-        colors = ['black','red','blue','green','purple','orange','yellow']
+        colors = ['black','red','blue','green','purple','orange','yellow','white']
         ui.bspine_cb.addItems(colors)
+        ui.bspine_cb.setCurrentText(self.settings.value('bottom_spine_color'))
         ui.tspine_cb.addItems(colors)
+        ui.tspine_cb.setCurrentText(self.settings.value('top_spine_color'))
         ui.lspine_cb.addItems(colors)
+        ui.lspine_cb.setCurrentText(self.settings.value('left_spine_color'))
         ui.rspine_cb.addItems(colors)
+        ui.rspine_cb.setCurrentText(self.settings.value('right_spine_color'))
+
         ui.buttonBox.accepted.connect(lambda: finish())
         dialog.exec_()
 
@@ -631,6 +641,7 @@ class plotting_funs:
     def app_settings_fun(self):
         def function():
             self.settings.setValue('app_style',ui.comboBox.currentText())
+            os.execl(sys.executable, sys.executable, *sys.argv)
         def change_path(settings_type):
             path = QtWidgets.QFileDialog.getExistingDirectory()
             self.settings.setValue(settings_type, path)
@@ -663,7 +674,8 @@ class plotting_funs:
         ui.comboBox.addItems(['DarkFusion'])
         ui.comboBox.addItems(['GrayFusion'])
         update()
-        ui.buttonBox.accepted.connect(lambda: function())
+        # ui.buttonBox.accepted.connect(lambda: function())
+        ui.comboBox.currentTextChanged.connect(lambda: function())
         ui.changedatapath_pb.clicked.connect(lambda: change_path('DATA_PATH'))
         ui.changesavepath_pb.clicked.connect(lambda: change_path('SAVED_DATA_PATH'))
         ui.changeprojectpath_pb.clicked.connect(lambda: change_path('PROJECT_PATH'))

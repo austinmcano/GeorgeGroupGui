@@ -66,25 +66,11 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.ui.tableWidget_2.cellChanged.connect(lambda: self.save_constraints())
         self.ui.selectdata_pb.clicked.connect(lambda: self.select_data())
 
-
     def eventFilter(self, object, event):
         # For right click events
         if event.type() == QtCore.QEvent.ContextMenu:
             self.context_menu.exec_(self.mapToGlobal(event.pos()))
         return False
-
-    # def pick_data(self):
-    #     dialog = QtWidgets.QDialog()
-    #     ui = STC_ui()
-    #     ui.setupUi(dialog)
-    #     dict = ApplicationSettings.ALL_DATA_PLOTTED
-    #     Key_List = []
-    #     for i in dict.keys():
-    #         Key_List.append(QtWidgets.QTreeWidgetItem([i]))
-    #     ui.treeWidget.addTopLevelItems(Key_List)
-    #     # ui.buttonBox.accepted.connect(lambda: temp())
-    #     ui.treeWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-    #     dialog.exec_()
 
     def save_constraints(self):
         try:
@@ -98,17 +84,16 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.main_window.cleargraph()
         self.save_constraints()
         con = self.constraints
-        #  Y is data[0]..... whyyyyyyy x is data[1]
-        linearmod = LinearModel()
 
         if self.ui.fit_shape_cb.currentText() == 'Gaussian':
             if self.ui.num_peaks_sb.value() == 1:
-                gmodel = GaussianModel()
+                gmodel = GaussianModel() + LinearModel()
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
                 params.add_many(('amplitude', con[0][0], True, con[0][1], con[0][2]),
                                 ('center', con[0][3], True, con[0][4], con[0][5]),
-                                ('sigma', con[0][6], True, con[0][7], con[0][8]))
+                                ('sigma', con[0][6], True, con[0][7], con[0][8])
+                                'slope', )
                 result = gmodel.fit(self.data_y, params, x=self.data_x)
                 self.ui.fit_report_TE.setText(result.fit_report())
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
@@ -437,8 +422,12 @@ class FTIR_view(QtWidgets.QDockWidget):
     def select_data(self):
         def finish():
             key = ui.treeWidget.currentItem().text(0)
-            self.data_x = dict[key]._xy.T[0]
-            self.data_y = dict[key]._xy.T[1]
+            if type(dict[key]) is list:
+                self.data_x = dict[key][0]._xy.T[0]
+                self.data_y = dict[key][0]._xy.T[1]
+            else:
+                self.data_x = dict[key]._xy.T[0]
+                self.data_y = dict[key]._xy.T[1]
             x_lim = ApplicationSettings.C_X_LIM
             indexs = [find_nearest(self.data_x, x_lim[1]), find_nearest(self.data_x, x_lim[0])]
             self.data_x = self.data_x[indexs[0]:indexs[1]]
@@ -532,7 +521,8 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.ir_basic()
 
     def ir_basic(self):
-        self.main_window.ax.set_xlim(4000, 400)
+        self.main_window.ax.set_xlim(self.main_window.ax.get_xlim()[::-1])
+        # self.main_window.ax.set_xlim(4000, 400)
         self.main_window.ax.set_xlabel('Wavenumber ($cm^{-1}$)')
         self.main_window.ax.set_ylabel('Absorbance')
         self.main_window.fig.tight_layout()

@@ -45,9 +45,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.dw_ProjectView = ProjectBrowser(self)
         self.dw_Data_Broswer = DataBrowser(self)
+        self.dw_FTIR = FTIR_view(self)
         self.dw_XPS = XPS_view(self)
         self.dw_QCM = QCM_view(self)
-        self.dw_FTIR = FTIR_view(self)
         self.dw_SE = SE_view(self)
         self.dw_Console = Console_view(self)
         self.dw_CF = CurveFit_view(self)
@@ -73,9 +73,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.verticalLayout.addWidget(self.toolbar)
         self.ui.verticalLayout.addWidget(self.canvas)
         self.canvas.draw()
-
         self.bar = {'xlist': '', 'y1list':'','y2list':'','y3list':'', 'width':'0.35', 'num':1,
                     'label1':'','label2':'','label3':''}
+        self.resize(self.settings.value("size", QtCore.QSize(270, 225)))
+        self.move(self.settings.value("pos", QtCore.QPoint(50, 50)))
+        self.ax.spines['bottom'].set_color(self.settings.value('bottom_spine_color'))
+        self.ax.spines['top'].set_color(self.settings.value('top_spine_color'))
+        self.ax.spines['right'].set_color(self.settings.value('right_spine_color'))
+        self.ax.spines['left'].set_color(self.settings.value('left_spine_color'))
+        self.ax.xaxis.label.set_color(self.settings.value('bottom_spine_color'))
+        self.ax.yaxis.label.set_color(self.settings.value('left_spine_color'))
+        self.ax.tick_params(axis='x', colors=self.settings.value('bottom_spine_color'))
+        self.ax.tick_params(axis='y', colors=self.settings.value('left_spine_color'))
 
     def closeEvent(self, event: QtGui.QCloseEvent):
         self.settings.setValue('window_size', self.size())
@@ -171,11 +180,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.axes_facecolor = ui.axes_facecolor_le.text()
             sns.set(self.context, self.style, self.c_palette, self.font, self.fs, True,
                     {"axes.facecolor": self.axes_facecolor, 'figure.facecolor': self.fig_facecolor})
-            # {"axes.facecolor": "#1f77b4ff", 'figure.facecolor': '#505F69'}
             self.ax_2 = 1
             self.cleargraph()
             self.fig.delaxes(self.ax)
             self.ax = self.fig.add_subplot(111)
+            self.ax.spines['bottom'].set_color(self.settings.value('bottom_spine_color'))
+            self.ax.spines['top'].set_color(self.settings.value('top_spine_color'))
+            self.ax.spines['right'].set_color(self.settings.value('right_spine_color'))
+            self.ax.spines['left'].set_color(self.settings.value('left_spine_color'))
+            self.ax.xaxis.label.set_color(self.settings.value('bottom_spine_color'))
+            self.ax.yaxis.label.set_color(self.settings.value('left_spine_color'))
+            self.ax.tick_params(axis='x', colors=self.settings.value('bottom_spine_color'))
+            self.ax.tick_params(axis='y', colors=self.settings.value('left_spine_color'))
             self.canvas.draw()
 
         d = QtWidgets.QDialog()
@@ -203,9 +219,72 @@ class MainWindow(QtWidgets.QMainWindow):
                            'tab20b_r', 'tab20c', 'tab20c_r', 'terrain', 'terrain_r', 'twilight', 'twilight_r',
                            'twilight_shifted', 'twilight_shifted_r', 'viridis', 'viridis_r', 'vlag', 'vlag_r',
                            'winter', 'winter_r']
-        font_options = ['Al Nile', 'Al Tarikh', 'AlBayan', 'AmericanTypewriter', 'Andale Mono', 'Apple Braille', 'Apple Braille Outline 6 Dot', 'Apple Braille Outline 8 Dot', 'Apple Braille Pinpoint 6 Dot', 'Apple Braille Pinpoint 8 Dot', 'Apple Chancery', 'Apple Color Emoji', 'Apple Symbols', 'AppleGothic', 'AppleMyungjo', 'AppleSDGothicNeo', 'AquaKana', 'ArabicUIDisplay', 'ArabicUIText', 'Arial', 'Arial Black', 'Arial Bold', 'Arial Bold Italic', 'Arial Italic', 'Arial Narrow', 'Arial Narrow Bold', 'Arial Narrow Bold Italic', 'Arial Narrow Italic', 'Arial Rounded Bold', 'Arial Unicode', 'ArialHB', 'Artifakt Element Bold', 'Artifakt Element Bold Italic', 'Artifakt Element Italic', 'Artifakt Element Regular', 'Athelas', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Ayuthaya', 'Baghdad', 'Bangla MN', 'Bangla Sangam MN', 'Baskerville', 'Beirut', 'BigCaslon', 'Bodoni 72', 'Bodoni 72 OS', 'Bodoni 72 Smallcaps Book', 'Bodoni Ornaments', 'Bradley Hand Bold', 'Brush Script', 'Chalkboard', 'ChalkboardSE', 'Chalkduster', 'Charter', 'Cochin', 'Comic Sans MS', 'Comic Sans MS Bold', 'Copperplate', 'Corsiva', 'Courier New', 'Courier New Bold', 'Courier New Bold Italic', 'Courier New Italic', 'DIN Alternate Bold', 'DIN Condensed Bold', 'Damascus', 'DecoTypeNaskh', 'Devanagari Sangam MN', 'DevanagariMT', 'Didot', 'Diwan Kufi', 'Diwan Thuluth', 'EuphemiaCAS', 'Farah', 'Farisi', 'Futura', 'GeezaPro', 'Georgia', 'Georgia Bold', 'Georgia Bold Italic', 'Georgia Italic', 'GillSans', 'Gujarati Sangam MN', 'GujaratiMT', 'Gurmukhi', 'Gurmukhi MN', 'Gurmukhi Sangam MN', 'Helvetica', 'HelveticaNeue', 'HelveticaNeueDeskInterface', 'Herculanum', 'Hiragino Sans GB', 'Hoefler Text', 'Hoefler Text Ornaments', 'ITFDevanagari', 'Impact', 'InaiMathi-MN', 'Iowan Old Style', 'Kailasa', 'Kannada MN', 'Kannada Sangam MN', 'Kefa', 'Keyboard', 'Khmer MN', 'Khmer Sangam MN', 'Kohinoor', 'KohinoorBangla', 'KohinoorTelugu', 'Kokonor', 'Krungthep', 'KufiStandardGK', 'Lao MN', 'Lao Sangam MN', 'LastResort', 'LucidaGrande', 'Luminari', 'Malayalam MN', 'Malayalam Sangam MN', 'Marion', 'MarkerFelt', 'Menlo', 'Microsoft Sans Serif', 'Mishafi', 'Mishafi Gold', 'Mshtakan', 'Muna', 'Myanmar MN', 'Myanmar Sangam MN', 'NISC18030', 'Nadeem', 'NewPeninimMT', 'Noteworthy', 'NotoNastaliq', 'Optima', 'Oriya MN', 'Oriya Sangam MN', 'PTMono', 'PTSans', 'PTSerif', 'PTSerifCaption', 'Palatino', 'Papyrus', 'Phosphate', 'PingFang', 'PlantagenetCherokee', 'Raanana', 'Rockwell', 'SFCompactDisplay-Black', 'SFCompactDisplay-Bold', 'SFCompactDisplay-Heavy', 'SFCompactDisplay-Light', 'SFCompactDisplay-Medium', 'SFCompactDisplay-Regular', 'SFCompactDisplay-Semibold', 'SFCompactDisplay-Thin', 'SFCompactDisplay-Ultralight', 'SFCompactRounded-Black', 'SFCompactRounded-Bold', 'SFCompactRounded-Heavy', 'SFCompactRounded-Light', 'SFCompactRounded-Medium', 'SFCompactRounded-Regular', 'SFCompactRounded-Semibold', 'SFCompactRounded-Thin', 'SFCompactRounded-Ultralight', 'SFCompactText-Bold', 'SFCompactText-BoldItalic', 'SFCompactText-Heavy', 'SFCompactText-HeavyItalic', 'SFCompactText-Light', 'SFCompactText-LightItalic', 'SFCompactText-Medium', 'SFCompactText-MediumItalic', 'SFCompactText-Regular', 'SFCompactText-RegularItalic', 'SFCompactText-Semibold', 'SFCompactText-SemiboldItalic', 'SFNSDisplay', 'SFNSDisplay-BlackItalic', 'SFNSDisplay-BoldItalic', 'SFNSDisplay-HeavyItalic', 'SFNSDisplay-LightItalic', 'SFNSDisplay-MediumItalic', 'SFNSDisplay-RegularItalic', 'SFNSDisplay-SemiboldItalic', 'SFNSDisplay-ThinG1', 'SFNSDisplay-ThinG2', 'SFNSDisplay-ThinG3', 'SFNSDisplay-ThinG4', 'SFNSDisplay-ThinItalic', 'SFNSDisplay-UltralightItalic', 'SFNSDisplayCondensed-Black', 'SFNSDisplayCondensed-Bold', 'SFNSDisplayCondensed-Heavy', 'SFNSDisplayCondensed-Light', 'SFNSDisplayCondensed-Medium', 'SFNSDisplayCondensed-Regular', 'SFNSDisplayCondensed-Semibold', 'SFNSDisplayCondensed-Thin', 'SFNSDisplayCondensed-Ultralight', 'SFNSRounded', 'SFNSSymbols-Black', 'SFNSSymbols-Bold', 'SFNSSymbols-Heavy', 'SFNSSymbols-Light', 'SFNSSymbols-Medium', 'SFNSSymbols-Regular', 'SFNSSymbols-Semibold', 'SFNSSymbols-Thin', 'SFNSSymbols-Ultralight', 'SFNSText', 'SFNSTextCondensed-Bold', 'SFNSTextCondensed-Heavy', 'SFNSTextCondensed-Light', 'SFNSTextCondensed-Medium', 'SFNSTextCondensed-Regular', 'SFNSTextCondensed-Semibold', 'SFNSTextItalic', 'STHeiti Light', 'STHeiti Medium', 'STIXGeneral', 'STIXGeneralBol', 'STIXGeneralBolIta', 'STIXGeneralItalic', 'STIXIntDBol', 'STIXIntDReg', 'STIXIntSmBol', 'STIXIntSmReg', 'STIXIntUpBol', 'STIXIntUpDBol', 'STIXIntUpDReg', 'STIXIntUpReg', 'STIXIntUpSmBol', 'STIXIntUpSmReg', 'STIXNonUni', 'STIXNonUniBol', 'STIXNonUniBolIta', 'STIXNonUniIta', 'STIXSizFiveSymReg', 'STIXSizFourSymBol', 'STIXSizFourSymReg', 'STIXSizOneSymBol', 'STIXSizOneSymReg', 'STIXSizThreeSymBol', 'STIXSizThreeSymReg', 'STIXSizTwoSymBol', 'STIXSizTwoSymReg', 'STIXVar', 'STIXVarBol', 'Sana', 'Sathu', 'Savoye LET', 'Seravek', 'Shree714', 'SignPainter', 'Silom', 'Sinhala MN', 'Sinhala Sangam MN', 'Skia', 'SnellRoundhand', 'Songti', 'SukhumvitSet', 'SuperClarendon', 'Symbol', 'Tahoma', 'Tahoma Bold', 'Tamil MN', 'Tamil Sangam MN', 'Telugu MN', 'Telugu Sangam MN', 'Thonburi', 'Times', 'Times New Roman', 'Times New Roman Bold', 'Times New Roman Bold Italic', 'Times New Roman Italic', 'Trattatello', 'Trebuchet MS', 'Trebuchet MS Bold', 'Trebuchet MS Bold Italic', 'Trebuchet MS Italic', 'Verdana', 'Verdana Bold', 'Verdana Bold Italic', 'Verdana Italic', 'Waseem', 'Webdings', 'Wingdings', 'Wingdings 2', 'Wingdings 3', 'ZapfDingbats', 'Zapfino', 'ヒラギノ丸ゴ ProN W4', 'ヒラギノ明朝 ProN', 'ヒラギノ角ゴシック W0', 'ヒラギノ角ゴシック W1', 'ヒラギノ角ゴシック W2', 'ヒラギノ角ゴシック W3', 'ヒラギノ角ゴシック W4', 'ヒラギノ角ゴシック W5', 'ヒラギノ角ゴシック W6', 'ヒラギノ角ゴシック W7', 'ヒラギノ角ゴシック W8', 'ヒラギノ角ゴシック W9']
-
-
+        font_options = ['Al Nile', 'Al Tarikh', 'AlBayan', 'AmericanTypewriter', 'Andale Mono', 'Apple Braille',
+                        'Apple Braille Outline 6 Dot', 'Apple Braille Outline 8 Dot', 'Apple Braille Pinpoint 6 Dot',
+                        'Apple Braille Pinpoint 8 Dot', 'Apple Chancery', 'Apple Color Emoji', 'Apple Symbols',
+                        'AppleGothic', 'AppleMyungjo', 'AppleSDGothicNeo', 'AquaKana', 'ArabicUIDisplay',
+                        'ArabicUIText', 'Arial', 'Arial Black', 'Arial Bold', 'Arial Bold Italic', 'Arial Italic',
+                        'Arial Narrow', 'Arial Narrow Bold', 'Arial Narrow Bold Italic', 'Arial Narrow Italic',
+                        'Arial Rounded Bold', 'Arial Unicode', 'ArialHB', 'Artifakt Element Bold',
+                        'Artifakt Element Bold Italic', 'Artifakt Element Italic', 'Artifakt Element Regular',
+                        'Athelas', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Ayuthaya', 'Baghdad', 'Bangla MN',
+                        'Bangla Sangam MN', 'Baskerville', 'Beirut', 'BigCaslon', 'Bodoni 72', 'Bodoni 72 OS',
+                        'Bodoni 72 Smallcaps Book', 'Bodoni Ornaments', 'Bradley Hand Bold', 'Brush Script',
+                        'Chalkboard', 'ChalkboardSE', 'Chalkduster', 'Charter', 'Cochin', 'Comic Sans MS',
+                        'Comic Sans MS Bold', 'Copperplate', 'Corsiva', 'Courier New', 'Courier New Bold',
+                        'Courier New Bold Italic', 'Courier New Italic', 'DIN Alternate Bold', 'DIN Condensed Bold',
+                        'Damascus', 'DecoTypeNaskh', 'Devanagari Sangam MN', 'DevanagariMT', 'Didot', 'Diwan Kufi',
+                        'Diwan Thuluth', 'EuphemiaCAS', 'Farah', 'Farisi', 'Futura', 'GeezaPro', 'Georgia',
+                        'Georgia Bold', 'Georgia Bold Italic', 'Georgia Italic', 'GillSans', 'Gujarati Sangam MN',
+                        'GujaratiMT', 'Gurmukhi', 'Gurmukhi MN', 'Gurmukhi Sangam MN', 'Helvetica', 'HelveticaNeue',
+                        'HelveticaNeueDeskInterface', 'Herculanum', 'Hiragino Sans GB', 'Hoefler Text',
+                        'Hoefler Text Ornaments', 'ITFDevanagari', 'Impact', 'InaiMathi-MN', 'Iowan Old Style',
+                        'Kailasa', 'Kannada MN', 'Kannada Sangam MN', 'Kefa', 'Keyboard', 'Khmer MN', 'Khmer Sangam MN',
+                        'Kohinoor', 'KohinoorBangla', 'KohinoorTelugu', 'Kokonor', 'Krungthep', 'KufiStandardGK',
+                        'Lao MN', 'Lao Sangam MN', 'LastResort', 'LucidaGrande', 'Luminari', 'Malayalam MN',
+                        'Malayalam Sangam MN', 'Marion', 'MarkerFelt', 'Menlo', 'Microsoft Sans Serif', 'Mishafi',
+                        'Mishafi Gold', 'Mshtakan', 'Muna', 'Myanmar MN', 'Myanmar Sangam MN', 'NISC18030', 'Nadeem',
+                        'NewPeninimMT', 'Noteworthy', 'NotoNastaliq', 'Optima', 'Oriya MN', 'Oriya Sangam MN', 'PTMono',
+                        'PTSans', 'PTSerif', 'PTSerifCaption', 'Palatino', 'Papyrus', 'Phosphate', 'PingFang',
+                        'PlantagenetCherokee', 'Raanana', 'Rockwell', 'SFCompactDisplay-Black', 'SFCompactDisplay-Bold',
+                        'SFCompactDisplay-Heavy', 'SFCompactDisplay-Light', 'SFCompactDisplay-Medium',
+                        'SFCompactDisplay-Regular', 'SFCompactDisplay-Semibold', 'SFCompactDisplay-Thin',
+                        'SFCompactDisplay-Ultralight', 'SFCompactRounded-Black', 'SFCompactRounded-Bold',
+                        'SFCompactRounded-Heavy', 'SFCompactRounded-Light', 'SFCompactRounded-Medium',
+                        'SFCompactRounded-Regular', 'SFCompactRounded-Semibold', 'SFCompactRounded-Thin',
+                        'SFCompactRounded-Ultralight', 'SFCompactText-Bold', 'SFCompactText-BoldItalic',
+                        'SFCompactText-Heavy', 'SFCompactText-HeavyItalic', 'SFCompactText-Light',
+                        'SFCompactText-LightItalic', 'SFCompactText-Medium', 'SFCompactText-MediumItalic',
+                        'SFCompactText-Regular', 'SFCompactText-RegularItalic', 'SFCompactText-Semibold',
+                        'SFCompactText-SemiboldItalic', 'SFNSDisplay', 'SFNSDisplay-BlackItalic',
+                        'SFNSDisplay-BoldItalic', 'SFNSDisplay-HeavyItalic', 'SFNSDisplay-LightItalic',
+                        'SFNSDisplay-MediumItalic', 'SFNSDisplay-RegularItalic', 'SFNSDisplay-SemiboldItalic',
+                        'SFNSDisplay-ThinG1', 'SFNSDisplay-ThinG2', 'SFNSDisplay-ThinG3', 'SFNSDisplay-ThinG4',
+                        'SFNSDisplay-ThinItalic', 'SFNSDisplay-UltralightItalic', 'SFNSDisplayCondensed-Black',
+                        'SFNSDisplayCondensed-Bold', 'SFNSDisplayCondensed-Heavy', 'SFNSDisplayCondensed-Light',
+                        'SFNSDisplayCondensed-Medium', 'SFNSDisplayCondensed-Regular', 'SFNSDisplayCondensed-Semibold',
+                        'SFNSDisplayCondensed-Thin', 'SFNSDisplayCondensed-Ultralight', 'SFNSRounded',
+                        'SFNSSymbols-Black', 'SFNSSymbols-Bold', 'SFNSSymbols-Heavy', 'SFNSSymbols-Light',
+                        'SFNSSymbols-Medium', 'SFNSSymbols-Regular', 'SFNSSymbols-Semibold', 'SFNSSymbols-Thin',
+                        'SFNSSymbols-Ultralight', 'SFNSText', 'SFNSTextCondensed-Bold', 'SFNSTextCondensed-Heavy',
+                        'SFNSTextCondensed-Light', 'SFNSTextCondensed-Medium', 'SFNSTextCondensed-Regular',
+                        'SFNSTextCondensed-Semibold', 'SFNSTextItalic', 'STHeiti Light', 'STHeiti Medium','STIXGeneral',
+                        'STIXGeneralBol', 'STIXGeneralBolIta', 'STIXGeneralItalic', 'STIXIntDBol', 'STIXIntDReg',
+                        'STIXIntSmBol', 'STIXIntSmReg', 'STIXIntUpBol', 'STIXIntUpDBol', 'STIXIntUpDReg','STIXIntUpReg',
+                        'STIXIntUpSmBol', 'STIXIntUpSmReg', 'STIXNonUni', 'STIXNonUniBol', 'STIXNonUniBolIta',
+                        'STIXNonUniIta', 'STIXSizFiveSymReg','STIXSizFourSymBol','STIXSizFourSymReg','STIXSizOneSymBol',
+                        'STIXSizOneSymReg', 'STIXSizThreeSymBol', 'STIXSizThreeSymReg', 'STIXSizTwoSymBol',
+                        'STIXSizTwoSymReg', 'STIXVar', 'STIXVarBol', 'Sana', 'Sathu', 'Savoye LET', 'Seravek',
+                        'Shree714', 'SignPainter', 'Silom', 'Sinhala MN', 'Sinhala Sangam MN', 'Skia', 'SnellRoundhand',
+                        'Songti', 'SukhumvitSet', 'SuperClarendon', 'Symbol', 'Tahoma', 'Tahoma Bold', 'Tamil MN',
+                        'Tamil Sangam MN', 'Telugu MN', 'Telugu Sangam MN', 'Thonburi', 'Times', 'Times New Roman',
+                        'Times New Roman Bold', 'Times New Roman Bold Italic', 'Times New Roman Italic', 'Trattatello',
+                        'Trebuchet MS', 'Trebuchet MS Bold', 'Trebuchet MS Bold Italic', 'Trebuchet MS Italic',
+                        'Verdana', 'Verdana Bold', 'Verdana Bold Italic', 'Verdana Italic', 'Waseem', 'Webdings',
+                        'Wingdings', 'Wingdings 2', 'Wingdings 3', 'ZapfDingbats', 'Zapfino', 'ヒラギノ丸ゴ ProN W4',
+                        'ヒラギノ明朝 ProN', 'ヒラギノ角ゴシック W0', 'ヒラギノ角ゴシック W1', 'ヒラギノ角ゴシック W2',
+                        'ヒラギノ角ゴシック W3', 'ヒラギノ角ゴシック W4', 'ヒラギノ角ゴシック W5', 'ヒラギノ角ゴシック W6',
+                        'ヒラギノ角ゴシック W7', 'ヒラギノ角ゴシック W8', 'ヒラギノ角ゴシック W9']
 
         ui.palette_cb.addItems(palette_options)
         ui.fonts_cb.addItems(font_options)
@@ -219,6 +298,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ui.axes_facecolor_le.setText(self.axes_facecolor)
         ui.fig_facecolor_le.setText(self.fig_facecolor)
         d.exec_()
+
         self.settings.setValue('sns_context',self.context)
         self.settings.setValue('sns_style', self.style)
         self.settings.setValue('sns_c_palette', self.c_palette)
@@ -231,30 +311,34 @@ class MainWindow(QtWidgets.QMainWindow):
         print('the best color is: #b63841ff')
 
     def cleargraph(self):
-        if self.ax_2 is None:
-            self.ax.clear()
-            self.ax.callbacks.connect('xlim_changed', self.lims_change)
-            self.ax.callbacks.connect('ylim_changed', self.lims_change)
-            ApplicationSettings.ALL_DATA_PLOTTED = {}
-            self.fig.tight_layout()
-            self.canvas.draw()
-        elif self.ax_2 is not None:
-            self.ui.verticalLayout.removeWidget(self.toolbar)
-            self.ui.verticalLayout.removeWidget(self.canvas)
-            self.toolbar.close()
-            self.canvas.close()
-            # self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
-            self.fig = figure(num=None, figsize=(8, 6), dpi=80)
-            self.canvas = FigureCanvas(self.fig)
-            self.toolbar = NavigationToolbar(self.canvas, self.canvas, coordinates=True)
-            self.ui.verticalLayout.addWidget(self.toolbar)
-            self.ui.verticalLayout.addWidget(self.canvas)
-            self.ax = self.fig.add_subplot(111)
-            self.canvas.installEventFilter(self)
-            self.ax.callbacks.connect('xlim_changed', self.lims_change)
-            self.ax.callbacks.connect('ylim_changed', self.lims_change)
-            ApplicationSettings.ALL_DATA_PLOTTED = {}
-            self.fig.tight_layout()
-            self.canvas.draw()
-            self.ax_2 = None
+        # if self.ax_2 is None:
+        #     self.ax.clear()
+        #     self.ax.callbacks.connect('xlim_changed', self.lims_change)
+        #     self.ax.callbacks.connect('ylim_changed', self.lims_change)
+        #     ApplicationSettings.ALL_DATA_PLOTTED = {}
+        #     self.fig.tight_layout()
+        #     self.canvas.draw()
+        # elif self.ax_2 is not None:
+        self.ui.verticalLayout.removeWidget(self.toolbar)
+        self.ui.verticalLayout.removeWidget(self.canvas)
+        self.toolbar.close()
+        self.canvas.close()
+        self.fig = figure(num=None, figsize=(8, 6), dpi=80)
+        self.canvas = FigureCanvas(self.fig)
+        self.toolbar = NavigationToolbar(self.canvas, self.canvas, coordinates=True)
+        self.ui.verticalLayout.addWidget(self.toolbar)
+        self.ui.verticalLayout.addWidget(self.canvas)
+        self.ax = self.fig.add_subplot(111)
+        self.canvas.installEventFilter(self)
+        self.ax.callbacks.connect('xlim_changed', self.lims_change)
+        self.ax.callbacks.connect('ylim_changed', self.lims_change)
+        ApplicationSettings.ALL_DATA_PLOTTED = {}
+        self.fig.tight_layout()
+        self.canvas.draw()
+        self.ax_2 = None
 
+    def closeEvent(self, e):
+        # Write window size and position to config file
+        self.settings.setValue("size", self.size())
+        self.settings.setValue("pos", self.pos())
+        e.accept()

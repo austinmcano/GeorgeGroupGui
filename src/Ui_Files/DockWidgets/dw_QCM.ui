@@ -15,9 +15,6 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="4">
-     <widget class="QTreeView" name="QCMtreeView"/>
-    </item>
     <item row="6" column="2">
      <widget class="QComboBox" name="plot_type_cb">
       <item>
@@ -47,16 +44,24 @@
       </item>
       <item>
        <property name="text">
-        <string>Half Cycle Density</string>
+        <string>Half+Full Cycle (Mass Only)</string>
        </property>
       </item>
-     </widget>
-    </item>
-    <item row="6" column="3">
-     <widget class="QPushButton" name="cols_plot_pb">
-      <property name="text">
-       <string>Plot</string>
-      </property>
+      <item>
+       <property name="text">
+        <string>Half Cycle (Mass Only)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Half+Full Cycle Density</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Half+Full Cycle Density (Mass Only)</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="6" column="0">
@@ -66,10 +71,34 @@
       </property>
      </widget>
     </item>
+    <item row="6" column="3">
+     <widget class="QPushButton" name="cols_plot_pb">
+      <property name="text">
+       <string>Plot</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="ax_cb">
+      <item>
+       <property name="text">
+        <string>Left Ax</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Right Ax</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="4">
+     <widget class="QTreeView" name="QCMtreeView"/>
+    </item>
     <item row="5" column="0" colspan="4">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -117,13 +146,6 @@
         <string>Params w/ Pressure</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="4">
-         <widget class="QLineEdit" name="Num_B">
-          <property name="text">
-           <string>1</string>
-          </property>
-         </widget>
-        </item>
         <item row="6" column="3">
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -236,13 +258,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="Num_A">
-          <property name="text">
-           <string>1</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0" colspan="5">
          <widget class="Line" name="line">
           <property name="orientation">
@@ -256,6 +271,12 @@
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="num_A"/>
+        </item>
+        <item row="0" column="4">
+         <widget class="QSpinBox" name="num_B"/>
         </item>
        </layout>
       </widget>
@@ -334,6 +355,20 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="0" colspan="4">
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="4">
+         <widget class="Line" name="line_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
@@ -341,10 +376,24 @@
         <string>Results</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_11">
+        <item row="2" column="3">
+         <widget class="QLabel" name="label_19">
           <property name="text">
-           <string>Ave Mass Change B</string>
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="total_ml_label">
+          <property name="text">
+           <string>0</string>
           </property>
          </widget>
         </item>
@@ -352,27 +401,6 @@
          <widget class="QLabel" name="label_10">
           <property name="text">
            <string>Ave Mass Change A</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="ave_mcpc_label">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Total Mass Lost</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLabel" name="total_ml_label">
-          <property name="text">
-           <string>0</string>
           </property>
          </widget>
         </item>
@@ -390,8 +418,36 @@
           </property>
          </widget>
         </item>
+        <item row="4" column="3">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="ave_mcpbhc_label">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Ave Mass Change B</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QLabel" name="num_doses">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="ave_mcpc_label">
           <property name="text">
            <string>0</string>
           </property>
@@ -404,10 +460,10 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QLabel" name="ave_mcpbhc_label">
+        <item row="4" column="2">
+         <widget class="QLabel" name="label_15">
           <property name="text">
-           <string>0</string>
+           <string>StDev</string>
           </property>
          </widget>
         </item>
@@ -418,31 +474,10 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="2">
-         <widget class="QLabel" name="label_15">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>StDev</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QLabel" name="label_16">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>0</string>
+           <string>Total Mass Lost</string>
           </property>
          </widget>
         </item>
@@ -453,22 +488,11 @@
           </property>
          </widget>
         </item>
+        <item row="5" column="0" colspan="4">
+         <widget class="QTextEdit" name="textEdit"/>
+        </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QComboBox" name="ax_cb">
-      <item>
-       <property name="text">
-        <string>Left Ax</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Right Ax</string>
-       </property>
-      </item>
      </widget>
     </item>
    </layout>

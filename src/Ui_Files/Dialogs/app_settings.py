@@ -32,6 +32,37 @@ class Ui_Dialog(object):
 
         self.tabWidget = QTabWidget(Dialog)
         self.tabWidget.setObjectName(u"tabWidget")
+        self.tab_2 = QWidget()
+        self.tab_2.setObjectName(u"tab_2")
+        self.gridLayout_3 = QGridLayout(self.tab_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.textBrowser = QTextBrowser(self.tab_2)
+        self.textBrowser.setObjectName(u"textBrowser")
+        self.textBrowser.setMaximumSize(QSize(16777215, 60))
+
+        self.gridLayout_3.addWidget(self.textBrowser, 1, 1, 1, 1)
+
+        self.label_2 = QLabel(self.tab_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_3.addWidget(self.label_2, 2, 0, 1, 1)
+
+        self.spinBox = QSpinBox(self.tab_2)
+        self.spinBox.setObjectName(u"spinBox")
+
+        self.gridLayout_3.addWidget(self.spinBox, 2, 1, 1, 1)
+
+        self.label = QLabel(self.tab_2)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
+
+        self.comboBox = QComboBox(self.tab_2)
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.gridLayout_3.addWidget(self.comboBox, 0, 1, 1, 1)
+
+        self.tabWidget.addTab(self.tab_2, "")
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.gridLayout_2 = QGridLayout(self.tab)
@@ -172,31 +203,6 @@ class Ui_Dialog(object):
         self.gridLayout_2.addWidget(self.change_figpath_pb, 3, 2, 1, 1)
 
         self.tabWidget.addTab(self.tab, "")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.gridLayout_3 = QGridLayout(self.tab_2)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.label = QLabel(self.tab_2)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
-
-        self.comboBox = QComboBox(self.tab_2)
-        self.comboBox.setObjectName(u"comboBox")
-
-        self.gridLayout_3.addWidget(self.comboBox, 0, 1, 1, 1)
-
-        self.label_2 = QLabel(self.tab_2)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_3.addWidget(self.label_2, 1, 0, 1, 1)
-
-        self.spinBox = QSpinBox(self.tab_2)
-        self.spinBox.setObjectName(u"spinBox")
-
-        self.gridLayout_3.addWidget(self.spinBox, 1, 1, 1, 1)
-
-        self.tabWidget.addTab(self.tab_2, "")
 
         self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 3)
 
@@ -213,6 +219,17 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
+        self.textBrowser.setHtml(QCoreApplication.translate("Dialog", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; font-style:italic; text-decoration: underline;\">Warning</span>: Changing the App Style will instantly restart the app. </p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Only do this if you are prepared to lose anything curing going on</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">in the program right now.</p></body><"
+                        "/html>", None))
+        self.label_2.setText(QCoreApplication.translate("Dialog", u"Maker Size", None))
+        self.label.setText(QCoreApplication.translate("Dialog", u"App Style", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Dialog", u"App Settings", None))
         self.savepath_le.setText("")
         self.change_ir_pb.setText(QCoreApplication.translate("Dialog", u"Change", None))
         self.projectpath_le.setText("")
@@ -241,8 +258,5 @@ class Ui_Dialog(object):
         self.fig_path_label.setText("")
         self.change_figpath_pb.setText(QCoreApplication.translate("Dialog", u"Change", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Change Paths", None))
-        self.label.setText(QCoreApplication.translate("Dialog", u"App Style", None))
-        self.label_2.setText(QCoreApplication.translate("Dialog", u"Maker Size", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Dialog", u"App Settings", None))
     # retranslateUi
 
