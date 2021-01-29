@@ -13,6 +13,7 @@ from src.Ui_Files.Dialogs.seaborn_settings import Ui_Dialog as Ui_sns_Dialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.pyplot import figure
+import psutil
 from src.gui_elements.settings import ApplicationSettings
 from PySide2 import QtCore,QtWidgets,QtGui
 import seaborn as sns
@@ -37,7 +38,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.font = self.settings.value('sns_font')
         self.axes_facecolor = self.settings.value('sns_axesfacecolor')
         self.fig_facecolor = self.settings.value('sns_figfacecolor')
-        print(self.axes_facecolor,self.fig_facecolor)
 
         # sns.set(self.context, self.style, self.c_palette, self.font, self.fs, True, {"axes.facecolor": "#F0F0F0", 'figure.facecolor': '#505F69'})
         sns.set(self.context, self.style, self.c_palette, self.font, self.fs,True, {"axes.facecolor": self.axes_facecolor,
@@ -76,7 +76,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bar = {'xlist': '', 'y1list':'','y2list':'','y3list':'', 'width':'0.35', 'num':1,
                     'label1':'','label2':'','label3':''}
         self.resize(self.settings.value("size", QtCore.QSize(270, 225)))
-        self.move(self.settings.value("pos", QtCore.QPoint(50, 50)))
+        # self.move(self.settings.value("pos", QtCore.QPoint(50, 50)))
         self.ax.spines['bottom'].set_color(self.settings.value('bottom_spine_color'))
         self.ax.spines['top'].set_color(self.settings.value('top_spine_color'))
         self.ax.spines['right'].set_color(self.settings.value('right_spine_color'))
@@ -88,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event: QtGui.QCloseEvent):
         self.settings.setValue('window_size', self.size())
-        self.settings.setValue('window_position', self.pos())
+        # self.settings.setValue('window_position', self.pos())
         print(self.settings.fileName())
 
     def init_connections(self):
@@ -116,6 +116,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.send_to_cf_action.triggered.connect(lambda: plotting_funs.send_to_cf(self))
         self.open_fig_action.triggered.connect(lambda: plotting_funs.show_pickled_fig(self))
         self.axis_colors_action.triggered.connect(lambda: plotting_funs.spine_color_fun(self))
+
 
         start_dialog = QtWidgets.QDialog()
         start_ui = start_Ui()
@@ -153,8 +154,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionTight_Layout.triggered.connect(lambda: plotting_funs.tight_figure(self))
         self.ui.actionQCM_Help.triggered.connect(lambda: plotting_funs.random_c_plot(self))
         self.ui.actionSE_Help.triggered.connect(lambda: self.se_help_function())
+        self.ui.actionXPS_Help.triggered.connect(lambda: self.memory_usage())
         self.ax.callbacks.connect('xlim_changed', self.lims_change)
         self.ui.actionLegend_Toggle.setShortcut(QtCore.QCoreApplication.translate("MainWindow", u"Ctrl+T", None))
+
+    def memory_usage(self):
+        # !/usr/bin/env python
+        import psutil
+        # gives a single float value
+        print(psutil.cpu_percent())
+        # gives an object with many fields
+        print(psutil.virtual_memory())
+        # you can convert that object to a dictionary
+        # dict(psutil.virtual_memory()._asdict())
 
     def start(self, dock_widget):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock_widget)
@@ -311,14 +323,8 @@ class MainWindow(QtWidgets.QMainWindow):
         print('the best color is: #b63841ff')
 
     def cleargraph(self):
-        # if self.ax_2 is None:
-        #     self.ax.clear()
-        #     self.ax.callbacks.connect('xlim_changed', self.lims_change)
-        #     self.ax.callbacks.connect('ylim_changed', self.lims_change)
-        #     ApplicationSettings.ALL_DATA_PLOTTED = {}
-        #     self.fig.tight_layout()
-        #     self.canvas.draw()
-        # elif self.ax_2 is not None:
+        self.ax.clear()
+        self.fig.clf()
         self.ui.verticalLayout.removeWidget(self.toolbar)
         self.ui.verticalLayout.removeWidget(self.canvas)
         self.toolbar.close()
@@ -340,5 +346,5 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, e):
         # Write window size and position to config file
         self.settings.setValue("size", self.size())
-        self.settings.setValue("pos", self.pos())
+        # self.settings.setValue("pos", self.pos())
         e.accept()

@@ -362,7 +362,7 @@ class Ui_DockWidget(object):
 
         self.retranslateUi(DockWidget)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(DockWidget)

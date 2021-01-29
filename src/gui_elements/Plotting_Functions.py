@@ -14,6 +14,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.pyplot import figure
 import matplotlib
 import pickle
+import pandas as pd
 from PySide2 import QtCore,QtWidgets,QtGui
 import sys
 from shutil import copyfile, copytree, rmtree, copy2
@@ -226,10 +227,18 @@ def ir_plot_basic(self):
 def difference_from_survey(list_of_csv):
     data = []
     for csv in list_of_csv:
-        data.append(np.genfromtxt(csv, delimiter=',').T)
+        temp_data = pd.read_csv(csv,delimiter=',').to_numpy().T
+        data.append(temp_data)
+        # data.append(np.genfromtxt(csv, delimiter=',').T)
     sub_list = [data[0][0]]
+    print(len(sub_list))
     for l in range(len(data)-1):
-        sub_list.append(data[l+1][1]-data[l][1])
+        print(len(sub_list))
+        print('')
+        try:
+            sub_list.append(data[l+1][1]-data[l][1])
+        except TypeError:
+            print('TypeError')
     return sub_list
 
 def subtraction_from_survey(list_of_csv):
@@ -240,6 +249,25 @@ def subtraction_from_survey(list_of_csv):
     for l in range(len(data) - 1):
         sub_list.append(data[l + 1][1] - data[0][1])
     return sub_list
+
+def diff_select_survey(list_of_csv):
+    def finish():
+        data = []
+        for csv in list_of_csv:
+            data.append(np.genfromtxt(csv, delimiter=',').T)
+        sub_list = [data[0][0]]
+        for l in range(len(data) - 1):
+            sub_list.append(data[l + 1][1] - data[l][1])
+        return sub_list
+    dialog = QtWidgets.QDialog()
+    ui = simple_tw()
+    ui.setupUi(dialog)
+    Key_List = []
+    for i in list_of_csv:
+        Key_List.append(QtWidgets.QTreeWidgetItem([i]))
+    ui.treeWidget.addTopLevelItems(Key_List)
+    ui.buttonBox.accepted.connect(lambda: finish())
+    dialog.exec_()
 
 def find_nearest(array, value):
     array = np.asarray(array)
@@ -543,7 +571,10 @@ class plotting_funs:
                 leg_2.set_draggable(True)
             self.canvas.draw()
         elif self.ui.actionLegend_Toggle.isChecked()==False:
-            self.ax.get_legend().remove()
+            if self.ax.get_legend() is None:
+                pass
+            else:
+                self.ax.get_legend().remove()
             if self.ax_2 is not None:
                 self.ax_2.get_legend().remove()
             self.canvas.draw()

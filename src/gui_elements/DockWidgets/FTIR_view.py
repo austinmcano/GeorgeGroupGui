@@ -87,13 +87,12 @@ class FTIR_view(QtWidgets.QDockWidget):
 
         if self.ui.fit_shape_cb.currentText() == 'Gaussian':
             if self.ui.num_peaks_sb.value() == 1:
-                gmodel = GaussianModel() + LinearModel()
+                gmodel = GaussianModel()
                 params = Parameters()
                 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
                 params.add_many(('amplitude', con[0][0], True, con[0][1], con[0][2]),
                                 ('center', con[0][3], True, con[0][4], con[0][5]),
-                                ('sigma', con[0][6], True, con[0][7], con[0][8])
-                                'slope', )
+                                ('sigma', con[0][6], True, con[0][7], con[0][8]))
                 result = gmodel.fit(self.data_y, params, x=self.data_x)
                 self.ui.fit_report_TE.setText(result.fit_report())
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
@@ -521,7 +520,9 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.ir_basic()
 
     def ir_basic(self):
-        self.main_window.ax.set_xlim(self.main_window.ax.get_xlim()[::-1])
+        limits = self.main_window.ax.get_xlim()
+        if limits[1] > limits[0]:
+            self.main_window.ax.set_xlim(self.main_window.ax.get_xlim()[::-1])
         # self.main_window.ax.set_xlim(4000, 400)
         self.main_window.ax.set_xlabel('Wavenumber ($cm^{-1}$)')
         self.main_window.ax.set_ylabel('Absorbance')
