@@ -500,8 +500,11 @@ class FTIR_view(QtWidgets.QDockWidget):
                 csv_list = sorted(glob.glob(path + '/*CSV'))
                 self.diff = difference_from_survey(csv_list)
                 for i in range(0,len(self.diff)-1,self.ui.skip_sb.value()+1):
-                    ApplicationSettings.ALL_DATA_PLOTTED['Diff_'+str(i)] = \
-                        self.main_window.ax.plot(self.diff[0],self.diff[i+1],label='Diff_'+str(i))
+                    try:
+                        ApplicationSettings.ALL_DATA_PLOTTED['Diff_'+str(i)] = \
+                            self.main_window.ax.plot(self.diff[0],self.diff[i+1],label='Diff_'+str(i))
+                    except ValueError:
+                        print('not the same size thing')
         elif combo == 'Plot (dir)':
             if os.path.isdir(path):
                 csv_list = sorted(glob.glob(path + '/*CSV'))

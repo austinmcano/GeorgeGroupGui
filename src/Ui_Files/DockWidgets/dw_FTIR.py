@@ -291,7 +291,7 @@ class Ui_DockWidget(object):
 
         self.retranslateUi(DockWidget)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(DockWidget)
@@ -373,13 +373,13 @@ class Ui_DockWidget(object):
         ___qtablewidgetitem21 = self.tableWidget_2.verticalHeaderItem(1)
         ___qtablewidgetitem21.setText(QCoreApplication.translate("DockWidget", u"Amp Low", None));
         ___qtablewidgetitem22 = self.tableWidget_2.verticalHeaderItem(2)
-        ___qtablewidgetitem22.setText(QCoreApplication.translate("DockWidget", u"New Row", None));
+        ___qtablewidgetitem22.setText(QCoreApplication.translate("DockWidget", u"Amp High", None));
         ___qtablewidgetitem23 = self.tableWidget_2.verticalHeaderItem(3)
         ___qtablewidgetitem23.setText(QCoreApplication.translate("DockWidget", u"Cen", None));
         ___qtablewidgetitem24 = self.tableWidget_2.verticalHeaderItem(4)
         ___qtablewidgetitem24.setText(QCoreApplication.translate("DockWidget", u"Cen Low", None));
         ___qtablewidgetitem25 = self.tableWidget_2.verticalHeaderItem(5)
-        ___qtablewidgetitem25.setText(QCoreApplication.translate("DockWidget", u"New Row", None));
+        ___qtablewidgetitem25.setText(QCoreApplication.translate("DockWidget", u"Cen High", None));
         ___qtablewidgetitem26 = self.tableWidget_2.verticalHeaderItem(6)
         ___qtablewidgetitem26.setText(QCoreApplication.translate("DockWidget", u"Sigma", None));
         ___qtablewidgetitem27 = self.tableWidget_2.verticalHeaderItem(7)

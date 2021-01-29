@@ -231,14 +231,12 @@ def difference_from_survey(list_of_csv):
         data.append(temp_data)
         # data.append(np.genfromtxt(csv, delimiter=',').T)
     sub_list = [data[0][0]]
-    print(len(sub_list))
     for l in range(len(data)-1):
-        print(len(sub_list))
-        print('')
-        try:
-            sub_list.append(data[l+1][1]-data[l][1])
-        except TypeError:
-            print('TypeError')
+        # if len(data[l+1][1]) == len(data[l][1]):
+        #     sub_list.append(data[l+1][1]-data[l][1])
+        # else:
+        length = len(data[0][0])
+        sub_list.append(data[l + 1][1][:length] - data[l][1][:length])
     return sub_list
 
 def subtraction_from_survey(list_of_csv):
@@ -247,7 +245,8 @@ def subtraction_from_survey(list_of_csv):
         data.append(np.genfromtxt(csv, delimiter=',').T)
     sub_list = [data[0][0]]
     for l in range(len(data) - 1):
-        sub_list.append(data[l + 1][1] - data[0][1])
+        length = len(data[0][0])
+        sub_list.append(data[l + 1][1][:length] - data[0][1][:length])
     return sub_list
 
 def diff_select_survey(list_of_csv):

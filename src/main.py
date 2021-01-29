@@ -9,10 +9,10 @@ settings = QtCore.QSettings('Resources/settings.ini', QtCore.QSettings.IniFormat
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     style = settings.value('app_style')
-    if style == 'DarkStyle':
-        sty = qdarkstyle.load_stylesheet()
-        app.setStyleSheet(sty)
-    elif style == 'DarkFusion':
+    # if style == 'DarkStyle':
+    #     sty = qdarkstyle.load_stylesheet()
+    #     app.setStyleSheet(sty)
+    if style == 'DarkFusion':
         app.setStyle('Fusion')
         palette = QtGui.QPalette()
         palette.setColor(QtGui.QPalette.Window, QtGui.QColor(53, 53, 53))
