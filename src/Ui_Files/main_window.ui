@@ -81,6 +81,7 @@
     <addaction name="actionQCM"/>
     <addaction name="actionSE"/>
     <addaction name="actionXPS"/>
+    <addaction name="actionXRD"/>
     <addaction name="actionCurve_Fitting"/>
     <addaction name="actionCalculator"/>
     <addaction name="separator"/>
@@ -598,6 +599,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionXRD">
+   <property name="text">
+    <string>XRD</string>
    </property>
   </action>
  </widget>

@@ -6,6 +6,7 @@ from src.gui_elements.DockWidgets.QCM_view import QCM_view
 from src.gui_elements.DockWidgets.FTIR_view import FTIR_view
 from src.gui_elements.DockWidgets.SE_view import SE_view
 from src.gui_elements.DockWidgets.CF_view import CurveFit_view
+from src.gui_elements.DockWidgets.XRD_view import XRD_view
 from src.gui_elements.DockWidgets.Calc_view import Calculator_view
 from src.Ui_Files.Dialogs.start_dialog import Ui_Dialog as start_Ui
 from src.gui_elements.DockWidgets.Console_view import Console_view
@@ -40,28 +41,27 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fig_facecolor = self.settings.value('sns_figfacecolor')
 
         # sns.set(self.context, self.style, self.c_palette, self.font, self.fs, True, {"axes.facecolor": "#F0F0F0", 'figure.facecolor': '#505F69'})
-        sns.set(self.context, self.style, self.c_palette, self.font, self.fs,True, {"axes.facecolor": self.axes_facecolor,
-                                                                               'figure.facecolor': self.fig_facecolor})
-
+        sns.set(self.context, self.style, self.c_palette, self.font,
+                self.fs,True, {"axes.facecolor": self.axes_facecolor,'figure.facecolor': self.fig_facecolor})
         self.dw_ProjectView = ProjectBrowser(self)
         self.dw_Data_Broswer = DataBrowser(self)
         self.dw_FTIR = FTIR_view(self)
         self.dw_XPS = XPS_view(self)
+        self.dw_XRD = XRD_view(self)
         self.dw_QCM = QCM_view(self)
         self.dw_SE = SE_view(self)
         self.dw_Console = Console_view(self)
         self.dw_CF = CurveFit_view(self)
         self.dw_calc = Calculator_view(self)
-
         self.All_Views = [self.dw_FTIR,self.dw_QCM,self.dw_SE,self.dw_XPS,self.dw_CF,self.dw_ProjectView
-            ,self.dw_Data_Broswer]
+            ,self.dw_Data_Broswer, self.dw_XRD]
 
-        for i in self.All_Views:
-            try:
-                i.setMinimumSize(QtCore.QSize(400, 50))
-                i.setMaximumSize(QtCore.QSize(500, 1000))
-            except AttributeError:
-                pass
+        # for i in self.All_Views:
+        #     try:
+        #         i.setMinimumSize(QtCore.QSize(400, 50))
+        #         i.setMaximumSize(QtCore.QSize(500, 1000))
+        #     except AttributeError:
+        #         pass
 
         # self.fig = figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
         self.fig = figure(num=None, figsize=(8, 6), dpi=80)
@@ -75,8 +75,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
         self.bar = {'xlist': '', 'y1list':'','y2list':'','y3list':'', 'width':'0.35', 'num':1,
                     'label1':'','label2':'','label3':''}
-        self.resize(self.settings.value("size", QtCore.QSize(270, 225)))
+
+        # self.resize(self.settings.value("size", QtCore.QSize(270, 225)))
+        # self.resize(self.settings.value("size"))
         # self.move(self.settings.value("pos", QtCore.QPoint(50, 50)))
+
         self.ax.spines['bottom'].set_color(self.settings.value('bottom_spine_color'))
         self.ax.spines['top'].set_color(self.settings.value('top_spine_color'))
         self.ax.spines['right'].set_color(self.settings.value('right_spine_color'))
@@ -86,10 +89,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ax.tick_params(axis='x', colors=self.settings.value('bottom_spine_color'))
         self.ax.tick_params(axis='y', colors=self.settings.value('left_spine_color'))
 
-    def closeEvent(self, event: QtGui.QCloseEvent):
-        self.settings.setValue('window_size', self.size())
+    # def closeEvent(self, event: QtGui.QCloseEvent):
+    #     self.settings.setValue('window_size', self.size())
         # self.settings.setValue('window_position', self.pos())
-        print(self.settings.fileName())
+        # print(self.settings.fileName())
 
     def init_connections(self):
         self.context_menu_plot = QtWidgets.QMenu(self)
@@ -121,12 +124,13 @@ class MainWindow(QtWidgets.QMainWindow):
         start_dialog = QtWidgets.QDialog()
         start_ui = start_Ui()
         start_ui.setupUi(start_dialog)
-        pbs = [start_ui.FTIR_pb, start_ui.QCM_pb,start_ui.SE_pb,start_ui.XPS_pb,start_ui.CF_pb]
+        pbs = [start_ui.FTIR_pb, start_ui.QCM_pb,start_ui.SE_pb,start_ui.XPS_pb,start_ui.XRD_pb,start_ui.CF_pb]
         [i.clicked.connect(lambda: start_dialog.accept())for i in pbs]
         start_ui.FTIR_pb.clicked.connect(lambda: self.start(self.dw_FTIR))
         start_ui.QCM_pb.clicked.connect(lambda: self.start(self.dw_QCM))
         start_ui.SE_pb.clicked.connect(lambda: self.start(self.dw_SE))
         start_ui.XPS_pb.clicked.connect(lambda: self.start(self.dw_XPS))
+        start_ui.XRD_pb.clicked.connect(lambda: self.start(self.dw_XRD))
         start_ui.CF_pb.clicked.connect(lambda: self.start(self.dw_CF))
         start_dialog.exec_()
 
@@ -141,6 +145,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionSave_Data.triggered.connect(lambda: plotting_funs.Save_All_Plotted(self))
         self.ui.actionClear_Graph.triggered.connect(lambda: self.cleargraph())
         self.ui.actionXPS.triggered.connect(lambda: plotting_funs.XPS_view_fun(self))
+        self.ui.actionXRD.triggered.connect(lambda: plotting_funs.XRD_view_fun(self))
         self.ui.actionDataBrowser.triggered.connect(lambda: plotting_funs.DataBrowser_view_fun(self))
         self.ui.actionProject_Tree.triggered.connect(lambda: plotting_funs.Project_view_fun(self))
         self.ui.actionQCM.triggered.connect(lambda: plotting_funs.QCM_view_fun(self))
@@ -343,8 +348,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
         self.ax_2 = None
 
+    def import_fitted_parameters(self):
+        pass
+
     def closeEvent(self, e):
         # Write window size and position to config file
         self.settings.setValue("size", self.size())
         # self.settings.setValue("pos", self.pos())
+        print('happened')
         e.accept()

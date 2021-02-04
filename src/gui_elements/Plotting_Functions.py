@@ -24,6 +24,8 @@ from src.gui_elements.settings import ApplicationSettings
 from scipy import integrate
 from scipy.linalg import norm
 from scipy.signal import savgol_filter
+from scipy import sparse
+from scipy.sparse.linalg import spsolve
 
 def linear_plot_SE(self):
     dialog = QtWidgets.QDialog()
@@ -215,28 +217,35 @@ def plot_QCM(self, time,pressure,mass,a_exp=int,b_exp=int,ttp=float,threshold=fl
     return MC_A, MC_B, MC_Cycle, half_cycle_density_A, half_cycle_density_B, full_cycle_density
 
 
-def ir_plot_basic(self):
-    try: self.main_window.ax.legend().set_draggable(True)
-    except: pass
-    self.main_window.ax.set_xlabel("Wavenumber (cm-1)")
-    self.main_window.ax.set_ylabel("Absorbance")
-    self.main_window.ax.set_xlim([4000, 400])
-    self.main_window.fig.tight_layout()
-    self.main_window.canvas.draw()
+# def ir_plot_basic(self):
+#     try: self.main_window.ax.legend().set_draggable(True)
+#     except: pass
+#     self.main_window.ax.set_xlabel("Wavenumber (cm-1)")
+#     self.main_window.ax.set_ylabel("Absorbance")
+#     self.main_window.ax.set_xlim([4000, 400])
+#     self.main_window.fig.tight_layout()
+#     self.main_window.canvas.draw()
 
 def difference_from_survey(list_of_csv):
     data = []
     for csv in list_of_csv:
-        temp_data = pd.read_csv(csv,delimiter=',').to_numpy().T
-        data.append(temp_data)
-        # data.append(np.genfromtxt(csv, delimiter=',').T)
+        temp_data = pd.read_csv(csv,delimiter=',')
+        temp_data = temp_data.dropna(how='any')
+        data.append(temp_data.to_numpy().T)
     sub_list = [data[0][0]]
     for l in range(len(data)-1):
-        # if len(data[l+1][1]) == len(data[l][1]):
-        #     sub_list.append(data[l+1][1]-data[l][1])
-        # else:
         length = len(data[0][0])
-        sub_list.append(data[l + 1][1][:length] - data[l][1][:length])
+        if len(data[l + 1][1][:length]) == len(data[l][1][:length]):
+            try:
+                sub_list.append(data[l + 1][1][:length] - data[l][1][:length])
+            except TypeError:
+                print('[l + 1][1][:length]')
+                print(data[l + 1][1][:length])
+                print('[l][1][:length]')
+                print(data[l][1][:length])
+        else:
+            print('problem with unequal lengths')
+            print(len(data[l + 1][1][:length]), len(data[l][1][:length]))
     return sub_list
 
 def subtraction_from_survey(list_of_csv):
@@ -406,6 +415,19 @@ def self_limiting(x,a,b,c):
 def smooth(y_data,window_length, poly):
     return savgol_filter(y_data, window_length, poly)
 
+def baseline_als(y, lam, p, niter=10):
+    # where y is the data needed to be corrected, lam is lambda and is a smoothing
+    # parameter and p is the asymmetry of the baseline, niter is the num of iterations
+    L = len(y)
+    D = sparse.diags([1,-2,1],[0,-1,-2], shape=(L,L-2))
+    w = np.ones(L)
+    for i in range(niter):
+        W = sparse.spdiags(w, 0, L, L)
+        Z = W + lam * D.dot(D.transpose())
+        z = spsolve(Z, w*y)
+        w = p * (y > z) + (1-p) * (y < z)
+    return z
+
 class plotting_funs:
     def spine_color_fun(self):
         def finish():
@@ -521,6 +543,11 @@ class plotting_funs:
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_QCM)
         self.restoreDockWidget(self.dw_QCM)
         self.dw_QCM.show()
+
+    def XRD_view_fun(self):
+        self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_XRD)
+        self.restoreDockWidget(self.dw_XRD)
+        self.dw_XRD.show()
 
     def SE_view_fun(self):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dw_SE)
@@ -683,6 +710,8 @@ class plotting_funs:
                 self.dw_SE.tree_view.setRootIndex(self.dw_SE.model.index(path))
             elif settings_type == 'XPS_PATH':
                 self.dw_XPS.tree_view.setRootIndex(self.dw_XPS.model.index(path))
+            elif settings_type == 'XRD_PATH':
+                self.dw_XRD.tree_view.setRootIndex(self.dw_XRD.model.index(path))
             update()
         def update():
             ui.datapath_le.setText(str(self.settings.value('DATA_PATH')))
@@ -694,6 +723,7 @@ class plotting_funs:
             ui.qcm_path_label.setText(str(self.settings.value('QCM_PATH')))
             ui.cf_path_label.setText(str(self.settings.value('CF_PATH')))
             ui.xps_path_label.setText(str(self.settings.value('XPS_PATH')))
+            ui.xrd_path_label.setText(str(self.settings.value('XRD_PATH')))
             ui.comboBox.setCurrentText(self.settings.value('app_style'))
 
         d = QtWidgets.QDialog()
@@ -715,6 +745,7 @@ class plotting_funs:
         ui.change_se_pb.clicked.connect(lambda: change_path('SE_PATH'))
         ui.change_cf_pb.clicked.connect(lambda: change_path('CF_PATH'))
         ui.change_xps_pb.clicked.connect(lambda: change_path('XPS_PATH'))
+        ui.changexrdpath_pb.clicked.connect(lambda: change_path('XRD_PATH'))
         d.exec_()
 
     def send_to_custom_data(self):

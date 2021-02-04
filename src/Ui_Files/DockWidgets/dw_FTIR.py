@@ -20,38 +20,90 @@ class Ui_DockWidget(object):
     def setupUi(self, DockWidget):
         if not DockWidget.objectName():
             DockWidget.setObjectName(u"DockWidget")
-        DockWidget.resize(468, 510)
+        DockWidget.resize(608, 574)
         self.dockWidgetContents = QWidget()
         self.dockWidgetContents.setObjectName(u"dockWidgetContents")
         self.gridLayout = QGridLayout(self.dockWidgetContents)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.FTIR_treeView = QTreeView(self.dockWidgetContents)
-        self.FTIR_treeView.setObjectName(u"FTIR_treeView")
-
-        self.gridLayout.addWidget(self.FTIR_treeView, 0, 0, 1, 3)
-
-        self.lineEdit_4 = QLineEdit(self.dockWidgetContents)
-        self.lineEdit_4.setObjectName(u"lineEdit_4")
-
-        self.gridLayout.addWidget(self.lineEdit_4, 5, 1, 1, 2)
-
-        self.label_4 = QLabel(self.dockWidgetContents)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout.addWidget(self.label_4, 5, 0, 1, 1)
-
         self.tabWidget = QTabWidget(self.dockWidgetContents)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.gridLayout_2 = QGridLayout(self.tab)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.pushButton = QPushButton(self.tab)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.gridLayout_2.addWidget(self.pushButton, 1, 3, 1, 1)
+
+        self.label = QLabel(self.tab)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_2.addWidget(self.label, 3, 1, 1, 1)
+
+        self.label_6 = QLabel(self.tab)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout_2.addWidget(self.label_6, 9, 1, 1, 1)
+
+        self.p_sb = QDoubleSpinBox(self.tab)
+        self.p_sb.setObjectName(u"p_sb")
+        self.p_sb.setDecimals(6)
+        self.p_sb.setMaximum(1.000000000000000)
+        self.p_sb.setSingleStep(0.010000000000000)
+        self.p_sb.setValue(0.010000000000000)
+
+        self.gridLayout_2.addWidget(self.p_sb, 9, 2, 1, 1)
+
+        self.smooth_sb = QSpinBox(self.tab)
+        self.smooth_sb.setObjectName(u"smooth_sb")
+
+        self.gridLayout_2.addWidget(self.smooth_sb, 12, 2, 1, 1)
+
+        self.lambda_sb = QSpinBox(self.tab)
+        self.lambda_sb.setObjectName(u"lambda_sb")
+        self.lambda_sb.setMaximum(9999999)
+        self.lambda_sb.setSingleStep(1000)
+        self.lambda_sb.setValue(1000)
+
+        self.gridLayout_2.addWidget(self.lambda_sb, 7, 2, 1, 1)
+
+        self.label_3 = QLabel(self.tab)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 12, 1, 1, 1)
+
+        self.line_2 = QFrame(self.tab)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_2.addWidget(self.line_2, 10, 1, 1, 3)
+
+        self.skip_sb = QSpinBox(self.tab)
+        self.skip_sb.setObjectName(u"skip_sb")
+        self.skip_sb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.skip_sb.setKeyboardTracking(False)
+        self.skip_sb.setValue(0)
+
+        self.gridLayout_2.addWidget(self.skip_sb, 3, 2, 1, 1)
+
+        self.smooth_pb = QPushButton(self.tab)
+        self.smooth_pb.setObjectName(u"smooth_pb")
+
+        self.gridLayout_2.addWidget(self.smooth_pb, 12, 3, 1, 1)
+
         self.line = QFrame(self.tab)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_2.addWidget(self.line, 1, 0, 1, 4)
+        self.gridLayout_2.addWidget(self.line, 6, 1, 1, 3)
+
+        self.label_4 = QLabel(self.tab)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_2.addWidget(self.label_4, 7, 1, 1, 1)
 
         self.ir_plot_cb = QComboBox(self.tab)
         self.ir_plot_cb.addItem("")
@@ -61,45 +113,22 @@ class Ui_DockWidget(object):
         self.ir_plot_cb.addItem("")
         self.ir_plot_cb.setObjectName(u"ir_plot_cb")
 
-        self.gridLayout_2.addWidget(self.ir_plot_cb, 0, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.ir_plot_cb, 1, 1, 1, 2)
 
-        self.lineEdit = QLineEdit(self.tab)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.baseline_pb = QPushButton(self.tab)
+        self.baseline_pb.setObjectName(u"baseline_pb")
 
-        self.gridLayout_2.addWidget(self.lineEdit, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.baseline_pb, 7, 3, 1, 1)
 
-        self.pushButton = QPushButton(self.tab)
-        self.pushButton.setObjectName(u"pushButton")
+        self.label_7 = QLabel(self.tab)
+        self.label_7.setObjectName(u"label_7")
 
-        self.gridLayout_2.addWidget(self.pushButton, 0, 2, 1, 2)
+        self.gridLayout_2.addWidget(self.label_7, 9, 3, 1, 1)
 
-        self.label = QLabel(self.tab)
-        self.label.setObjectName(u"label")
+        self.FTIR_treeView = QTreeView(self.tab)
+        self.FTIR_treeView.setObjectName(u"FTIR_treeView")
 
-        self.gridLayout_2.addWidget(self.label, 4, 0, 1, 1)
-
-        self.label_13 = QLabel(self.tab)
-        self.label_13.setObjectName(u"label_13")
-
-        self.gridLayout_2.addWidget(self.label_13, 2, 0, 1, 1)
-
-        self.lineEdit_2 = QLineEdit(self.tab)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
-
-        self.gridLayout_2.addWidget(self.lineEdit_2, 2, 2, 1, 1)
-
-        self.smooth_pb = QPushButton(self.tab)
-        self.smooth_pb.setObjectName(u"smooth_pb")
-
-        self.gridLayout_2.addWidget(self.smooth_pb, 4, 2, 1, 1)
-
-        self.skip_sb = QSpinBox(self.tab)
-        self.skip_sb.setObjectName(u"skip_sb")
-        self.skip_sb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.skip_sb.setKeyboardTracking(False)
-        self.skip_sb.setValue(0)
-
-        self.gridLayout_2.addWidget(self.skip_sb, 4, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.FTIR_treeView, 0, 1, 1, 3)
 
         self.tabWidget.addTab(self.tab, "")
         self.tab_3 = QWidget()
@@ -201,12 +230,15 @@ class Ui_DockWidget(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayout_3 = QGridLayout(self.tab_2)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.num_peaks_sb = QSpinBox(self.tab_2)
-        self.num_peaks_sb.setObjectName(u"num_peaks_sb")
-        self.num_peaks_sb.setMinimum(1)
-        self.num_peaks_sb.setMaximum(5)
+        self.plot_current_pb = QPushButton(self.tab_2)
+        self.plot_current_pb.setObjectName(u"plot_current_pb")
 
-        self.gridLayout_3.addWidget(self.num_peaks_sb, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.plot_current_pb, 2, 1, 1, 1)
+
+        self.fit_report_TE = QTextEdit(self.tab_2)
+        self.fit_report_TE.setObjectName(u"fit_report_TE")
+
+        self.gridLayout_3.addWidget(self.fit_report_TE, 3, 0, 1, 4)
 
         self.tableWidget_2 = QTableWidget(self.tab_2)
         if (self.tableWidget_2.columnCount() < 5):
@@ -243,12 +275,34 @@ class Ui_DockWidget(object):
         self.tableWidget_2.setVerticalHeaderItem(8, __qtablewidgetitem32)
         self.tableWidget_2.setObjectName(u"tableWidget_2")
 
-        self.gridLayout_3.addWidget(self.tableWidget_2, 1, 0, 1, 3)
+        self.gridLayout_3.addWidget(self.tableWidget_2, 1, 0, 1, 4)
 
         self.label_5 = QLabel(self.tab_2)
         self.label_5.setObjectName(u"label_5")
 
         self.gridLayout_3.addWidget(self.label_5, 0, 0, 1, 1)
+
+        self.selectdata_pb = QPushButton(self.tab_2)
+        self.selectdata_pb.setObjectName(u"selectdata_pb")
+
+        self.gridLayout_3.addWidget(self.selectdata_pb, 2, 0, 1, 1)
+
+        self.num_peaks_sb = QSpinBox(self.tab_2)
+        self.num_peaks_sb.setObjectName(u"num_peaks_sb")
+        self.num_peaks_sb.setMinimum(1)
+        self.num_peaks_sb.setMaximum(5)
+
+        self.gridLayout_3.addWidget(self.num_peaks_sb, 0, 1, 1, 1)
+
+        self.fit_pb = QPushButton(self.tab_2)
+        self.fit_pb.setObjectName(u"fit_pb")
+
+        self.gridLayout_3.addWidget(self.fit_pb, 2, 3, 1, 1)
+
+        self.import_to_constraints_pb = QPushButton(self.tab_2)
+        self.import_to_constraints_pb.setObjectName(u"import_to_constraints_pb")
+
+        self.gridLayout_3.addWidget(self.import_to_constraints_pb, 2, 2, 1, 1)
 
         self.fit_shape_cb = QComboBox(self.tab_2)
         self.fit_shape_cb.addItem("")
@@ -256,42 +310,17 @@ class Ui_DockWidget(object):
         self.fit_shape_cb.addItem("")
         self.fit_shape_cb.setObjectName(u"fit_shape_cb")
 
-        self.gridLayout_3.addWidget(self.fit_shape_cb, 0, 2, 1, 1)
-
-        self.fit_pb = QPushButton(self.tab_2)
-        self.fit_pb.setObjectName(u"fit_pb")
-
-        self.gridLayout_3.addWidget(self.fit_pb, 2, 0, 1, 1)
-
-        self.plot_current_pb = QPushButton(self.tab_2)
-        self.plot_current_pb.setObjectName(u"plot_current_pb")
-
-        self.gridLayout_3.addWidget(self.plot_current_pb, 2, 1, 1, 1)
-
-        self.selectdata_pb = QPushButton(self.tab_2)
-        self.selectdata_pb.setObjectName(u"selectdata_pb")
-
-        self.gridLayout_3.addWidget(self.selectdata_pb, 2, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.fit_shape_cb, 0, 2, 1, 2)
 
         self.tabWidget.addTab(self.tab_2, "")
-        self.tab_4 = QWidget()
-        self.tab_4.setObjectName(u"tab_4")
-        self.gridLayout_5 = QGridLayout(self.tab_4)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.fit_report_TE = QTextEdit(self.tab_4)
-        self.fit_report_TE.setObjectName(u"fit_report_TE")
 
-        self.gridLayout_5.addWidget(self.fit_report_TE, 0, 0, 1, 1)
-
-        self.tabWidget.addTab(self.tab_4, "")
-
-        self.gridLayout.addWidget(self.tabWidget, 3, 0, 1, 3)
+        self.gridLayout.addWidget(self.tabWidget, 3, 0, 1, 2)
 
         DockWidget.setWidget(self.dockWidgetContents)
 
         self.retranslateUi(DockWidget)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(DockWidget)
@@ -299,17 +328,20 @@ class Ui_DockWidget(object):
 
     def retranslateUi(self, DockWidget):
         DockWidget.setWindowTitle(QCoreApplication.translate("DockWidget", u"FTIR", None))
-        self.label_4.setText(QCoreApplication.translate("DockWidget", u"Error Log", None))
+        self.pushButton.setText(QCoreApplication.translate("DockWidget", u"Plot or Fit FTIR", None))
+        self.label.setText(QCoreApplication.translate("DockWidget", u"Skip Every", None))
+        self.label_6.setText(QCoreApplication.translate("DockWidget", u"P (asymetry) ", None))
+        self.label_3.setText(QCoreApplication.translate("DockWidget", u"Savitzky\u2013Golay Filter", None))
+        self.smooth_pb.setText(QCoreApplication.translate("DockWidget", u"Smooth", None))
+        self.label_4.setText(QCoreApplication.translate("DockWidget", u"<html><head/><body><p>\u03bb  (smoothness)</p></body></html>", None))
         self.ir_plot_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Sub Plot (dir)", None))
         self.ir_plot_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Plot (dir)", None))
         self.ir_plot_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Diff Plot (dir)", None))
         self.ir_plot_cb.setItemText(3, QCoreApplication.translate("DockWidget", u"Diff (2)", None))
         self.ir_plot_cb.setItemText(4, QCoreApplication.translate("DockWidget", u"Plot", None))
 
-        self.pushButton.setText(QCoreApplication.translate("DockWidget", u"Plot or Fit FTIR", None))
-        self.label.setText(QCoreApplication.translate("DockWidget", u"Skip Every", None))
-        self.label_13.setText(QCoreApplication.translate("DockWidget", u"From:To", None))
-        self.smooth_pb.setText(QCoreApplication.translate("DockWidget", u"Smooth", None))
+        self.baseline_pb.setText(QCoreApplication.translate("DockWidget", u"Baseline All", None))
+        self.label_7.setText(QCoreApplication.translate("DockWidget", u"UNDER WORK", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("DockWidget", u"IR Plot", None))
         self.int_type_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Integrate Sub (dir)", None))
         self.int_type_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Integrate Sub (dir) Corrected", None))
@@ -358,6 +390,7 @@ class Ui_DockWidget(object):
         self.comboBox.setItemText(1, QCoreApplication.translate("DockWidget", u"Right Axis", None))
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("DockWidget", u"Integrate", None))
+        self.plot_current_pb.setText(QCoreApplication.translate("DockWidget", u"Plot Current", None))
         ___qtablewidgetitem15 = self.tableWidget_2.horizontalHeaderItem(0)
         ___qtablewidgetitem15.setText(QCoreApplication.translate("DockWidget", u"Peak 1", None));
         ___qtablewidgetitem16 = self.tableWidget_2.horizontalHeaderItem(1)
@@ -387,14 +420,13 @@ class Ui_DockWidget(object):
         ___qtablewidgetitem28 = self.tableWidget_2.verticalHeaderItem(8)
         ___qtablewidgetitem28.setText(QCoreApplication.translate("DockWidget", u"Sigma High", None));
         self.label_5.setText(QCoreApplication.translate("DockWidget", u"Num of Peak", None))
+        self.selectdata_pb.setText(QCoreApplication.translate("DockWidget", u"Select Data", None))
+        self.fit_pb.setText(QCoreApplication.translate("DockWidget", u"Fit", None))
+        self.import_to_constraints_pb.setText(QCoreApplication.translate("DockWidget", u"import fitted params", None))
         self.fit_shape_cb.setItemText(0, QCoreApplication.translate("DockWidget", u"Voigt", None))
         self.fit_shape_cb.setItemText(1, QCoreApplication.translate("DockWidget", u"Gaussian", None))
         self.fit_shape_cb.setItemText(2, QCoreApplication.translate("DockWidget", u"Lorentz", None))
 
-        self.fit_pb.setText(QCoreApplication.translate("DockWidget", u"Fit", None))
-        self.plot_current_pb.setText(QCoreApplication.translate("DockWidget", u"Plot Current", None))
-        self.selectdata_pb.setText(QCoreApplication.translate("DockWidget", u"Select Data", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("DockWidget", u"Fitting", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("DockWidget", u"Fit Report", None))
     # retranslateUi
 

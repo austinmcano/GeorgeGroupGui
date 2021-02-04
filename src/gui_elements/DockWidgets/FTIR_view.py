@@ -7,6 +7,7 @@ from scipy.signal import savgol_filter
 from lmfit.models import VoigtModel, GaussianModel, LorentzianModel, LinearModel
 from lmfit import Model, Parameters
 from src.Ui_Files.Dialogs.simple_treeWidget_dialog import Ui_Dialog as twDialog_ui
+from src.gui_elements.Plotting_Functions import baseline_als
 
 class FTIR_view(QtWidgets.QDockWidget):
     def __init__(self, main_window):
@@ -65,6 +66,7 @@ class FTIR_view(QtWidgets.QDockWidget):
         self.ui.plot_current_pb.clicked.connect(lambda: self.plot_init())
         self.ui.tableWidget_2.cellChanged.connect(lambda: self.save_constraints())
         self.ui.selectdata_pb.clicked.connect(lambda: self.select_data())
+        self.ui.baseline_pb.clicked.connect(lambda: self.baseline_data())
 
     def eventFilter(self, object, event):
         # For right click events
@@ -268,6 +270,116 @@ class FTIR_view(QtWidgets.QDockWidget):
                 ApplicationSettings.ALL_DATA_PLOTTED['L2'] = self.main_window.ax.plot(self.data_x,
                                                                                       comps['p2_'],
                                                                                       'k--', label='L2')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit,
+                                                                                       'r--', label='Result')
+                leg = self.main_window.ax.legend(loc='best', fontsize='small')
+                leg.set_draggable(True)
+            elif self.ui.num_peaks_sb.value() == 3:
+                lmodel = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')+LorentzianModel(prefix='p3_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]))
+                result = lmodel.fit(self.data_y, params, x=self.data_x)
+                comps = result.eval_components()
+                self.ui.fit_report_TE.setText(result.fit_report())
+                ApplicationSettings.ALL_DATA_PLOTTED['L1'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p1_'],
+                                                                                      'k--', label='L1')
+                ApplicationSettings.ALL_DATA_PLOTTED['L2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p2_'],
+                                                                                      'k--', label='L2')
+                ApplicationSettings.ALL_DATA_PLOTTED['L3'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p3_'],
+                                                                                      'k--', label='L3')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit,
+                                                                                       'r--', label='Result')
+                leg = self.main_window.ax.legend(loc='best', fontsize='small')
+                leg.set_draggable(True)
+            elif self.ui.num_peaks_sb.value() == 4:
+                lmodel = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')+LorentzianModel(prefix='p3_') \
+                         + LorentzianModel(prefix='p4_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_sigma', con[3][6], True, con[3][7], con[3][8]))
+                result = lmodel.fit(self.data_y, params, x=self.data_x)
+                comps = result.eval_components()
+                self.ui.fit_report_TE.setText(result.fit_report())
+                ApplicationSettings.ALL_DATA_PLOTTED['L1'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p1_'],
+                                                                                      'k--', label='L1')
+                ApplicationSettings.ALL_DATA_PLOTTED['L2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p2_'],
+                                                                                      'k--', label='L2')
+                ApplicationSettings.ALL_DATA_PLOTTED['L3'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p3_'],
+                                                                                      'k--', label='L3')
+                ApplicationSettings.ALL_DATA_PLOTTED['L4'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p4_'],
+                                                                                      'k--', label='L4')
+                ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
+                                                                                       result.best_fit,
+                                                                                       'r--', label='Result')
+                leg = self.main_window.ax.legend(loc='best', fontsize='small')
+                leg.set_draggable(True)
+            elif self.ui.num_peaks_sb.value() == 5:
+                lmodel = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')+LorentzianModel(prefix='p3_')
+                + LorentzianModel(prefix='p4_') + LorentzianModel(prefix='p5_')
+                params = Parameters()
+                # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+                params.add_many(('p1_amplitude', con[0][0], True, con[0][1], con[0][2]),
+                                ('p1_center', con[0][3], True, con[0][4], con[0][5]),
+                                ('p1_sigma', con[0][6], True, con[0][7], con[0][8]),
+                                ('p2_amplitude', con[1][0], True, con[1][1], con[1][2]),
+                                ('p2_center', con[1][3], True, con[1][4], con[1][5]),
+                                ('p2_sigma', con[1][6], True, con[1][7], con[1][8]),
+                                ('p3_amplitude', con[2][0], True, con[2][1], con[2][2]),
+                                ('p3_center', con[2][3], True, con[2][4], con[2][5]),
+                                ('p3_sigma', con[2][6], True, con[2][7], con[2][8]),
+                                ('p4_amplitude', con[3][0], True, con[3][1], con[3][2]),
+                                ('p4_center', con[3][3], True, con[3][4], con[3][5]),
+                                ('p4_sigma', con[3][6], True, con[3][7], con[3][8]),
+                                ('p5_amplitude', con[4][0], True, con[4][1], con[4][2]),
+                                ('p5_center', con[4][3], True, con[4][4], con[4][5]),
+                                ('p5_sigma', con[4][6], True, con[4][7], con[4][8]))
+                result = lmodel.fit(self.data_y, params, x=self.data_x)
+                comps = result.eval_components()
+                self.ui.fit_report_TE.setText(result.fit_report())
+                ApplicationSettings.ALL_DATA_PLOTTED['L1'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p1_'],
+                                                                                      'k--', label='L1')
+                ApplicationSettings.ALL_DATA_PLOTTED['L2'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p2_'],
+                                                                                      'k--', label='L2')
+                ApplicationSettings.ALL_DATA_PLOTTED['L3'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p3_'],
+                                                                                      'k--', label='L3')
+                ApplicationSettings.ALL_DATA_PLOTTED['L4'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p4_'],
+                                                                                      'k--', label='L4')
+                ApplicationSettings.ALL_DATA_PLOTTED['L5'] = self.main_window.ax.plot(self.data_x,
+                                                                                      comps['p5_'],
+                                                                                      'k--', label='L5')
                 ApplicationSettings.ALL_DATA_PLOTTED['Fit'] = self.main_window.ax.plot(self.data_x,
                                                                                        result.best_fit,
                                                                                        'r--', label='Result')
@@ -481,13 +593,14 @@ class FTIR_view(QtWidgets.QDockWidget):
 
     def ir_plot(self):
         path = self.model.filePath(self.tree_view.currentIndex())
-        # head, tail = os.path.split(path)
+        head, tail = os.path.split(path)
         combo = self.ui.ir_plot_cb.currentText()
         if combo == 'Plot':
-            self.data = np.genfromtxt(path,delimiter=',').T
-            self.x_data = self.data[0]
-            self.y_data = self.data[1]
-            ApplicationSettings.ALL_DATA_PLOTTED['FTIR'] = self.main_window.ax.plot(self.data[0],self.data[1],'-b',label='IR Plot')
+            temp = pd.read_csv(path,delimiter=',')
+            self.data = temp.to_numpy().T
+            # self.data = np.genfromtxt(path,delimiter=',').T
+            ApplicationSettings.ALL_DATA_PLOTTED[tail] = self.main_window.ax.plot(
+                self.data[0],self.data[1],label=tail)
         elif combo == 'Sub Plot (dir)':
             if os.path.isdir(path):
                 csv_list = sorted(glob.glob(path + '/*CSV'))
@@ -593,3 +706,24 @@ class FTIR_view(QtWidgets.QDockWidget):
                                                                                                             i + 1], 51,
                                                                                                         3))
         self.ir_basic()
+
+    def baseline_data(self):
+        all_lines = ApplicationSettings.ALL_DATA_PLOTTED
+        all_data = []
+        for line in all_lines.keys():
+            all_data.append(all_lines[line][0]._xy.T)
+        x_data = all_data[0][0]
+        self.main_window.cleargraph()
+        for i in range(len(all_data)):
+            baseline = baseline_als(all_data[i][1],self.ui.lambda_sb.value(),self.ui.p_sb.value())
+            # ApplicationSettings.ALL_DATA_PLOTTED['Corr_IR_' + str(i)] = \
+            #     self.main_window.ax.plot(x_data, all_data[i][1]-corrected, label='Corr_IR_' + str(i))
+            ApplicationSettings.ALL_DATA_PLOTTED['data'] = \
+                         self.main_window.ax.plot(x_data, all_data[i][1]-baseline,label='corrected')
+            ApplicationSettings.ALL_DATA_PLOTTED['baseline'] = \
+                self.main_window.ax.plot(x_data, baseline,label='baseline')
+            ApplicationSettings.ALL_DATA_PLOTTED['data'] = \
+                self.main_window.ax.plot(x_data, all_data[i][1], label='raw')
+        self.ir_basic()
+        # need to first get the keys from the dict, than grab the ._xy from Line2D object, put through the baseline
+        # correction, clear the data and then plot all the corrected baselines. Not too hard right?

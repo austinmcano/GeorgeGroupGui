@@ -2,16 +2,12 @@ import sys
 from PySide2 import QtWidgets,QtCore, QtGui
 from src.gui_elements.main_window import MainWindow
 # from src import pyqtcss
-from src.Resources import qdarkstyle
 
 settings = QtCore.QSettings('Resources/settings.ini', QtCore.QSettings.IniFormat)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     style = settings.value('app_style')
-    # if style == 'DarkStyle':
-    #     sty = qdarkstyle.load_stylesheet()
-    #     app.setStyleSheet(sty)
     if style == 'DarkFusion':
         app.setStyle('Fusion')
         palette = QtGui.QPalette()
@@ -48,7 +44,9 @@ if __name__ == "__main__":
     else:
         app.setStyle(style)
 
+
     window = MainWindow()
+    window.resize(settings.value('size'))
     window.show()
     sys.exit(app.exec_())
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>510</height>
+    <width>608</width>
+    <height>574</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,37 +15,118 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="3">
-     <widget class="QTreeView" name="FTIR_treeView"/>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit_4"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Error Log</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="3">
+    <item row="3" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>IR Plot</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="0" colspan="4">
+        <item row="1" column="3">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Plot or Fit FTIR</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Skip Every</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>P (asymetry) </string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="2">
+         <widget class="QDoubleSpinBox" name="p_sb">
+          <property name="decimals">
+           <number>6</number>
+          </property>
+          <property name="maximum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.010000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="2">
+         <widget class="QSpinBox" name="smooth_sb"/>
+        </item>
+        <item row="7" column="2">
+         <widget class="QSpinBox" name="lambda_sb">
+          <property name="maximum">
+           <number>9999999</number>
+          </property>
+          <property name="singleStep">
+           <number>1000</number>
+          </property>
+          <property name="value">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="1">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Savitzky–Golay Filter</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1" colspan="3">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="skip_sb">
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::UpDownArrows</enum>
+          </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="3">
+         <widget class="QPushButton" name="smooth_pb">
+          <property name="text">
+           <string>Smooth</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1" colspan="3">
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
+        <item row="7" column="1">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;λ  (smoothness)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
          <widget class="QComboBox" name="ir_plot_cb">
           <item>
            <property name="text">
@@ -74,52 +155,22 @@
           </item>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit"/>
-        </item>
-        <item row="0" column="2" colspan="2">
-         <widget class="QPushButton" name="pushButton">
+        <item row="7" column="3">
+         <widget class="QPushButton" name="baseline_pb">
           <property name="text">
-           <string>Plot or Fit FTIR</string>
+           <string>Baseline All</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label">
+        <item row="9" column="3">
+         <widget class="QLabel" name="label_7">
           <property name="text">
-           <string>Skip Every</string>
+           <string>UNDER WORK</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>From:To</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QLineEdit" name="lineEdit_2"/>
-        </item>
-        <item row="4" column="2">
-         <widget class="QPushButton" name="smooth_pb">
-          <property name="text">
-           <string>Smooth</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QSpinBox" name="skip_sb">
-          <property name="buttonSymbols">
-           <enum>QAbstractSpinBox::UpDownArrows</enum>
-          </property>
-          <property name="keyboardTracking">
-           <bool>false</bool>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
+        <item row="0" column="1" colspan="3">
+         <widget class="QTreeView" name="FTIR_treeView"/>
         </item>
        </layout>
       </widget>
@@ -349,17 +400,17 @@
         <string>Fitting</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="num_peaks_sb">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>5</number>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="plot_current_pb">
+          <property name="text">
+           <string>Plot Current</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" colspan="3">
+        <item row="3" column="0" colspan="4">
+         <widget class="QTextEdit" name="fit_report_TE"/>
+        </item>
+        <item row="1" column="0" colspan="4">
          <widget class="QTableWidget" name="tableWidget_2">
           <row>
            <property name="text">
@@ -440,7 +491,38 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
+        <item row="2" column="0">
+         <widget class="QPushButton" name="selectdata_pb">
+          <property name="text">
+           <string>Select Data</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="num_peaks_sb">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="fit_pb">
+          <property name="text">
+           <string>Fit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="import_to_constraints_pb">
+          <property name="text">
+           <string>import fitted params</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" colspan="2">
          <widget class="QComboBox" name="fit_shape_cb">
           <item>
            <property name="text">
@@ -458,37 +540,6 @@
            </property>
           </item>
          </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="fit_pb">
-          <property name="text">
-           <string>Fit</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="plot_current_pb">
-          <property name="text">
-           <string>Plot Current</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QPushButton" name="selectdata_pb">
-          <property name="text">
-           <string>Select Data</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>Fit Report</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QTextEdit" name="fit_report_TE"/>
         </item>
        </layout>
       </widget>

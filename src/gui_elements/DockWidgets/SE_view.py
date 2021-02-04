@@ -103,8 +103,6 @@ class SE_view(QtWidgets.QDockWidget):
         self.main_window.fig.tight_layout()
         self.main_window.canvas.draw()
 
-
-
     def linear_SE(self):
         def finish():
             if self.ui.line_name_checkbox.isChecked():
